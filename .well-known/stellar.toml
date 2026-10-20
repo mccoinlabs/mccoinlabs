@@ -1,0 +1,20 @@
+VERSION="2.0.0"
+
+[DOCUMENTATION]
+ORG_NAME="McCoin Labs"
+ORG_URL="https://mccoinlabs.github.io/mccoinlabs"
+ORG_DBA="McCoin Labs"
+ORG_DESCRIPTION="MCCOIN - Moeda Bimetalica Comunitaria - Supply fixo 21M na Stellar"
+ORG_GITHUB="mccoinlabs"
+
+[[CURRENCIES]]
+code="MCCOIN"
+issuer="GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI"
+displayName="MCCOIN"
+desc="MCCOIN 21M - Emissao travada - Lastro comunitario"
+is_asset_anchored=false
+fixed_number=21000000
+max_number=21000000
+status="live"
+image="https://mccoinlabs.github.io/mccoinlabs/logo.png"
+conditions="Supply fixo 21M, nao inflacionavel"
