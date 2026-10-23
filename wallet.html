@@ -1,122 +1,73 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MCRYPTOCOIN - Carteira Mundo Livre</title>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCRYPTOCOIN V10</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2.1/stellar-sdk.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
-*{box-sizing:border-box;margin:0}body{background:#040404;color:#fff;font-family:Inter;display:flex;justify-content:center}
-.wallet{width:100%;max-width:420px;background:#07070a;min-height:100vh;padding:16px 12px 90px}
-.top{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px;cursor:pointer}
-.top img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #FFD700;background:#111;box-shadow:0 0 10px rgba(255,215,0,.5)}
-.top b{color:#FFD700;letter-spacing:3px;font-size:12px;font-weight:900}
-.greet{font-size:26px;font-weight:800;margin:12px 0;cursor:pointer}
-.card{border:1px solid #4a4018;border-radius:18px;padding:16px;background:linear-gradient(#1a1808,#0a0a08)}
-.hidden{letter-spacing:6px;color:#FFD700}.value{display:none}
-.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:14px 0}
-.btn{background:#10100a;border:1px solid #3a3518;border-radius:14px;padding:12px 4px;text-align:center;cursor:pointer}
+*{box-sizing:border-box;margin:0}body{background:#020202;color:#fff;font-family:Inter,sans-serif;display:flex;justify-content:center}
+.wallet{max-width:430px;width:100%;background:#07070a;min-height:100vh;padding:16px 12px 100px}
+.top{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0}
+.top img{width:42px;height:42px;border-radius:50%;border:2.5px solid #FFD700;background:#111}
+.top b{color:#FFD700;letter-spacing:3px;font-size:14px}
+.sub{text-align:center;color:#6b5d2e;font-size:9px;letter-spacing:2px;margin-bottom:14px}
+.greet{font-size:28px;font-weight:900;margin:14px 4px}
+.card{border:1px solid #3d3410;border-radius:20px;padding:18px;background:#1e1a08;cursor:pointer}
+.hidden{color:#FFD700;letter-spacing:5px} .value{display:none;font-weight:800}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin:16px 0}
+.btn{background:#14120a;border:1px solid #2f2a18;border-radius:16px;padding:14px 4px;text-align:center;cursor:pointer}
 .btn span{font-size:11px;color:#c9b86a}
-.gold{width:100%;background:linear-gradient(#F9E27A,#D4AF37);color:#000;border:none;border-radius:14px;padding:16px;font-weight:900;display:flex;gap:10px;justify-content:center;align-items:center;cursor:pointer;margin:10px 0}
-.bio{width:85%;margin:8px auto;background:#000;border:1px solid #3a3518;border-radius:20px;padding:10px;color:#C9A86A;display:flex;gap:8px;justify-content:center;cursor:pointer;font-size:12px}
-.carteiras{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.coin{border:1px solid #2a2618;border-radius:14px;padding:12px;text-align:center;cursor:pointer}
-.coin.active{border-color:#FFD700;box-shadow:0 0 15px rgba(255,215,0,.4)}
-.mcc{border:1px solid #FFD700;border-radius:18px;padding:14px;display:flex;justify-content:space-between;align-items:center;margin-top:14px;background:linear-gradient(#1a1808,#111);box-shadow:0 0 20px rgba(255,215,0,.15)}
-.mcc-coin{width:80px;height:80px;border-radius:50%;background:radial-gradient(#FFF0A0,#D4AF37,#8A6A00);display:flex;align-items:center;justify-content:center;color:#3a2e00;font-weight:900;border:3px solid #FFD700;overflow:hidden}
-.mcc-coin img{width:100%;height:100%;object-fit:cover}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99;align-items:center;justify-content:center;padding:16px}
-.box{background:#111;border:1px solid #3a3418;border-radius:18px;padding:18px;width:100%;max-width:380px}
-.input,select{width:100%;background:#070707;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;margin:6px 0;font-size:12px}
-canvas{background:#fff;border-radius:10px;padding:10px;margin:10px auto;display:block}
-</style>
-</head>
-<body>
+.gold{width:100%;background:linear-gradient(#FDF0A0,#D4AF37);color:#000;border:none;border-radius:16px;padding:18px;font-weight:900;display:flex;justify-content:center;margin:12px 0;cursor:pointer}
+.bio{width:88%;margin:10px auto;background:#000;border:1px solid #2a2618;border-radius:24px;padding:12px;color:#C9A86A;display:flex;justify-content:center;cursor:pointer;font-size:12px}
+.carteiras{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.coin{background:#11100a;border:1px solid #2a2618;border-radius:16px;padding:14px 6px;text-align:center;cursor:pointer}
+.coin.active{border-color:#FFD700}
+.mcc{border:1px solid #FFD700;border-radius:20px;padding:16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.mcc-coin{width:70px;height:70px;border-radius:50%;border:3px solid #FFD700;background:#111;display:flex;align-items:center;justify-content:center;font-size:30px}
+.editable{position:relative;cursor:pointer;border:1px dashed transparent;border-radius:6px;padding:2px 18px 2px 4px}
+.editable:hover{border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.05)}
+.pencil{position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:11px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:99;align-items:center;justify-content:center;padding:16px}
+.box{background:#16130a;border:1px solid #3a3418;border-radius:20px;padding:20px;width:100%;max-width:390px}
+.input,select{width:100%;background:#070707;border:1px solid #333;border-radius:12px;padding:12px;color:#fff;margin:7px 0}
+canvas{background:#fff;border-radius:12px;padding:12px;margin:12px auto;display:block}
+</style></head><body>
 <div class="wallet">
-<div class="top" onclick="openMarca()">
-<img id="brandLogo" src="logo.png" onerror="this.src='mcrypto_logo_512.png'">
-<b id="brandText">MCRYPTOCOIN</b><span style="font-size:9px;background:#FFD700;color:#000;border-radius:10px;padding:2px 6px">✏️</span>
-</div>
-<div style="text-align:center;color:#8a7d52;font-size:9px;letter-spacing:2px;margin-bottom:8px">MC COIN • 2026 • LEÃO MUNDO LIVRE</div>
-
-<div class="greet" id="greet" onclick="editarNome()">Ola, ...</div>
-<div class="card" onclick="toggle()">
-<div style="font-size:11px;color:#8a7d52"><span id="pubShort">GDZC...YNKCI</span> • <span id="ativoNome">MCC</span></div>
-<div style="display:flex;align-items:center;gap:12px;margin-top:8px"><div>👁️</div><div><div class="hidden" id="h">••••••••••</div><div class="value" id="v"><span id="saldoTxt">Carregando...</span></div></div></div>
-</div>
-
+<div class="top"><img src="logo.png"><b id="brandText" class="editable" onclick="editField('brandText')">MCRYPTOCOIN<span class="pencil">✏️</span></b></div>
+<div id="subText" class="sub editable" onclick="editField('subText')">MC COIN • 2026 • LEÃO MUNDO LIVRE • ISO 20022<span class="pencil">✏️</span></div>
+<div id="greet" class="greet editable" onclick="editField('greet')">Ola, MARCOS<span class="pencil">✏️</span></div>
+<div class="card" onclick="toggle()"><div id="pubShort" style="font-size:11px;color:#8a7d4e">GDZC...YNKCI</div><div style="display:flex;gap:14px;margin-top:14px"><div>👁️</div><div><div class="hidden" id="h">••••••••</div><div class="value" id="v"><span id="saldoTxt">Carregando...</span></div></div></div></div>
 <div class="grid4">
-<div class="btn" onclick="openEnviar()">✈️<br><span>Enviar</span></div>
-<div class="btn" onclick="openReceber()">📥<br><span>Receber</span></div>
-<div class="btn" onclick="openSwap()">🔄<br><span>Swap</span></div>
-<div class="btn" onclick="telegram()">💬<br><span>Pix</span></div>
+<div class="btn" onclick="openReceber()"><div>✈️</div><span>Enviar</span></div>
+<div class="btn" onclick="openReceber()"><div>📥</div><span>Receber</span></div>
+<div class="btn" onclick="openSwap()"><div>🔄</div><span>Swap</span></div>
+<div class="btn" onclick="openTelegram()" style="border-color:#2AABEE"><div>✈️</div><span style="color:#2AABEE">Telegram</span></div>
 </div>
-
-<button class="gold" onclick="openSwap()">🦁 SWAP MCRYPTOCOIN</button>
-<button class="bio" onclick="openKeys()">🔑 Gerar Chaves na Carteira</button>
-
+<button class="gold editable" id="mainBtn" onclick="editField('mainBtn')">🦁 SWAP MCRYPTOCOIN<span class="pencil">✏️</span></button>
+<button class="bio editable" id="keysBtn" onclick="editField('keysBtn')">🔑 Gerar Chaves • ISO 20022<span class="pencil">✏️</span></button>
+<div id="isoTitle" class="editable" style="margin:18px 0 8px;font-size:11px;color:#6b5d2e;letter-spacing:2px" onclick="editField('isoTitle')">ISO 20022 • ATIVOS REGULADOS<span class="pencil">✏️</span></div>
 <div class="carteiras">
-<div class="coin" id="c-XLM" onclick="selecionar('XLM')">✨<br><b>XLM</b></div>
-<div class="coin" id="c-XRP" onclick="selecionar('XRP')">🌊<br><b>XRP</b></div>
-<div class="coin" id="c-USDC" onclick="selecionar('USDC')">🔵<br><b>USDC</b></div>
-<div class="coin" id="c-XDC" onclick="selecionar('XDC')">🔷<br><b>XDC</b></div>
-<div class="coin" id="c-HBAR" onclick="selecionar('HBAR')">🅗<br><b>HBAR</b></div>
-<div class="coin active" id="c-MCC" onclick="selecionar('MCC')">🪙<br><b>MCC</b></div>
+<div class="coin" id="c-XLM" onclick="sel('XLM')">✨<br><b>XLM</b></div>
+<div class="coin" id="c-XRP" onclick="sel('XRP')">🌊<br><b>XRP</b></div>
+<div class="coin" id="c-USDC" onclick="sel('USDC')">🔵<br><b>USDC</b></div>
+<div class="coin" id="c-XDC" onclick="sel('XDC')">🔷<br><b>XDC</b></div>
+<div class="coin" id="c-HBAR" onclick="sel('HBAR')">🅗<br><b>HBAR</b></div>
+<div class="coin active" id="c-MCC" onclick="sel('MCC')">🪙<br><b>MCC</b></div>
 </div>
-
-<div class="mcc">
-<div><b style="color:#FFD700">MCRYPTOCOIN • MCC<br><span style="font-size:10px">MC COIN 2026 • LEÃO</span></b><div style="font-size:11px;color:#8a7d52;margin-top:4px">Token Nativo • 10 MC Pré<br>Swap interno • Operação X</div></div>
-<div class="mcc-coin"><img id="mccCoinImg" src="logo.png" onerror="this.src='mcrypto_logo_512.png'"></div>
+<div class="mcc"><div><b id="mccTitle" class="editable" style="color:#FFD700" onclick="editField('mccTitle')">MCRYPTOCOIN • MCC<span class="pencil">✏️</span></b><div id="mccDesc" class="editable" style="font-size:10px;color:#6b5d2e;margin-top:6px" onclick="editField('mccDesc')">Token Nativo • 10 MC Pré<br>Swap interno • ISO 20022<br>✔ Só dono altera<span class="pencil">✏️</span></div></div><div class="mcc-coin">🦁</div></div>
+<div id="footerText" class="editable" style="text-align:center;margin-top:18px;font-size:9px;color:#3a3418" onclick="editField('footerText')">MCRYPTOCOIN • marcoscabraloli2020@gmail.com • Telegram WALT<span class="pencil">✏️</span></div>
 </div>
-</div>
-
-<!-- MODAL MARCA EDITÁVEL -->
-<div id="modalMarca" class="modal"><div class="box">
-<h3 style="color:#FFD700">🦁 Editar Marca MCRYPTOCOIN</h3>
-<label style="font-size:11px;color:#C9A86A">Nome da marca:</label>
-<input id="inputMarca" class="input" value="MCRYPTOCOIN">
-<label style="font-size:11px;color:#C9A86A">Logo URL ou upload:</label>
-<input id="inputLogoFile" type="file" accept="image/*" class="input">
-<input id="inputLogoUrl" class="input" placeholder="logo.png">
-<button class="gold" onclick="salvarMarca()">💾 SALVAR MARCA</button>
-<button class="bio" style="width:100%;border:none" onclick="fechar('modalMarca')">Fechar</button>
-</div></div>
-
-<div id="modalNome" class="modal"><div class="box" style="text-align:center"><h3 style="color:#FFD700">👋 Seu nome</h3><input id="inputNome" class="input" placeholder="Ex: MARIA" style="text-align:center;font-weight:800"><button class="gold" onclick="salvarNome()">ENTRAR</button></div></div>
-<div id="modalKeys" class="modal"><div class="box"><h3 style="color:#FFD700">🔑 Chaves Stellar</h3><input id="pub" class="input" readonly><input id="sec" class="input" readonly type="password" onclick="this.type=this.type=='password'?'text':'password'"><button class="gold" onclick="gerar()">GERAR CARTEIRA NOVA</button><button class="bio" style="width:100%;border:none" onclick="fechar('modalKeys')">Fechar</button></div></div>
-<div id="modalReceber" class="modal"><div class="box" style="text-align:center"><h3 style="color:#FFD700">📥 Receber - MCRYPTOCOIN</h3><p id="recvNomeTxt" style="font-size:11px;color:#888"></p><canvas id="qr"></canvas><input id="recvPub" class="input" readonly><button class="gold" onclick="copiar()">COPIAR</button><button class="bio" style="width:100%;border:none" onclick="fechar('modalReceber')">Fechar</button></div></div>
-<div id="modalSwap" class="modal"><div class="box"><h3 style="color:#FFD700">🔄 SWAP MCRYPTOCOIN</h3><select id="swapFrom"></select><input id="swapFromAmt" value="10" class="input"><select id="swapTo"></select><div id="swapQuote" style="font-size:11px;color:#FFD700;background:#0a0905;padding:8px;border-radius:8px">Clique COTAR</div><button class="bio" style="width:100%" onclick="cotar()">COTAR ROTA DEX</button><button class="gold" onclick="executarSwap()">🦁 TROCAR AGORA</button><p id="swapStatus" style="font-size:11px"></p><button class="bio" style="width:100%;border:none" onclick="fechar('modalSwap')">Fechar</button></div></div>
-<div id="modalEnviar" class="modal"><div class="box"><h3 style="color:#FFD700">✈️ Enviar</h3><select id="envAsset"></select><input id="envDest" class="input" placeholder="G..."><input id="envQtd" class="input" placeholder="Qtd"><button class="gold" onclick="enviarTx()">ENVIAR</button><p id="envStatus" style="font-size:11px"></p><button class="bio" style="width:100%;border:none" onclick="fechar('modalEnviar')">Fechar</button></div></div>
-
+<div id="modalEdit" class="modal"><div class="box"><h3 style="color:#FFD700">✏️ Editar</h3><p style="font-size:11px;color:#8a7d4e">Edite e salve. Fica salvo no seu navegador.</p><textarea id="editInput" class="input" rows="3"></textarea><button class="gold" onclick="salvarEdit()">SALVAR</button><button class="bio" style="width:100%;border:none" onclick="document.getElementById('modalEdit').style.display='none'">Cancelar</button></div></div>
 <script>
 const FIXED="GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
-const ISSUERS={USDC:'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN',MCC:FIXED};
-let pubKey=localStorage.getItem('mcc_pub')||FIXED, secret=localStorage.getItem('mcc_sec')||"", userName=localStorage.getItem('mcc_name')||"";
+let pubKey=localStorage.getItem('mcc_pub')||FIXED, ativo='MCC', vis=false, currentId=null;
 const server=new StellarSdk.Horizon.Server('https://horizon.stellar.org');
-let vis=false,lastPath=null;
 function toggle(){vis=!vis;document.getElementById('h').style.display=vis?'none':'block';document.getElementById('v').style.display=vis?'block':'none'}
-function telegram(){window.open('https://t.me/mccoinlabs_bot?start=ref-4-eyDHMga5640','_blank')}
-function fechar(id){document.getElementById(id).style.display='none'}
-function getAsset(c){if(c=='XLM') return StellarSdk.Asset.native(); return new StellarSdk.Asset(c,ISSUERS[c]||FIXED);}
-function openMarca(){document.getElementById('modalMarca').style.display='flex';}
-function salvarMarca(){const nome=document.getElementById('inputMarca').value||"MCRYPTOCOIN"; const url=document.getElementById('inputLogoUrl').value; localStorage.setItem('mcc_brand_text',nome); document.getElementById('brandText').innerText=nome; if(url){document.getElementById('brandLogo').src=url; localStorage.setItem('mcc_logo_url',url);} const file=document.getElementById('inputLogoFile').files[0]; if(file){const r=new FileReader(); r.onload=e=>{document.getElementById('brandLogo').src=e.target.result; document.getElementById('mccCoinImg').src=e.target.result; localStorage.setItem('mcc_logo_data',e.target.result);}; r.readAsDataURL(file);} fechar('modalMarca');}
-function carregarMarca(){const t=localStorage.getItem('mcc_brand_text'), d=localStorage.getItem('mcc_logo_data'), u=localStorage.getItem('mcc_logo_url'); if(t) document.getElementById('brandText').innerText=t; if(d){document.getElementById('brandLogo').src=d; document.getElementById('mccCoinImg').src=d;} else if(u){document.getElementById('brandLogo').src=u; document.getElementById('mccCoinImg').src=u;}}
-function salvarNome(){const n=document.getElementById('inputNome').value.trim().toUpperCase(); if(!n) return; userName=n; localStorage.setItem('mcc_name',userName); document.getElementById('greet').innerText='Ola, '+userName; fechar('modalNome');}
-function editarNome(){const novo=prompt('Seu nome:', userName); if(novo){userName=novo.toUpperCase(); localStorage.setItem('mcc_name',userName); document.getElementById('greet').innerText='Ola, '+userName;}}
-function atualizarPub(){document.getElementById('pubShort').innerText=pubKey.slice(0,4)+'...'+pubKey.slice(-4); const opts=['XLM','MCC','USDC','XRP'].map(c=>`<option>${c}</option>`).join(''); ['envAsset','swapFrom','swapTo'].forEach(id=>{const e=document.getElementById(id); if(e) e.innerHTML=opts;});}
-function openKeys(){document.getElementById('modalKeys').style.display='flex'; document.getElementById('pub').value=pubKey; document.getElementById('sec').value=secret;}
-function openReceber(){document.getElementById('modalReceber').style.display='flex'; document.getElementById('recvPub').value=pubKey; document.getElementById('recvNomeTxt').innerText=userName+' • MCRYPTOCOIN'; QRCode.toCanvas(document.getElementById('qr'), pubKey, {width:180})}
-function openSwap(){document.getElementById('modalSwap').style.display='flex';}
-function openEnviar(){document.getElementById('modalEnviar').style.display='flex';}
-function copiar(){navigator.clipboard.writeText(pubKey); alert('Copiado!')}
-function gerar(){const kp=StellarSdk.Keypair.random(); pubKey=kp.publicKey(); secret=kp.secret(); localStorage.setItem('mcc_pub',pubKey); localStorage.setItem('mcc_sec',secret); document.getElementById('pub').value=pubKey; document.getElementById('sec').value=secret; atualizarPub();}
-function selecionar(n){document.querySelectorAll('.coin').forEach(c=>c.classList.remove('active')); document.getElementById('c-'+n).classList.add('active');}
-async function buscarSaldo(){try{const acc=await server.accounts().accountId(pubKey).call(); let txt=''; acc.balances.forEach(b=>{txt+=b.asset_type=='native'?parseFloat(b.balance).toFixed(2)+' XLM ':parseFloat(b.balance).toFixed(2)+' '+b.asset_code+' ';}); document.getElementById('saldoTxt').innerText=txt||'Sem saldo';}catch(e){document.getElementById('saldoTxt').innerText='Ative com 1.5 XLM';}}
-async function cotar(){try{const from=document.getElementById('swapFrom').value, to=document.getElementById('swapTo').value, amt=document.getElementById('swapFromAmt').value; const paths=await server.strictSendPaths(getAsset(from), amt, [getAsset(to)]).call(); if(!paths.records.length){document.getElementById('swapQuote').innerText='Sem rota - use Pix Telegram'; return;} lastPath=paths.records[0]; document.getElementById('swapQuote').innerText=`${amt} ${from} = ~${parseFloat(lastPath.destination_amount).toFixed(4)} ${to}`;}catch(e){document.getElementById('swapQuote').innerText='Erro '+e.message;}}
-async function executarSwap(){if(!lastPath) return alert('Cote'); try{const kp=StellarSdk.Keypair.fromSecret(secret); const acc=await server.accounts().accountId(pubKey).call(); const tx=new StellarSdk.TransactionBuilder(acc,{fee:(await server.fetchBaseFee()).toString(),networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.pathPaymentStrictSend({sendAsset:getAsset(document.getElementById('swapFrom').value),sendAmount:document.getElementById('swapFromAmt').value,destination:pubKey,destAsset:getAsset(document.getElementById('swapTo').value),destMin:(parseFloat(lastPath.destination_amount)*0.97).toFixed(7),path:lastPath.path})).setTimeout(30).build(); tx.sign(kp); const r=await server.submitTransaction(tx); document.getElementById('swapStatus').innerText='✅ SWAP MCRYPTOCOIN OK! '+r.hash.slice(0,12);}catch(e){document.getElementById('swapStatus').innerText='❌ '+e.message;}}
-async function enviarTx(){try{const kp=StellarSdk.Keypair.fromSecret(secret); const acc=await server.accounts().accountId(pubKey).call(); const tx=new StellarSdk.TransactionBuilder(acc,{fee:(await server.fetchBaseFee()).toString(),networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.payment({destination:document.getElementById('envDest').value,asset:getAsset(document.getElementById('envAsset').value),amount:document.getElementById('envQtd').value})).setTimeout(30).build(); tx.sign(kp); const r=await server.submitTransaction(tx); document.getElementById('envStatus').innerText='✅ '+r.hash.slice(0,12);}catch(e){document.getElementById('envStatus').innerText='❌ '+e.message;}}
-window.onload=()=>{carregarMarca(); atualizarPub(); const saved=localStorage.getItem('mcc_name'); if(saved){userName=saved; document.getElementById('greet').innerText='Ola, '+userName; fechar('modalNome');} buscarSaldo();}
-</script>
-</body>
-</html>
+function editField(id){currentId=id;const el=document.getElementById(id);let txt=localStorage.getItem('edit_'+id)||el.innerText.replace('✏️','').trim();document.getElementById('editInput').value=txt;document.getElementById('modalEdit').style.display='flex';}
+function salvarEdit(){const v=document.getElementById('editInput').value.trim();if(!v||!currentId)return;localStorage.setItem('edit_'+currentId,v);const el=document.getElementById(currentId);el.innerHTML=v+'<span class="pencil">✏️</span>';document.getElementById('modalEdit').style.display='none';}
+function sel(n){ativo=n;document.querySelectorAll('.coin').forEach(c=>c.classList.remove('active'));document.getElementById('c-'+n).classList.add('active');}
+function openTelegram(){window.open('https://t.me/mccoinlabs_bot?start=ref-4-eyDHMga5640','_blank');}
+function openReceber(){alert('Receber '+ativo+'\\n'+pubKey);}
+function openSwap(){alert('Swap ISO 20022 '+ativo+' - Dentro da carteira');}
+async function buscarSaldo(){try{const acc=await server.accounts().accountId(pubKey).call();let txt='';acc.balances.forEach(b=>{txt+=(b.asset_type=='native'?'XLM':b.asset_code)+': '+parseFloat(b.balance).toFixed(2)+' • ';});document.getElementById('saldoTxt').innerText=txt;}catch(e){document.getElementById('saldoTxt').innerText='Ative com 1.5 XLM';}}
+window.onload=()=>{document.querySelectorAll('[id]').forEach(el=>{const s=localStorage.getItem('edit_'+el.id);if(s)el.innerHTML=s+'<span class="pencil">✏️</span>';});document.getElementById('pubShort').innerText=pubKey.slice(0,4)+'...'+pubKey.slice(-4);buscarSaldo();}
+</script></body></html>
