@@ -1,125 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Carteira MCcoin 2026 - Pré 10 MC</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carteira Mundo Livre MCC</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2.1/stellar-sdk.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#06070a;display:flex;justify-content:center;color:#e8e6c8}
-.phone{width:100%;max-width:420px;background:linear-gradient(180deg,#0c0e14 0%,#080a10 100%);min-height:100vh;padding:18px 16px 90px;border-left:1px solid #1a1d27;border-right:1px solid #1a1d27;position:relative}
-.top{display:flex;justify-content:space-between;align-items:center}
-.logo{display:flex;gap:10px;align-items:center}
-.shield{width:46px;height:56px;background:linear-gradient(145deg,#d4af37,#8a6d1b);clip-path:polygon(50% 0%,100% 15%,100% 70%,50% 100%,0% 70%,0% 15%);display:grid;place-items:center;font-size:22px;box-shadow:0 0 18px rgba(212,175,55,.4)}
-.logo h1{font-size:20px;line-height:.9;color:#e7d08a;font-weight:800} .logo h1 span{color:#d4af37;display:block}
-.quantum{border:1px solid #3a3f1e;background:#10120a;border-radius:10px;padding:6px 8px;text-align:center;font-size:9px;color:#a3b86a;font-weight:700} .quantum b{color:#5eff7a;display:block;font-size:10px}
-.card{margin-top:16px;border:1px solid #d4af37;border-radius:18px;padding:16px 18px;background:radial-gradient(120% 120% at 0% 0%,#1a1d14 0%,#0e100c 60%);box-shadow:0 0 0 1px rgba(212,175,55,.15),0 0 30px rgba(212,175,55,.15) inset}
-.label{font-size:13px;color:#7a8060} .total{font-size:36px;font-weight:800;color:#e8d68a;letter-spacing:-1px} .sub{display:flex;gap:8px;margin-top:10px;font-size:13px;color:#9aa07a} .sub b{color:#d4af37} .xlm{display:flex;gap:8px;margin-top:10px;font-size:20px;font-weight:700;color:#fff}
-.btn-telegram{margin-top:18px;background:linear-gradient(90deg,#2a8fd6,#1d6fb0);border-radius:999px;padding:12px 14px;display:flex;gap:10px;justify-content:center;align-items:center;color:#fff;text-decoration:none;font-weight:700;font-size:13px;box-shadow:0 4px 18px rgba(42,143,214,.4)}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:18px 0}
-.btn{background:#0e110d;border:1px solid #2a2f1e;border-radius:14px;padding:14px 6px;text-align:center;color:#c8c49a;font-size:12px;font-weight:600;cursor:pointer;transition:.15s} .btn:hover{border-color:#d4af37;box-shadow:0 0 12px rgba(212,175,55,.2)} .btn .ic{font-size:22px;display:block;margin-bottom:6px;color:#d4af37}
-.airdrop{border:1px solid #2a4d2a;background:linear-gradient(90deg,#0f1a0f,#0d1a0f);border-radius:16px;padding:14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:12px}
-.badge{background:#1e3520;border:1px solid #3a6a3a;color:#7bff8a;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800}
-.status{background:#0a0c08;border:1px solid #1e2215;border-radius:12px;padding:12px;font-size:11px;color:#8a8f6e;line-height:1.5}
-.status b{color:#d4af37}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;place-items:center;z-index:99;padding:16px}
-.box{background:#10120a;border:1px solid #d4af37;border-radius:16px;padding:18px;width:100%;max-width:380px}
-.box h3{color:#d4af37;margin-bottom:8px} .box input{width:100%;background:#06070a;border:1px solid #2a2f1e;border-radius:10px;padding:12px;color:#fff;margin:8px 0} .box button{background:#d4af37;border:0;border-radius:10px;padding:12px;font-weight:800;width:100%;margin-top:8px;cursor:pointer}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;background:#080a0a;border-top:1px solid #1a1d1a;display:flex;justify-content:space-around;padding:10px 0 18px}
-.bottom span{font-size:11px;color:#5a5f4a;display:flex;flex-direction:column;align-items:center;gap:4px} .bottom span.active{color:#d4af37}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap');
+*{box-sizing:border-box;margin:0}body{background:#040404;color:#fff;font-family:Inter;display:flex;justify-content:center}
+.wallet{width:100%;max-width:420px;background:#07070a;min-height:100vh;padding:16px 12px 90px}
+.top{color:#C9A86A;text-align:center;letter-spacing:3px;font-size:10px;margin:8px}
+.greet{font-size:32px;font-weight:800;margin:12px 0}
+.card{border:1px solid #3a3418;border-radius:18px;padding:16px;background:linear-gradient(#14120a,#0a0a08)}
+.eye{cursor:pointer}.hidden{letter-spacing:6px;color:#FFD700}.value{display:none;font-weight:800}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin:14px 0}
+.btn{background:#10100a;border:1px solid #3a3518;border-radius:14px;padding:12px 4px;text-align:center;cursor:pointer}
+.btn span{font-size:11px;color:#c9b86a}
+.gold{width:100%;background:linear-gradient(#F9E27A,#D4AF37);color:#000;border:none;border-radius:14px;padding:16px;font-weight:900;display:flex;gap:10px;justify-content:center;align-items:center;cursor:pointer;margin:10px 0}
+.bio{width:75%;margin:8px auto;background:#000;border:1px solid #3a3518;border-radius:20px;padding:10px;color:#C9A86A;display:flex;gap:8px;justify-content:center;cursor:pointer}
+.carteiras{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
+.coin{border:1px solid #2a2618;border-radius:14px;padding:12px;text-align:center}
+.coin.active{border-color:#FFD700}
+.mcc{border:1px solid #4a4018;border-radius:18px;padding:14px;display:flex;justify-content:space-between;align-items:center;margin-top:14px;background:linear-gradient(#1a1808,#111)}
+.mcc-coin{width:78px;height:78px;border-radius:50%;background:radial-gradient(#FFF0A0,#D4AF37,#8A6A00);display:flex;align-items:center;justify-content:center;color:#3a2e00;font-weight:900;border:3px solid #6a5200}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9;align-items:center;justify-content:center;padding:20px}
+.box{background:#111;border:1px solid #3a3418;border-radius:18px;padding:18px;width:100%;max-width:360px}
+.input{width:100%;background:#070707;border:1px solid #222;border-radius:10px;padding:10px;color:#fff;margin:6px 0;font-family:monospace;font-size:11px}
 </style>
 </head>
 <body>
-<div class="phone">
-<div class="top"><div class="logo"><div class="shield">🛡️</div><h1>Carteira<span>MCcoin 2026</span></h1></div><div class="quantum">QUANTUM SHIELD<br><b>ATIVO</b></div></div>
-<div class="card">
-<div class="label">Saldo Total - PRÉ-LANÇAMENTO 10 MC</div>
-<div class="total" id="mcBalance">0.00 MC</div>
-<div class="sub">🪙 <b>MC COIN 2026</b> • GDZC...YNKCI</div>
-<div class="xlm">✴️ <span id="xlmBalance">0.00 XLM</span></div>
-<div style="font-size:10px;color:#6a6f4a;margin-top:10px" id="walletAddr">Desconectado - Clique em Gerador de Chaves para ser o 1º</div>
-<a class="btn-telegram" href="https://t.me/walt/start?startapp=ref-4-eyDHMga5640" target="_blank">✈️ Comprar XLM com Pix via Telegram - ref-4-eyDHMga5640</a>
-</div>
-<div class="grid">
-<div class="btn" onclick="conectar()"><span class="ic">🔑</span>Gerador de Chaves</div>
-<div class="btn" onclick="fazerTrustline()"><span class="ic">🔗</span>Trustline MCcoin</div>
-<div class="btn" onclick="receber()"><span class="ic">📥</span>Receber</div>
-<div class="btn" onclick="enviar()"><span class="ic">✈️</span>Enviar</div>
-<div class="btn" onclick="trocar()"><span class="ic">🔄</span>Trocar</div>
-<div class="btn" onclick="window.open('https://t.me/walt/start?startapp=ref-4-eyDHMga5640','_blank')"><span class="ic">⦿</span>Comprar XLM</div>
-</div>
-<div class="airdrop" onclick="resgatar()"><div><h3>🌱 Resgatar Airdrop <br><small style="font-size:11px;color:#7a9a6a;letter-spacing:1px;font-weight:400">SEMENTE • PRÉ 10 MC</small></h3></div><div class="badge">+10 MC</div></div>
-<div class="status" id="log">
-<b>ISSUER/COFRE:</b> GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI<br>
-<b>DIST:</b> GBHH...XEEB (sua DIST)<br>
-<b>CAIXA:</b> GBU4...NXOQ<br>
-<b>REDE:</b> Stellar Pública • 1 XLM = 4 MC • Pool travada 200 carteiras<br><br>
-<b>PASSO A PASSO PRA VOCÊ SER O 1º:</b><br>
-1. Clique em Gerador de Chaves<br>
-2. Clique em Trustline MCcoin<br>
-3. Assine na Freighter<br>
-4. Pronto, saldo aparece aqui
+<div class="wallet">
+<div class="top">CARTEIRA MUNDO LIVRE MCC</div>
+<div class="greet" id="greet">Ola, MC_OLIVEIRA</div>
+<div class="card" onclick="toggle()">
+<div style="font-size:11px;color:#8a7d52">Saldo ISO 20022 • GDZC...YNKCI</div>
+<div style="display:flex;align-items:center;gap:12px;margin-top:8px">
+<div class="eye">👁️</div>
+<div><div class="hidden" id="h">••••••••••</div><div class="value" id="v">10.00 MC • 0.00 XLM</div><div style="font-size:11px;color:#8a7d52">Toque no olho para ver saldo</div></div>
 </div>
 </div>
-<div class="bottom"><span class="active">💼 Carteira</span><span>📈 Mercado</span><span>🕒 Histórico</span><span>⭐ Rewards</span><span>👤 Perfil</span></div>
-<div class="modal" id="mRecv"><div class="box"><h3>Receber MCcoin</h3><p style="font-size:12px;color:#8a8f6e">Sua chave pública:</p><input id="recvAddr" readonly><img id="qrRecv" style="width:140px;height:140px;background:#fff;padding:6px;border-radius:10px;margin:10px auto;display:block"><p style="font-size:11px;color:#7a8060">Trustline: MCCOIN / GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</p><button onclick="document.getElementById('mRecv').style.display='none'">Fechar</button></div></div>
-<div class="modal" id="mSend"><div class="box"><h3>Enviar MCcoin - Pré 10 MC</h3><input id="sendDest" placeholder="G... destino"><input id="sendAmount" placeholder="Quantidade - ex: 10" value="10"><button onclick="doEnviar()">Enviar Agora</button><button onclick="document.getElementById('mSend').style.display='none'" style="background:#1a1d14;color:#8a8f6e">Cancelar</button></div></div>
+<div class="grid4">
+<div class="btn" onclick="openKeys()">✈️<br><span>Enviar</span></div>
+<div class="btn" onclick="openKeys()">📥<br><span>Receber</span></div>
+<div class="btn" onclick="telegram()">💳<br><span>Pagar</span></div>
+<div class="btn" onclick="telegram()">📈<br><span>Investir</span></div>
+</div>
+<button class="gold" onclick="telegram()"><span style="background:#000;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center">✈️</span> ENTRAR VIA TELEGRAM</button>
+<div style="text-align:center;color:#C9A86A;font-size:10px">🔒 OPERAÇÃO X POOL SECRETA • ref-4-eyDHMga5640</div>
+<button class="bio" onclick="openKeys()">🔑 Gerar Chaves na Carteira • Biometria</button>
+<div style="display:flex;gap:10px;align-items:center;color:#5a5438;font-size:11px;letter-spacing:2px;margin:14px 0"><div style="flex:1;height:1px;background:#3a3518"></div>CARTEIRAS<div style="flex:1;height:1px;background:#3a3518"></div></div>
+<div class="carteiras">
+<div class="coin">✨<br><b>XLM</b></div><div class="coin">🌊<br><b>XRP</b></div><div class="coin">🔵<br><b>USDC</b></div>
+<div class="coin">🔷<br><b>XDC</b></div><div class="coin">🅗<br><b>HBAR</b></div><div class="coin active">🪙<br><b>MCC</b></div>
+</div>
+<div class="mcc"><div><b style="color:#FFD700;font-size:12px">MCC COIN • MCC NATIVA<br>ISO DESTACADA</b><div style="font-size:11px;color:#8a7d52;margin-top:6px">Token Nativo • 10 MC Pré</div></div><div class="mcc-coin">MCC</div></div>
+</div>
+<div id="modal" class="modal" onclick="if(event.target==this) this.style.display='none'"><div class="box">
+<h3 style="color:#FFD700">🔑 Stellar SDK Interno</h3><p style="font-size:11px;color:#888">Gera chaves LOCALMENTE dentro da carteira (igual Lab mas interno). Chave não fica visível na tela principal.</p>
+<input id="pub" class="input" readonly placeholder="Public G...">
+<input id="sec" class="input" readonly placeholder="Secret S..." type="password" onclick="this.type=this.type=='password'?'text':'password'">
+<button class="gold" onclick="gerar()">⚡ GERAR CHAVE AGORA - LABS INTERNO</button>
+<button class="bio" style="width:100%" onclick="fixa()">Usar GDZC Fixa</button>
+<button class="bio" style="width:100%;border:none" onclick="document.getElementById('modal').style.display='none'">Fechar</button>
+</div></div>
 <script>
-const ISSUER="GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
-const CODE="MCCOIN";
-let pubKey=null;
-function log(t){document.getElementById('log').innerHTML+="<br>"+t}
-async function conectar(){
- try{
-  if(!window.freighterApi){alert("Instale Freighter: freighter.app");return}
-  const c=await window.freighterApi.isConnected(); if(!c.isConnected) await window.freighterApi.setAllowed();
-  pubKey=await window.freighterApi.getPublicKey();
-  document.getElementById('walletAddr').innerText=pubKey.slice(0,6)+"..."+pubKey.slice(-6)+" • Conectado • Você é o 1º teste!";
-  log("✅ Conectado: "+pubKey); carregarSaldo();
- }catch(e){alert("Erro: "+e.message);log("❌ "+e.message)}
-}
-async function carregarSaldo(){
- if(!pubKey) return;
- try{
-  const r=await fetch('https://horizon.stellar.org/accounts/'+pubKey); const j=await r.json();
-  let xlm=0,mc=0; j.balances.forEach(b=>{if(b.asset_type==='native') xlm=parseFloat(b.balance); if(b.asset_code===CODE) mc=parseFloat(b.balance)});
-  document.getElementById('xlmBalance').innerText=xlm.toFixed(7)+" XLM";
-  document.getElementById('mcBalance').innerText=mc.toFixed(2)+" MC";
-  log("Saldo XLM: "+xlm+" | MC: "+mc);
- }catch(e){log("⚠️ Conta precisa de 1 XLM para ativar. Compre via Telegram Pix.")}
-}
-async function fazerTrustline(){
- if(!pubKey){await conectar(); if(!pubKey) return;}
- try{
-  log("🔗 Criando trustline MCCOIN / GDZCQYJU...");
-  const server=new StellarSdk.Horizon.Server("https://horizon.stellar.org");
-  const acc=await server.loadAccount(pubKey);
-  const asset=new StellarSdk.Asset(CODE,ISSUER);
-  const tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.changeTrust({asset:asset})).setTimeout(30).build();
-  const xdr=tx.toXDR(); const signed=await window.freighterApi.signTransaction(xdr,{networkPassphrase:StellarSdk.Networks.PUBLIC});
-  const tx2=StellarSdk.TransactionBuilder.fromXDR(signed.signedTxXdr,StellarSdk.Networks.PUBLIC);
-  const res=await server.submitTransaction(tx2);
-  log("✅ TRUSTLINE OK! Hash: "+res.hash.slice(0,20)+"... Agora pode receber 10 MC"); alert("Trustline criada! Você é o primeiro!");
-  carregarSaldo();
- }catch(e){log("❌ Erro trustline: "+(e.message||e)); alert("Erro trustline: "+e.message+" - Verifique se tem XLM")}
-}
-function receber(){if(!pubKey){alert("Conecte primeiro");return} document.getElementById('recvAddr').value=pubKey; document.getElementById('qrRecv').src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+pubKey; document.getElementById('mRecv').style.display='grid';}
-function enviar(){if(!pubKey){alert("Conecte primeiro");return} document.getElementById('mSend').style.display='grid';}
-async function doEnviar(){
- const dest=document.getElementById('sendDest').value.trim(); const amt=document.getElementById('sendAmount').value.trim()||"10";
- try{
-  const server=new StellarSdk.Horizon.Server("https://horizon.stellar.org"); const acc=await server.loadAccount(pubKey);
-  const asset=new StellarSdk.Asset(CODE,ISSUER);
-  const tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.payment({destination:dest,asset:asset,amount:amt})).setTimeout(30).build();
-  const xdr=tx.toXDR(); const signed=await window.freighterApi.signTransaction(xdr,{networkPassphrase:StellarSdk.Networks.PUBLIC});
-  const tx2=StellarSdk.TransactionBuilder.fromXDR(signed.signedTxXdr,StellarSdk.Networks.PUBLIC);
-  const res=await server.submitTransaction(tx2); alert("Enviado "+amt+" MC! Hash: "+res.hash); log("📤 Enviado "+amt+" MC"); carregarSaldo(); document.getElementById('mSend').style.display='none';
- }catch(e){alert("Erro enviar: "+e.message);log("❌ Erro enviar: "+e.message)}
-}
-function trocar(){window.open("https://lobstr.co/trade/MCCOIN:"+ISSUER,"_blank")}
-function resgatar(){if(!pubKey){alert("Faça trustline primeiro!");return} log("ℹ️ Airdrop Pré 10 MC: Vá na Freighter na DIST GBHH...XEEB > Send > MCCOIN > destino: "+pubKey+" > 10 MC"); alert("Para resgatar 10 MC: Abra Freighter > DIST GBHH...XEEB > Enviar MCCOIN > cole: "+pubKey+" > 10 MC")}
+let kp=null; const FIXED="GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
+let vis=false; function toggle(){vis=!vis;document.getElementById('h').style.display=vis?'none':'block';document.getElementById('v').style.display=vis?'block':'none'}
+function telegram(){window.open('https://t.me/mccoinlabs_bot?start=ref-4-eyDHMga5640','_blank')}
+function openKeys(){document.getElementById('modal').style.display='flex'}
+function gerar(){try{kp=StellarSdk.Keypair.random();document.getElementById('pub').value=kp.publicKey();document.getElementById('sec').value=kp.secret();document.getElementById('greet').innerText='Ola, '+kp.publicKey().slice(0,8);alert('✅ Chave gerada DENTRO da carteira!')}catch(e){alert(e.message)}}
+function fixa(){document.getElementById('pub').value=FIXED;document.getElementById('sec').value='(GDZC fixa - secret offline)'}
 </script>
 </body>
 </html>
