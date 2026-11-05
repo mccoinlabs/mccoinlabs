@@ -1,73 +1,100 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MCRYPTOCOIN V10</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2.1/stellar-sdk.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCCOIN - Carteira Oficial | 1 Bilhão Supply Fixo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2.2/stellar-sdk.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0}body{background:#020202;color:#fff;font-family:Inter,sans-serif;display:flex;justify-content:center}
-.wallet{max-width:430px;width:100%;background:#07070a;min-height:100vh;padding:16px 12px 100px}
-.top{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0}
-.top img{width:42px;height:42px;border-radius:50%;border:2.5px solid #FFD700;background:#111}
-.top b{color:#FFD700;letter-spacing:3px;font-size:14px}
-.sub{text-align:center;color:#6b5d2e;font-size:9px;letter-spacing:2px;margin-bottom:14px}
-.greet{font-size:28px;font-weight:900;margin:14px 4px}
-.card{border:1px solid #3d3410;border-radius:20px;padding:18px;background:#1e1a08;cursor:pointer}
-.hidden{color:#FFD700;letter-spacing:5px} .value{display:none;font-weight:800}
-.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin:16px 0}
-.btn{background:#14120a;border:1px solid #2f2a18;border-radius:16px;padding:14px 4px;text-align:center;cursor:pointer}
-.btn span{font-size:11px;color:#c9b86a}
-.gold{width:100%;background:linear-gradient(#FDF0A0,#D4AF37);color:#000;border:none;border-radius:16px;padding:18px;font-weight:900;display:flex;justify-content:center;margin:12px 0;cursor:pointer}
-.bio{width:88%;margin:10px auto;background:#000;border:1px solid #2a2618;border-radius:24px;padding:12px;color:#C9A86A;display:flex;justify-content:center;cursor:pointer;font-size:12px}
-.carteiras{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.coin{background:#11100a;border:1px solid #2a2618;border-radius:16px;padding:14px 6px;text-align:center;cursor:pointer}
-.coin.active{border-color:#FFD700}
-.mcc{border:1px solid #FFD700;border-radius:20px;padding:16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px}
-.mcc-coin{width:70px;height:70px;border-radius:50%;border:3px solid #FFD700;background:#111;display:flex;align-items:center;justify-content:center;font-size:30px}
-.editable{position:relative;cursor:pointer;border:1px dashed transparent;border-radius:6px;padding:2px 18px 2px 4px}
-.editable:hover{border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.05)}
-.pencil{position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:11px}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:99;align-items:center;justify-content:center;padding:16px}
-.box{background:#16130a;border:1px solid #3a3418;border-radius:20px;padding:20px;width:100%;max-width:390px}
-.input,select{width:100%;background:#070707;border:1px solid #333;border-radius:12px;padding:12px;color:#fff;margin:7px 0}
-canvas{background:#fff;border-radius:12px;padding:12px;margin:12px auto;display:block}
-</style></head><body>
-<div class="wallet">
-<div class="top"><img src="logo.png"><b id="brandText" class="editable" onclick="editField('brandText')">MCRYPTOCOIN<span class="pencil">✏️</span></b></div>
-<div id="subText" class="sub editable" onclick="editField('subText')">MC COIN • 2026 • LEÃO MUNDO LIVRE • ISO 20022<span class="pencil">✏️</span></div>
-<div id="greet" class="greet editable" onclick="editField('greet')">Ola, MARCOS<span class="pencil">✏️</span></div>
-<div class="card" onclick="toggle()"><div id="pubShort" style="font-size:11px;color:#8a7d4e">GDZC...YNKCI</div><div style="display:flex;gap:14px;margin-top:14px"><div>👁️</div><div><div class="hidden" id="h">••••••••</div><div class="value" id="v"><span id="saldoTxt">Carregando...</span></div></div></div></div>
-<div class="grid4">
-<div class="btn" onclick="openReceber()"><div>✈️</div><span>Enviar</span></div>
-<div class="btn" onclick="openReceber()"><div>📥</div><span>Receber</span></div>
-<div class="btn" onclick="openSwap()"><div>🔄</div><span>Swap</span></div>
-<div class="btn" onclick="openTelegram()" style="border-color:#2AABEE"><div>✈️</div><span style="color:#2AABEE">Telegram</span></div>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050505;color:#fff;font-family:Inter,Arial;display:flex;justify-content:center;min-height:100vh;padding:10px}
+.container{width:100%;max-width:420px;background:#0f0f0f;border-radius:24px;border:1px solid #222;padding:16px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-area img{width:48px;height:48px;border-radius:50%;border:2px solid #f5d000;object-fit:cover;background:#fff}
+.edit{cursor:pointer;color:#f5d000;font-size:13px}
+.wallet-box{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.addr{font-size:12px;color:#aaa}
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.act{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:14px;padding:10px 4px;text-align:center;cursor:pointer}
+.act:hover{border-color:#f5d000}
+.act span{font-size:20px;display:block}
+.act p{font-size:11px;margin-top:4px;color:#ccc}
+.bar-gold{background:linear-gradient(90deg,#f5d000,#ffef8a);color:#000;border-radius:12px;padding:10px 14px;font-weight:800;font-size:13px;display:flex;justify-content:space-between;margin-bottom:10px;cursor:pointer}
+.bar-black{background:#1a1a1a;border:1px dashed #444;border-radius:12px;padding:10px 14px;font-size:12px;display:flex;justify-content:space-between;margin-bottom:14px;cursor:pointer;color:#ccc}
+.label{font-size:10px;letter-spacing:2px;color:#888;margin:8px 0 8px 4px;text-transform:uppercase;display:flex;justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.asset{background:#181818;border:1px solid #2a2a2a;border-radius:16px;padding:14px 6px;text-align:center;cursor:pointer}
+.asset:hover{border-color:#f5d000}
+.asset b{font-size:12px;display:block;margin-top:6px}
+.mcc-card{background:#111;border:1.5px solid #f5d000;border-radius:18px;padding:12px;display:flex;justify-content:space-between;align-items:center}
+.lion{width:52px;height:52px;border-radius:50%;border:1px solid #f5d000;object-fit:cover;background:#fff}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99;align-items:center;justify-content:center;padding:16px}
+.modal.active{display:flex}
+.modal-box{background:#161616;border:1px solid #333;border-radius:18px;padding:18px;width:100%;max-width:380px}
+.btn{background:#f5d000;color:#000;border:none;border-radius:10px;padding:12px;width:100%;font-weight:800;cursor:pointer;margin-top:8px}
+.btn-outline{background:transparent;border:1px solid #444;color:#fff}
+#qrcode{display:flex;justify-content:center;margin:12px 0}
+.small{font-size:11px;color:#888;margin-top:8px}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo-area">
+      <img id="logo-top" src="logo.png" alt="logo MCCOIN"><span class="edit" onclick="editLogo('logo-top')">✏️ logo</span>
+      <h1 style="font-size:18px"><span id="txt-ola">Ola, MARCOS</span> <span class="edit" onclick="editText('txt-ola')">✏️</span></h1>
+    </div>
+  </div>
+
+  <div class="wallet-box">
+    <div><div class="addr"><span id="txt-addr">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI</span> <span class="edit" onclick="editText('txt-addr')">✏️</span></div><div style="font-size:11px;margin-top:2px">Emissor Oficial MCCOIN • 1.000.000.000 Supply Fixo</div></div>
+    <div style="cursor:pointer" onclick="openModal('modal-receber')">👁️</div>
+  </div>
+
+  <div class="actions">
+    <div class="act" onclick="openModal('modal-enviar')"><span>✈️</span><p>Enviar</p></div>
+    <div class="act" onclick="openModal('modal-receber')"><span>📥</span><p>Receber</p></div>
+    <div class="act" onclick="openModal('modal-swap-mc')"><span>🔄</span><p>Swap</p></div>
+    <div class="act" onclick="openTelegram()" style="border-color:#2a9fd6"><span>✈️</span><p style="color:#2a9fd6">Telegram</p></div>
+  </div>
+
+  <div class="bar-gold" onclick="openModal('modal-swap-mc')"><span>🪙 SWAP MCCOIN</span><span>↔️</span></div>
+  <div class="bar-black" onclick="openModal('modal-chaves')"><span>🔑 <span id="txt-gerar">Gerar Chaves • ISO 20022</span></span><span>✏️</span></div>
+
+  <div class="label"><span>CRYPTOATIVOS ALINHADOS ISO20022</span><span class="edit" onclick="editText('txt-iso')">✏️</span></div>
+  <div class="grid">
+    <div class="asset" onclick="openAsset('XLM')"><span>✨</span><b>XLM</b></div>
+    <div class="asset" onclick="openAsset('XRP')"><span>✖️</span><b>XRP</b></div>
+    <div class="asset" onclick="openAsset('USDC')"><span>🔵</span><b>USDC</b></div>
+    <div class="asset" onclick="openAsset('XDC')"><span>🔷</span><b>XDC</b></div>
+    <div class="asset" onclick="openAsset('HBAR')"><span>ℏ</span><b>HBAR</b></div>
+    <div class="asset" onclick="openAsset('MCCOIN')"><span>🪙</span><b>MCCOIN</b></div>
+  </div>
+
+  <div class="mcc-card">
+    <div><b style="color:#f5d000">MCCOIN • Supply 1B <span class="edit" onclick="editText('txt-mcc')">✏️</span></b><p id="txt-mcc" style="font-size:9px;color:#aaa;max-width:200px;margin-top:4px">Token Nativo Stellar<br>1.000.000.000 MCCOIN • Emissao Travada<br>ISO 20022</p></div>
+    <img id="logo-mcc" class="lion" src="logo.png" alt="mccoin"><span class="edit" onclick="editLogo('logo-mcc')">✏️</span>
+  </div>
 </div>
-<button class="gold editable" id="mainBtn" onclick="editField('mainBtn')">🦁 SWAP MCRYPTOCOIN<span class="pencil">✏️</span></button>
-<button class="bio editable" id="keysBtn" onclick="editField('keysBtn')">🔑 Gerar Chaves • ISO 20022<span class="pencil">✏️</span></button>
-<div id="isoTitle" class="editable" style="margin:18px 0 8px;font-size:11px;color:#6b5d2e;letter-spacing:2px" onclick="editField('isoTitle')">ISO 20022 • ATIVOS REGULADOS<span class="pencil">✏️</span></div>
-<div class="carteiras">
-<div class="coin" id="c-XLM" onclick="sel('XLM')">✨<br><b>XLM</b></div>
-<div class="coin" id="c-XRP" onclick="sel('XRP')">🌊<br><b>XRP</b></div>
-<div class="coin" id="c-USDC" onclick="sel('USDC')">🔵<br><b>USDC</b></div>
-<div class="coin" id="c-XDC" onclick="sel('XDC')">🔷<br><b>XDC</b></div>
-<div class="coin" id="c-HBAR" onclick="sel('HBAR')">🅗<br><b>HBAR</b></div>
-<div class="coin active" id="c-MCC" onclick="sel('MCC')">🪙<br><b>MCC</b></div>
-</div>
-<div class="mcc"><div><b id="mccTitle" class="editable" style="color:#FFD700" onclick="editField('mccTitle')">MCRYPTOCOIN • MCC<span class="pencil">✏️</span></b><div id="mccDesc" class="editable" style="font-size:10px;color:#6b5d2e;margin-top:6px" onclick="editField('mccDesc')">Token Nativo • 10 MC Pré<br>Swap interno • ISO 20022<br>✔ Só dono altera<span class="pencil">✏️</span></div></div><div class="mcc-coin">🦁</div></div>
-<div id="footerText" class="editable" style="text-align:center;margin-top:18px;font-size:9px;color:#3a3418" onclick="editField('footerText')">MCRYPTOCOIN • marcoscabraloli2020@gmail.com • Telegram WALT<span class="pencil">✏️</span></div>
-</div>
-<div id="modalEdit" class="modal"><div class="box"><h3 style="color:#FFD700">✏️ Editar</h3><p style="font-size:11px;color:#8a7d4e">Edite e salve. Fica salvo no seu navegador.</p><textarea id="editInput" class="input" rows="3"></textarea><button class="gold" onclick="salvarEdit()">SALVAR</button><button class="bio" style="width:100%;border:none" onclick="document.getElementById('modalEdit').style.display='none'">Cancelar</button></div></div>
+
+<div id="modal-enviar" class="modal" onclick="closeModal('modal-enviar')"><div class="modal-box" onclick="event.stopPropagation()"><h3>Enviar MCCOIN</h3><input id="env-dest" placeholder="Destino G..."><input id="env-qtd" value="100" type="number"><button class="btn" onclick="alert('Enviando via Freighter! Conecte Freighter e confirme')">Enviar via Freighter</button><button class="btn btn-outline" onclick="closeModal('modal-enviar')">Fechar</button></div></div>
+<div id="modal-receber" class="modal" onclick="closeModal('modal-receber')"><div class="modal-box" onclick="event.stopPropagation()"><h3>Receber MCCOIN</h3><p id="receber-addr" style="font-size:11px;word-break:break-all;background:#000;padding:8px;border-radius:8px">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI</p><div id="qrcode"></div><button class="btn btn-outline" onclick="closeModal('modal-receber')">Fechar</button></div></div>
+<div id="modal-swap-mc" class="modal" onclick="closeModal('modal-swap-mc')"><div class="modal-box" onclick="event.stopPropagation()"><h3>🪙 Swap MCCOIN</h3><p style="font-size:20px;color:#f5d000;font-weight:800">Supply Fixo 1.000.000.000 MCCOIN</p><p style="font-size:12px;color:#aaa;margin:8px 0">Emissor: GDZC...YNKCI</p><button class="btn" onclick="window.open('https://lobstr.co/trade/MCCOIN:GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI','_blank')">Abrir no Lobstr</button><button class="btn btn-outline" onclick="closeModal('modal-swap-mc')">Fechar</button></div></div>
+<div id="modal-chaves" class="modal" onclick="closeModal('modal-chaves')"><div class="modal-box" onclick="event.stopPropagation()"><h3>🔑 Gerar Chaves ISO 20022</h3><button class="btn" onclick="gerarChaves()">Gerar Par</button><p id="chave-pub" style="font-size:10px;word-break:break-all;margin-top:10px;background:#000;padding:8px;border-radius:8px"></p><p id="chave-sec" style="font-size:10px;word-break:break-all;margin-top:6px;background:#000;padding:8px;border-radius:8px;color:#f5a"></p><button class="btn" onclick="alert('Trustline MCCOIN / GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI - Confirme na Freighter')">Criar Trustline MCCOIN</button><button class="btn btn-outline" onclick="closeModal('modal-chaves')">Fechar</button></div></div>
+<div id="modal-asset" class="modal" onclick="closeModal('modal-asset')"><div class="modal-box" onclick="event.stopPropagation()"><h3 id="asset-title">XLM</h3><p id="asset-saldo" style="margin:10px 0">Saldo: 0.00</p><button class="btn" id="asset-btn">Abrir</button><button class="btn btn-outline" onclick="closeModal('modal-asset')">Fechar</button></div></div>
+
 <script>
-const FIXED="GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
-let pubKey=localStorage.getItem('mcc_pub')||FIXED, ativo='MCC', vis=false, currentId=null;
-const server=new StellarSdk.Horizon.Server('https://horizon.stellar.org');
-function toggle(){vis=!vis;document.getElementById('h').style.display=vis?'none':'block';document.getElementById('v').style.display=vis?'block':'none'}
-function editField(id){currentId=id;const el=document.getElementById(id);let txt=localStorage.getItem('edit_'+id)||el.innerText.replace('✏️','').trim();document.getElementById('editInput').value=txt;document.getElementById('modalEdit').style.display='flex';}
-function salvarEdit(){const v=document.getElementById('editInput').value.trim();if(!v||!currentId)return;localStorage.setItem('edit_'+currentId,v);const el=document.getElementById(currentId);el.innerHTML=v+'<span class="pencil">✏️</span>';document.getElementById('modalEdit').style.display='none';}
-function sel(n){ativo=n;document.querySelectorAll('.coin').forEach(c=>c.classList.remove('active'));document.getElementById('c-'+n).classList.add('active');}
-function openTelegram(){window.open('https://t.me/mccoinlabs_bot?start=ref-4-eyDHMga5640','_blank');}
-function openReceber(){alert('Receber '+ativo+'\\n'+pubKey);}
-function openSwap(){alert('Swap ISO 20022 '+ativo+' - Dentro da carteira');}
-async function buscarSaldo(){try{const acc=await server.accounts().accountId(pubKey).call();let txt='';acc.balances.forEach(b=>{txt+=(b.asset_type=='native'?'XLM':b.asset_code)+': '+parseFloat(b.balance).toFixed(2)+' • ';});document.getElementById('saldoTxt').innerText=txt;}catch(e){document.getElementById('saldoTxt').innerText='Ative com 1.5 XLM';}}
-window.onload=()=>{document.querySelectorAll('[id]').forEach(el=>{const s=localStorage.getItem('edit_'+el.id);if(s)el.innerHTML=s+'<span class="pencil">✏️</span>';});document.getElementById('pubShort').innerText=pubKey.slice(0,4)+'...'+pubKey.slice(-4);buscarSaldo();}
-</script></body></html>
+function editText(id){let el=document.getElementById(id);let n=prompt("Novo texto:",el.innerText);if(n!==null){el.innerText=n;localStorage.setItem(id,n);}}
+function editLogo(id){let url=prompt("Cole URL da nova logo:",document.getElementById(id).src);if(url){document.getElementById(id).src=url;localStorage.setItem(id,url);}}
+(function restore(){["txt-ola","txt-addr","txt-mcc","logo-top","logo-mcc"].forEach(id=>{let v=localStorage.getItem(id);if(v){let e=document.getElementById(id);if(e){if(id.includes('logo'))e.src=v;else e.innerText=v;}}});})();
+function openModal(id){document.getElementById(id).classList.add('active');if(id==='modal-receber'){let addr=document.getElementById('txt-addr').innerText;document.getElementById('receber-addr').innerText=addr;document.getElementById('qrcode').innerHTML="";new QRCode(document.getElementById('qrcode'),{text:addr,width:160,height:160});}}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+function openTelegram(){window.open('https://t.me/walt/start?startapp=ref-4-eyDHMga5640','_blank');}
+function openAsset(s){document.getElementById('asset-title').innerText=s+" - Carteira Alinhada";document.getElementById('asset-saldo').innerText="ISO20022 • Rede Stellar • "+s;let b=document.getElementById('asset-btn');b.innerText="Abrir "+s+" no Explorer";b.onclick=()=>window.open(s==='MCCOIN'?'https://stellar.expert/explorer/public/asset/MCCOIN-GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI':'https://lobstr.co/assets/'+s,'_blank');openModal('modal-asset');}
+function gerarChaves(){let kp=StellarSdk.Keypair.random();document.getElementById('chave-pub').innerText="PUB: "+kp.publicKey();document.getElementById('chave-sec').innerText="SEC: "+kp.secret();alert("Chaves geradas! Copie e guarde a secreta!");}
+</script>
+</body>
+</html>
