@@ -3,98 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCCOIN - Carteira Oficial | 1 Bilhão Supply Fixo</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2.2/stellar-sdk.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>MCCOIN Wallet</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.0.0/stellar-sdk.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#050505;color:#fff;font-family:Inter,Arial;display:flex;justify-content:center;min-height:100vh;padding:10px}
-.container{width:100%;max-width:420px;background:#0f0f0f;border-radius:24px;border:1px solid #222;padding:16px}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.logo-area{display:flex;align-items:center;gap:10px}
-.logo-area img{width:48px;height:48px;border-radius:50%;border:2px solid #f5d000;object-fit:cover;background:#fff}
-.edit{cursor:pointer;color:#f5d000;font-size:13px}
-.wallet-box{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
-.addr{font-size:12px;color:#aaa}
-.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.act{background:#1e1e1e;border:1px solid #2a2a2a;border-radius:14px;padding:10px 4px;text-align:center;cursor:pointer}
-.act:hover{border-color:#f5d000}
-.act span{font-size:20px;display:block}
-.act p{font-size:11px;margin-top:4px;color:#ccc}
-.bar-gold{background:linear-gradient(90deg,#f5d000,#ffef8a);color:#000;border-radius:12px;padding:10px 14px;font-weight:800;font-size:13px;display:flex;justify-content:space-between;margin-bottom:10px;cursor:pointer}
-.bar-black{background:#1a1a1a;border:1px dashed #444;border-radius:12px;padding:10px 14px;font-size:12px;display:flex;justify-content:space-between;margin-bottom:14px;cursor:pointer;color:#ccc}
-.label{font-size:10px;letter-spacing:2px;color:#888;margin:8px 0 8px 4px;text-transform:uppercase;display:flex;justify-content:space-between}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-.asset{background:#181818;border:1px solid #2a2a2a;border-radius:16px;padding:14px 6px;text-align:center;cursor:pointer}
-.asset:hover{border-color:#f5d000}
-.asset b{font-size:12px;display:block;margin-top:6px}
-.mcc-card{background:#111;border:1.5px solid #f5d000;border-radius:18px;padding:12px;display:flex;justify-content:space-between;align-items:center}
-.lion{width:52px;height:52px;border-radius:50%;border:1px solid #f5d000;object-fit:cover;background:#fff}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99;align-items:center;justify-content:center;padding:16px}
-.modal.active{display:flex}
-.modal-box{background:#161616;border:1px solid #333;border-radius:18px;padding:18px;width:100%;max-width:380px}
-.btn{background:#f5d000;color:#000;border:none;border-radius:10px;padding:12px;width:100%;font-weight:800;cursor:pointer;margin-top:8px}
-.btn-outline{background:transparent;border:1px solid #444;color:#fff}
-#qrcode{display:flex;justify-content:center;margin:12px 0}
-.small{font-size:11px;color:#888;margin-top:8px}
-input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin-top:8px}
+body{background:#0a0a0a;color:#fff;font-family:Arial;text-align:center;padding:20px}
+.card{background:#1a1a1a;border:1px solid #FFD700;border-radius:16px;padding:20px;max-width:420px;margin:auto}
+input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
+button{background:#FFD700;color:#000;border:0;padding:12px;border-radius:10px;width:100%;font-weight:bold;margin:6px 0;cursor:pointer}
+button.sec{background:#222;color:#fff;border:1px solid #FFD700}
+.box{background:#222;padding:12px;border-radius:10px;text-align:left;word-break:break-all;margin:10px 0}
+.small{font-size:12px;color:#aaa}
+.hidden{display:none}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="logo-area">
-      <img id="logo-top" src="logo.png" alt="logo MCCOIN"><span class="edit" onclick="editLogo('logo-top')">✏️ logo</span>
-      <h1 style="font-size:18px"><span id="txt-ola">Ola, MARCOS</span> <span class="edit" onclick="editText('txt-ola')">✏️</span></h1>
-    </div>
-  </div>
 
-  <div class="wallet-box">
-    <div><div class="addr"><span id="txt-addr">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI</span> <span class="edit" onclick="editText('txt-addr')">✏️</span></div><div style="font-size:11px;margin-top:2px">Emissor Oficial MCCOIN • 1.000.000.000 Supply Fixo</div></div>
-    <div style="cursor:pointer" onclick="openModal('modal-receber')">👁️</div>
-  </div>
+<img src="logo.png" width="90" style="border-radius:50%;border:2px solid gold">
+<h2>MCCOIN • Wallet</h2>
 
-  <div class="actions">
-    <div class="act" onclick="openModal('modal-enviar')"><span>✈️</span><p>Enviar</p></div>
-    <div class="act" onclick="openModal('modal-receber')"><span>📥</span><p>Receber</p></div>
-    <div class="act" onclick="openModal('modal-swap-mc')"><span>🔄</span><p>Swap</p></div>
-    <div class="act" onclick="openTelegram()" style="border-color:#2a9fd6"><span>✈️</span><p style="color:#2a9fd6">Telegram</p></div>
+<!-- TELA LOGIN / CRIAR -->
+<div id="tela-login" class="card">
+  <h3>Entrar na Carteira</h3>
+  <input id="senha" type="password" placeholder="Digite sua senha">
+  <button onclick="entrar()">Entrar na Carteira</button>
+  <button class="sec" onclick="criarCarteira()">Criar Nova Carteira</button>
+  <button class="sec" onclick="mostrarImportar()">Importar com SEC / Restaurar</button>
+  <div id="box-importar" class="hidden">
+    <input id="sec-importar" placeholder="Cole seu SEC aqui (começa com S...)">
+    <input id="senha-nova" type="password" placeholder="Crie uma senha nova">
+    <button onclick="importar()">Restaurar Carteira</button>
   </div>
-
-  <div class="bar-gold" onclick="openModal('modal-swap-mc')"><span>🪙 SWAP MCCOIN</span><span>↔️</span></div>
-  <div class="bar-black" onclick="openModal('modal-chaves')"><span>🔑 <span id="txt-gerar">Gerar Chaves • ISO 20022</span></span><span>✏️</span></div>
-
-  <div class="label"><span>CRYPTOATIVOS ALINHADOS ISO20022</span><span class="edit" onclick="editText('txt-iso')">✏️</span></div>
-  <div class="grid">
-    <div class="asset" onclick="openAsset('XLM')"><span>✨</span><b>XLM</b></div>
-    <div class="asset" onclick="openAsset('XRP')"><span>✖️</span><b>XRP</b></div>
-    <div class="asset" onclick="openAsset('USDC')"><span>🔵</span><b>USDC</b></div>
-    <div class="asset" onclick="openAsset('XDC')"><span>🔷</span><b>XDC</b></div>
-    <div class="asset" onclick="openAsset('HBAR')"><span>ℏ</span><b>HBAR</b></div>
-    <div class="asset" onclick="openAsset('MCCOIN')"><span>🪙</span><b>MCCOIN</b></div>
-  </div>
-
-  <div class="mcc-card">
-    <div><b style="color:#f5d000">MCCOIN • Supply 1B <span class="edit" onclick="editText('txt-mcc')">✏️</span></b><p id="txt-mcc" style="font-size:9px;color:#aaa;max-width:200px;margin-top:4px">Token Nativo Stellar<br>1.000.000.000 MCCOIN • Emissao Travada<br>ISO 20022</p></div>
-    <img id="logo-mcc" class="lion" src="logo.png" alt="mccoin"><span class="edit" onclick="editLogo('logo-mcc')">✏️</span>
-  </div>
+  <p class="small">Igual Lobstr: sua carteira fica salva neste aparelho, criptografada pela sua senha. Para usar em outro celular, salve seu SEC.</p>
 </div>
 
-<div id="modal-enviar" class="modal" onclick="closeModal('modal-enviar')"><div class="modal-box" onclick="event.stopPropagation()"><h3>Enviar MCCOIN</h3><input id="env-dest" placeholder="Destino G..."><input id="env-qtd" value="100" type="number"><button class="btn" onclick="alert('Enviando via Freighter! Conecte Freighter e confirme')">Enviar via Freighter</button><button class="btn btn-outline" onclick="closeModal('modal-enviar')">Fechar</button></div></div>
-<div id="modal-receber" class="modal" onclick="closeModal('modal-receber')"><div class="modal-box" onclick="event.stopPropagation()"><h3>Receber MCCOIN</h3><p id="receber-addr" style="font-size:11px;word-break:break-all;background:#000;padding:8px;border-radius:8px">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI</p><div id="qrcode"></div><button class="btn btn-outline" onclick="closeModal('modal-receber')">Fechar</button></div></div>
-<div id="modal-swap-mc" class="modal" onclick="closeModal('modal-swap-mc')"><div class="modal-box" onclick="event.stopPropagation()"><h3>🪙 Swap MCCOIN</h3><p style="font-size:20px;color:#f5d000;font-weight:800">Supply Fixo 1.000.000.000 MCCOIN</p><p style="font-size:12px;color:#aaa;margin:8px 0">Emissor: GDZC...YNKCI</p><button class="btn" onclick="window.open('https://lobstr.co/trade/MCCOIN:GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI','_blank')">Abrir no Lobstr</button><button class="btn btn-outline" onclick="closeModal('modal-swap-mc')">Fechar</button></div></div>
-<div id="modal-chaves" class="modal" onclick="closeModal('modal-chaves')"><div class="modal-box" onclick="event.stopPropagation()"><h3>🔑 Gerar Chaves ISO 20022</h3><button class="btn" onclick="gerarChaves()">Gerar Par</button><p id="chave-pub" style="font-size:10px;word-break:break-all;margin-top:10px;background:#000;padding:8px;border-radius:8px"></p><p id="chave-sec" style="font-size:10px;word-break:break-all;margin-top:6px;background:#000;padding:8px;border-radius:8px;color:#f5a"></p><button class="btn" onclick="alert('Trustline MCCOIN / GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI - Confirme na Freighter')">Criar Trustline MCCOIN</button><button class="btn btn-outline" onclick="closeModal('modal-chaves')">Fechar</button></div></div>
-<div id="modal-asset" class="modal" onclick="closeModal('modal-asset')"><div class="modal-box" onclick="event.stopPropagation()"><h3 id="asset-title">XLM</h3><p id="asset-saldo" style="margin:10px 0">Saldo: 0.00</p><button class="btn" id="asset-btn">Abrir</button><button class="btn btn-outline" onclick="closeModal('modal-asset')">Fechar</button></div></div>
+<!-- TELA CARTEIRA -->
+<div id="tela-carteira" class="card hidden">
+  <h3>Olá, <span id="nome-user">Usuário</span></h3>
+
+  <div class="box">
+    <b>PUB:</b><br><span id="pub-txt">-</span><br>
+    <button onclick="copiar('pub-txt')">📋 Copiar PUB</button>
+    <button class="sec" onclick="salvarTxt()">💾 Salvar Backup (.txt)</button>
+  </div>
+
+  <div class="box">
+    <b>SEC:</b><br><span id="sec-txt">••••••••••••••••</span><br>
+    <button onclick="mostrarSec()">👁️ Mostrar / Esconder</button>
+    <button onclick="copiarSec()">📋 Copiar SEC</button>
+  </div>
+
+  <button onclick="gerarPar()">🔑 Gerar Par Novo</button>
+  <button onclick="criarTrustline()">🪙 Criar Trustline MCCOIN</button>
+  <button class="sec" onclick="sair()">Sair</button>
+  <p class="small" id="status"></p>
+</div>
 
 <script>
-function editText(id){let el=document.getElementById(id);let n=prompt("Novo texto:",el.innerText);if(n!==null){el.innerText=n;localStorage.setItem(id,n);}}
-function editLogo(id){let url=prompt("Cole URL da nova logo:",document.getElementById(id).src);if(url){document.getElementById(id).src=url;localStorage.setItem(id,url);}}
-(function restore(){["txt-ola","txt-addr","txt-mcc","logo-top","logo-mcc"].forEach(id=>{let v=localStorage.getItem(id);if(v){let e=document.getElementById(id);if(e){if(id.includes('logo'))e.src=v;else e.innerText=v;}}});})();
-function openModal(id){document.getElementById(id).classList.add('active');if(id==='modal-receber'){let addr=document.getElementById('txt-addr').innerText;document.getElementById('receber-addr').innerText=addr;document.getElementById('qrcode').innerHTML="";new QRCode(document.getElementById('qrcode'),{text:addr,width:160,height:160});}}
-function closeModal(id){document.getElementById(id).classList.remove('active');}
-function openTelegram(){window.open('https://t.me/walt/start?startapp=ref-4-eyDHMga5640','_blank');}
-function openAsset(s){document.getElementById('asset-title').innerText=s+" - Carteira Alinhada";document.getElementById('asset-saldo').innerText="ISO20022 • Rede Stellar • "+s;let b=document.getElementById('asset-btn');b.innerText="Abrir "+s+" no Explorer";b.onclick=()=>window.open(s==='MCCOIN'?'https://stellar.expert/explorer/public/asset/MCCOIN-GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI':'https://lobstr.co/assets/'+s,'_blank');openModal('modal-asset');}
-function gerarChaves(){let kp=StellarSdk.Keypair.random();document.getElementById('chave-pub').innerText="PUB: "+kp.publicKey();document.getElementById('chave-sec').innerText="SEC: "+kp.secret();alert("Chaves geradas! Copie e guarde a secreta!");}
+let secAtual = "";
+let secVisivel = false;
+
+function copiar(id){
+  let t = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t);
+  alert("Copiado!");
+}
+function copiarSec(){
+  if(!secAtual) return alert("Gere uma carteira primeiro");
+  navigator.clipboard.writeText(secAtual);
+  alert("SEC copiado! Guarde com cuidado!");
+}
+function mostrarSec(){
+  if(!secAtual) return;
+  secVisivel = !secVisivel;
+  document.getElementById("sec-txt").innerText = secVisivel ? secAtual : "••••••••••••••••";
+}
+function salvarTxt(){
+  if(!secAtual) return alert("Gere uma carteira primeiro");
+  let pub = document.getElementById("pub-txt").innerText;
+  let conteudo = "MCCOIN WALLET BACKUP\n\nPUB: "+pub+"\nSEC: "+secAtual+"\n\nGUARDE COM SEGURANÇA. NUNCA COMPARTILHE SEU SEC!";
+  let blob = new Blob([conteudo], {type:"text/plain"});
+  let a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "mccoin-backup.txt";
+  a.click();
+}
+function criarCarteira(){
+  let senha = document.getElementById("senha").value;
+  if(senha.length < 4) return alert("Crie uma senha com no mínimo 4 dígitos!");
+  let par = StellarSdk.Keypair.random();
+  secAtual = par.secret();
+  let pub = par.publicKey();
+  let cripto = CryptoJS.AES.encrypt(secAtual, senha).toString();
+  localStorage.setItem("mccoin_wallet", JSON.stringify({pub:pub, sec_cripto:cripto}));
+  abrirCarteira(pub);
+  alert("Carteira criada! COPIE e SALVE seu SEC agora!");
+}
+function entrar(){
+  let senha = document.getElementById("senha").value;
+  let salvo = localStorage.getItem("mccoin_wallet");
+  if(!salvo) return alert("Nenhuma carteira neste aparelho. Clique em Criar Nova Carteira ou Importar.");
+  try{
+    let dados = JSON.parse(salvo);
+    let sec = CryptoJS.AES.decrypt(dados.sec_cripto, senha).toString(CryptoJS.enc.Utf8);
+    if(!sec) return alert("Senha errada!");
+    secAtual = sec;
+    abrirCarteira(dados.pub);
+  }catch(e){ alert("Senha errada!"); }
+}
+function mostrarImportar(){ document.getElementById("box-importar").classList.remove("hidden"); }
+function importar(){
+  let sec = document.getElementById("sec-importar").value.trim();
+  let senha = document.getElementById("senha-nova").value;
+  if(!sec.startsWith("S")) return alert("SEC inválido! Começa com S...");
+  if(senha.length < 4) return alert("Crie uma senha!");
+  try{
+    let par = StellarSdk.Keypair.fromSecret(sec);
+    let cripto = CryptoJS.AES.encrypt(sec, senha).toString();
+    localStorage.setItem("mccoin_wallet", JSON.stringify({pub:par.publicKey(), sec_cripto:cripto}));
+    secAtual = sec;
+    abrirCarteira(par.publicKey());
+    alert("Carteira restaurada com sucesso!");
+  }catch(e){ alert("SEC inválido!"); }
+}
+function abrirCarteira(pub){
+  document.getElementById("tela-login").classList.add("hidden");
+  document.getElementById("tela-carteira").classList.remove("hidden");
+  document.getElementById("pub-txt").innerText = pub;
+  document.getElementById("sec-txt").innerText = "••••••••••••••••";
+  secVisivel = false;
+}
+function gerarPar(){
+  if(!confirm("Gerar um par novo vai substituir a carteira atual. Você já salvou seu SEC?")) return;
+  let par = StellarSdk.Keypair.random();
+  secAtual = par.secret();
+  let senha = prompt("Digite sua senha para salvar o novo par:");
+  if(!senha) return;
+  let cripto = CryptoJS.AES.encrypt(secAtual, senha).toString();
+  localStorage.setItem("mccoin_wallet", JSON.stringify({pub:par.publicKey(), sec_cripto:cripto}));
+  abrirCarteira(par.publicKey());
+  alert("Novo par gerado! Salve seu novo SEC!");
+}
+async function criarTrustline(){
+  document.getElementById("status").innerText = "Criando Trustline MCCOIN... (precisa de 1 XLM na conta para ativar)";
+  alert("Trustline: Para ativar, sua conta precisa ter 1 XLM. Depois clique em Enviar e ative no Lobstr / na rede Stellar.");
+}
+function sair(){
+  secAtual = "";
+  document.getElementById("tela-carteira").classList.add("hidden");
+  document.getElementById("tela-login").classList.remove("hidden");
+}
 </script>
 </body>
 </html>
