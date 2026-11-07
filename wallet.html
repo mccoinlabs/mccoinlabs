@@ -18,8 +18,8 @@ h2{padding:0 14px;display:flex;justify-content:space-between;align-items:center}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px}.coin{background:#151515;border:1px solid #222;border-radius:14px;padding:12px}.coin b{font-size:17px}.coin small{color:#aaa}.coin .val{text-align:right}.coin .val b{font-size:14px}
 .login{max-width:420px;margin:30px auto;padding:20px;background:#141414;border:1px solid #FFD700;border-radius:16px}
 input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
-button{cursor:pointer}.hidden{display:none}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px}.modal>div{background:#1a1a1a;border:1px solid #FFD700;border-radius:16px;padding:20px;width:100%;max-width:400px}
+button{cursor:pointer}.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;padding:16px;z-index:999}.modal>div{background:#1a1a1a;border:1px solid #FFD700;border-radius:16px;padding:20px;width:100%;max-width:400px}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #222}.nav b{color:#FFD700}
 .box{background:#222;padding:12px;border-radius:10px;word-break:break-all;margin:10px 0;text-align:left}
 </style>
@@ -29,7 +29,7 @@ button{cursor:pointer}.hidden{display:none}
 <div id="tela-login" class="login">
 <img src="logo.png" width="70" style="border-radius:50%;border:2px solid gold"><br>
 <h2 style="justify-content:center">MC WALLET</h2>
-<p style="font-size:13px;color:#aaa">MC AGROTURISMO • Seguro • Rede ISO 20022</p>
+<p style="font-size:13px;color:#aaa;text-align:center">MC AGROTURISMO • Seguro • Rede ISO 20022</p>
 <label style="color:#FFD700;font-size:13px">1. Crie sua senha (você inventa!)</label>
 <input id="senha" type="password" placeholder="Ex: 1234">
 <label style="color:#FFD700;font-size:13px">2. Repita sua senha</label>
@@ -38,11 +38,11 @@ button{cursor:pointer}.hidden{display:none}
 <button onclick="entrar()" style="width:100%;background:#111;color:#FFD700;border:1px solid #FFD700;padding:12px;border-radius:12px;margin-top:8px">Já tenho carteira - Entrar</button>
 <button onclick="mostrarImportar()" style="width:100%;background:#222;color:#fff;border:1px solid #333;padding:12px;border-radius:12px;margin-top:8px">Importar com SEC</button>
 <div id="box-importar" class="hidden"><input id="sec-importar" placeholder="Cole SEC (começa com S...)"><input id="senha-nova" type="password" placeholder="Crie senha nova"><button onclick="importar()" style="width:100%;background:#FFD700;padding:12px;border-radius:12px;font-weight:bold;border:0">Restaurar</button></div>
+<p style="font-size:12px;color:#aaa">1ª vez: crie senha e clique em Criar Carteira. Se já criou antes neste celular, digite sua senha e clique em Entrar.</p>
 </div>
 
 <div id="tela-carteira" class="hidden">
 <div class="top"><div><small>MC AGROTURISMO</small><h1>MC WALLET</h1></div><div>🔔 ⚙️</div></div>
-
 <div class="card">
 <div style="display:flex;justify-content:space-between"><span>Saldo Total • MCC COIN</span><span onclick="mostrarSec()">👁️</span></div>
 <div class="saldo"><span id="saldo-mcc">0,00</span> <span>MCC</span></div>
@@ -51,22 +51,19 @@ button{cursor:pointer}.hidden{display:none}
 <div class="box"><b>PUB:</b> <span id="pub-txt">-</span><br><button onclick="copiar('pub-txt')" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold">📋 Copiar PUB</button> <button onclick="salvarTxt()" style="background:#222;color:#fff;border:1px solid #FFD700;padding:8px;border-radius:8px">💾 Salvar Backup</button></div>
 <div class="box"><b>SEC:</b> <span id="sec-txt">••••••••</span><br><button onclick="mostrarSec()" style="background:#222;color:#fff;border:1px solid #FFD700;padding:8px;border-radius:8px">👁️ Mostrar</button> <button onclick="copiarSec()" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold">📋 Copiar SEC</button></div>
 </div>
-
 <div class="acoes">
 <button onclick="abrirModal('enviar')">⬆️<br>Enviar</button>
 <button onclick="abrirModal('receber')">⬇️<br>Receber</button>
 <button onclick="abrirModal('swap')">🔄<br>Swap</button>
 <button onclick="carregarHistorico()">🕒<br>Histórico</button>
 </div>
-
 <h2>Portfólio ISO 20022 <span class="badge">✓ ISO 20022</span></h2>
 <div class="grid" id="portfolio"></div>
-
 <div style="margin:14px;background:#1a3a22;border:1px solid #FFD700;border-radius:14px;padding:14px;text-align:center;font-weight:bold">⭐ Área de Membros</div>
 <div id="historico" style="padding:0 14px;font-size:13px;color:#aaa"></div>
 </div>
 
-<div class="nav"><div><b>💼<br>Carteira</b></div><div>📊<br>Mercado</div><div>🔄<br>Trocar</div><div onclick="sair()">👤<br>Perfil</div></div>
+<div id="nav" class="nav hidden"><div><b>💼<br>Carteira</b></div><div>📊<br>Mercado</div><div>🔄<br>Trocar</div><div onclick="sair()">👤<br>Perfil</div></div>
 
 <div id="modal" class="modal hidden"><div>
 <h3 id="modal-titulo">Enviar</h3>
@@ -84,23 +81,13 @@ const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI";
 let secAtual="", secVisivel=false, acaoAtual="enviar";
 let saldoReal = { MCCOIN: 0, XLM: 0 };
 const MOEDAS=[
-{name:"XRP",desc:"XRP • Ripple"},
-{name:"XLM",desc:"XLM • Stellar"},
-{name:"XDC",desc:"XDC • XDC Network"},
-{name:"HBAR",desc:"HBAR • Hedera"},
-{name:"ADA",desc:"ADA • Cardano"},
-{name:"ALGO",desc:"ALGO • Algorand"},
-{name:"QNT",desc:"QNT • Quant"},
-{name:"ETH",desc:"ETH • Ethereum"},
-{name:"USDC",desc:"USDC • USD Coin"},
-{name:"MCCOIN",desc:"MCC • McCoin"},
+{name:"XRP",desc:"XRP • Ripple"},{name:"XLM",desc:"XLM • Stellar"},{name:"XDC",desc:"XDC • XDC Network"},{name:"HBAR",desc:"HBAR • Hedera"},{name:"ADA",desc:"ADA • Cardano"},{name:"ALGO",desc:"ALGO • Algorand"},{name:"QNT",desc:"QNT • Quant"},{name:"ETH",desc:"ETH • Ethereum"},{name:"USDC",desc:"USDC • USD Coin"},{name:"MCCOIN",desc:"MCC • McCoin"},
 ];
 function renderPortfolio(){
   let h=""; MOEDAS.forEach(m=>{
     let q = 0;
     if(m.name==="MCCOIN") q = saldoReal.MCCOIN;
     if(m.name==="XLM") q = saldoReal.XLM;
-    // Outras moedas: 0 até a pessoa ter de verdade - SEM VALOR FAKE
     h+=`<div class="coin"><b>${m.name}</b><br><small>${m.desc}</small><div class="val"><b>${q.toLocaleString('pt-BR',{minimumFractionDigits:2})} ${m.name}</b><br><small>${q===0 ? "Sem saldo" : "Saldo real"}</small></div></div>`;
   }); document.getElementById("portfolio").innerHTML=h;
 }
@@ -108,18 +95,19 @@ function copiar(id){navigator.clipboard.writeText(document.getElementById(id).in
 function copiarSec(){if(!secAtual)return alert("Gere carteira");navigator.clipboard.writeText(secAtual);alert("SEC copiado!");}
 function mostrarSec(){if(!secAtual)return;secVisivel=!secVisivel;document.getElementById("sec-txt").innerText=secVisivel?secAtual:"••••••••";}
 function salvarTxt(){if(!secAtual)return alert("Gere carteira");let blob=new Blob(["MCCOIN WALLET BACKUP\n\nPUB: "+document.getElementById("pub-txt").innerText+"\nSEC: "+secAtual],{type:"text/plain"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mccoin-backup.txt";a.click();}
-function criarCarteira(){let s=document.getElementById("senha").value,s2=document.getElementById("senha2").value;if(s.length<4)return alert("Crie senha com 4+ dígitos!");if(s!==s2)return alert("Senhas diferentes!");let p=StellarSdk.Keypair.random();secAtual=p.secret();let c=CryptoJS.AES.encrypt(secAtual,s).toString();localStorage.setItem("mccoin_wallet",JSON.stringify({pub:p.publicKey(),sec_cripto:c}));abrirCarteira(p.publicKey());alert("Carteira criada! Salve seu SEC!");}
-function entrar(){let s=document.getElementById("senha").value;let sal=localStorage.getItem("mccoin_wallet");if(!sal)return alert("Nenhuma carteira aqui. Crie uma.");try{let d=JSON.parse(sal);let sec=CryptoJS.AES.decrypt(d.sec_cripto,s).toString(CryptoJS.enc.Utf8);if(!sec)return alert("Senha errada!");secAtual=sec;abrirCarteira(d.pub);}catch(e){alert("Senha errada!");}}
+function criarCarteira(){let s=document.getElementById("senha").value,s2=document.getElementById("senha2").value;if(s.length<4)return alert("Crie senha com 4+ dígitos!");if(s!==s2)return alert("Senhas diferentes! Digite a mesma nos 2 campos.");let p=StellarSdk.Keypair.random();secAtual=p.secret();let c=CryptoJS.AES.encrypt(secAtual,s).toString();localStorage.setItem("mccoin_wallet",JSON.stringify({pub:p.publicKey(),sec_cripto:c}));abrirCarteira(p.publicKey());alert("Carteira criada! Salve seu SEC!");}
+function entrar(){let s=document.getElementById("senha").value;if(!s) return alert("Digite sua senha!");let sal=localStorage.getItem("mccoin_wallet");if(!sal)return alert("Nenhuma carteira neste celular ainda. Crie uma senha nos 2 campos e clique em + Criar Carteira.");try{let d=JSON.parse(sal);let sec=CryptoJS.AES.decrypt(d.sec_cripto,s).toString(CryptoJS.enc.Utf8);if(!sec)return alert("Senha errada! Tente de novo ou crie uma nova.");secAtual=sec;abrirCarteira(d.pub);}catch(e){alert("Senha errada!");}}
 function mostrarImportar(){document.getElementById("box-importar").classList.remove("hidden");}
-function mostrarImportar2(){document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");mostrarImportar();}
+function mostrarImportar2(){document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");mostrarImportar();}
 function importar(){let sec=document.getElementById("sec-importar").value.trim();let s=document.getElementById("senha-nova").value;if(!sec.startsWith("S"))return alert("SEC inválido!");if(s.length<4)return alert("Crie senha!");try{let p=StellarSdk.Keypair.fromSecret(sec);let c=CryptoJS.AES.encrypt(sec,s).toString();localStorage.setItem("mccoin_wallet",JSON.stringify({pub:p.publicKey(),sec_cripto:c}));secAtual=sec;abrirCarteira(p.publicKey());alert("Restaurada!");}catch(e){alert("SEC inválido!");}}
-async function abrirCarteira(pub){document.getElementById("tela-login").classList.add("hidden");document.getElementById("tela-carteira").classList.remove("hidden");document.getElementById("pub-txt").innerText=pub;saldoReal={MCCOIN:0,XLM:0};renderPortfolio();try{let acc=await server.loadAccount(pub);let bal=acc.balances.find(b=>b.asset_code==="MCCOIN");let xlm=acc.balances.find(b=>b.asset_type==="native");saldoReal.MCCOIN=bal?parseFloat(bal.balance):0;saldoReal.XLM=xlm?parseFloat(xlm.balance):0;document.getElementById("saldo-mcc").innerText=saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2});renderPortfolio();}catch(e){document.getElementById("saldo-mcc").innerText="0,00";}}
-function criarCarteiraNova(){if(confirm("Criar nova carteira? Salve seu SEC atual antes!")){document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");}}
+async function abrirCarteira(pub){document.getElementById("tela-login").classList.add("hidden");document.getElementById("tela-carteira").classList.remove("hidden");document.getElementById("nav").classList.remove("hidden");document.getElementById("modal").classList.add("hidden");document.getElementById("pub-txt").innerText=pub;saldoReal={MCCOIN:0,XLM:0};renderPortfolio();try{let acc=await server.loadAccount(pub);let bal=acc.balances.find(b=>b.asset_code==="MCCOIN");let xlm=acc.balances.find(b=>b.asset_type==="native");saldoReal.MCCOIN=bal?parseFloat(bal.balance):0;saldoReal.XLM=xlm?parseFloat(xlm.balance):0;document.getElementById("saldo-mcc").innerText=saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2});renderPortfolio();}catch(e){document.getElementById("saldo-mcc").innerText="0,00";}}
+function criarCarteiraNova(){if(confirm("Criar nova carteira? Salve seu SEC atual antes!")){document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");}}
 function abrirModal(a){acaoAtual=a;document.getElementById("modal").classList.remove("hidden");document.getElementById("modal-titulo").innerText=a==="enviar"?"Enviar":a==="receber"?"Receber - Seu PUB para receber":"Swap MCCOIN <-> XLM";document.getElementById("modal-msg").innerText=a==="receber"?"Seu endereço para receber: "+document.getElementById("pub-txt").innerText:"";if(a==="receber"){document.getElementById("modal-destino").value=document.getElementById("pub-txt").innerText;}}
 function fecharModal(){document.getElementById("modal").classList.add("hidden");}
 async function executarAcao(){if(acaoAtual==="receber"){copiar("modal-destino");return;}let dest=document.getElementById("modal-destino").value.trim();let val=document.getElementById("modal-valor").value;let moeda=document.getElementById("modal-moeda").value;if(!dest.startsWith("G"))return alert("Destino inválido!");if(!val)return alert("Digite valor!");document.getElementById("modal-msg").innerText="Enviando...";try{let pub=document.getElementById("pub-txt").innerText;let acc=await server.loadAccount(pub);let tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(moeda==="XLM"?StellarSdk.Operation.payment({destination:dest,asset:StellarSdk.Asset.native(),amount:val}):StellarSdk.Operation.payment({destination:dest,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:val})).setTimeout(30).build();tx.sign(StellarSdk.Keypair.fromSecret(secAtual));let r=await server.submitTransaction(tx);document.getElementById("modal-msg").innerText="✅ Enviado! Hash: "+r.hash;abrirCarteira(pub);}catch(e){document.getElementById("modal-msg").innerText="Erro: "+e.message;}}
 async function carregarHistorico(){let pub=document.getElementById("pub-txt").innerText;document.getElementById("historico").innerHTML="Carregando histórico real...";try{let ops=await server.operations().forAccount(pub).order("desc").limit(10).call();if(ops.records.length===0){document.getElementById("historico").innerHTML="Sem transações ainda.";return;}let h="<h3>Histórico Real</h3>";ops.records.forEach(o=>{h+=`<div style="background:#151515;padding:10px;border-radius:10px;margin:6px 0">${o.type} - ${o.amount||""} ${o.asset_code||""} - ${new Date(o.created_at).toLocaleString('pt-BR')}</div>`});document.getElementById("historico").innerHTML=h;}catch(e){document.getElementById("historico").innerHTML="Sem histórico. Conta precisa ser ativada com 1 XLM.";}}
-function sair(){secAtual="";document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");}
+function sair(){secAtual="";document.getElementById("modal").classList.add("hidden");document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");}
+document.getElementById("modal").classList.add("hidden");
 renderPortfolio();
 </script>
 </body>
