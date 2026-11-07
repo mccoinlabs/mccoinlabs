@@ -9,12 +9,13 @@
 <style>
 body{background:#0a0a0a;color:#fff;font-family:Arial;text-align:center;padding:20px}
 .card{background:#1a1a1a;border:1px solid #FFD700;border-radius:16px;padding:20px;max-width:420px;margin:auto}
-input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
+input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff;box-sizing:border-box}
 button{background:#FFD700;color:#000;border:0;padding:12px;border-radius:10px;width:100%;font-weight:bold;margin:6px 0;cursor:pointer}
 button.sec{background:#222;color:#fff;border:1px solid #FFD700}
 .box{background:#222;padding:12px;border-radius:10px;text-align:left;word-break:break-all;margin:10px 0}
-.small{font-size:12px;color:#aaa}
+.small{font-size:12px;color:#aaa;line-height:1.5}
 .hidden{display:none}
+label{font-size:13px;color:#FFD700;display:block;text-align:left;margin-top:10px}
 </style>
 </head>
 <body>
@@ -25,21 +26,32 @@ button.sec{background:#222;color:#fff;border:1px solid #FFD700}
 <!-- TELA LOGIN / CRIAR -->
 <div id="tela-login" class="card">
   <h3>Entrar na Carteira</h3>
-  <input id="senha" type="password" placeholder="Digite sua senha">
-  <button onclick="entrar()">Entrar na Carteira</button>
-  <button class="sec" onclick="criarCarteira()">Criar Nova Carteira</button>
+
+  <label>1. Crie sua senha (você inventa!)</label>
+  <input id="senha" type="password" placeholder="Ex: 1234 ou mccoin123">
+  <label>2. Repita sua senha</label>
+  <input id="senha2" type="password" placeholder="Digite a mesma senha de novo">
+
+  <button onclick="criarCarteira()">Criar Minha Carteira</button>
+  <button class="sec" onclick="entrar()">Já tenho carteira - Entrar</button>
   <button class="sec" onclick="mostrarImportar()">Importar com SEC / Restaurar</button>
+
   <div id="box-importar" class="hidden">
     <input id="sec-importar" placeholder="Cole seu SEC aqui (começa com S...)">
     <input id="senha-nova" type="password" placeholder="Crie uma senha nova">
     <button onclick="importar()">Restaurar Carteira</button>
   </div>
-  <p class="small">Igual Lobstr: sua carteira fica salva neste aparelho, criptografada pela sua senha. Para usar em outro celular, salve seu SEC.</p>
+
+  <p class="small">Como funciona:<br>
+  • 1ª vez: Você cria uma senha e clica em <b>Criar Minha Carteira</b><br>
+  • O site gera sua PUB e SEC na hora<br>
+  • Salve seu SEC com o botão <b>Salvar Backup</b><br>
+  • Depois é só digitar sua senha para entrar</p>
 </div>
 
 <!-- TELA CARTEIRA -->
 <div id="tela-carteira" class="card hidden">
-  <h3>Olá, <span id="nome-user">Usuário</span></h3>
+  <h3>Olá, Usuário</h3>
 
   <div class="box">
     <b>PUB:</b><br><span id="pub-txt">-</span><br>
@@ -90,7 +102,9 @@ function salvarTxt(){
 }
 function criarCarteira(){
   let senha = document.getElementById("senha").value;
-  if(senha.length < 4) return alert("Crie uma senha com no mínimo 4 dígitos!");
+  let senha2 = document.getElementById("senha2").value;
+  if(senha.length < 4) return alert("Crie uma senha com no mínimo 4 dígitos! Ex: 1234");
+  if(senha !== senha2) return alert("As senhas não são iguais! Digite a mesma nos 2 campos.");
   let par = StellarSdk.Keypair.random();
   secAtual = par.secret();
   let pub = par.publicKey();
@@ -102,7 +116,7 @@ function criarCarteira(){
 function entrar(){
   let senha = document.getElementById("senha").value;
   let salvo = localStorage.getItem("mccoin_wallet");
-  if(!salvo) return alert("Nenhuma carteira neste aparelho. Clique em Criar Nova Carteira ou Importar.");
+  if(!salvo) return alert("Nenhuma carteira neste aparelho. Crie uma senha e clique em Criar Minha Carteira.");
   try{
     let dados = JSON.parse(salvo);
     let sec = CryptoJS.AES.decrypt(dados.sec_cripto, senha).toString(CryptoJS.enc.Utf8);
@@ -146,7 +160,7 @@ function gerarPar(){
 }
 async function criarTrustline(){
   document.getElementById("status").innerText = "Criando Trustline MCCOIN... (precisa de 1 XLM na conta para ativar)";
-  alert("Trustline: Para ativar, sua conta precisa ter 1 XLM. Depois clique em Enviar e ative no Lobstr / na rede Stellar.");
+  alert("Trustline: Para ativar, sua conta precisa ter 1 XLM.");
 }
 function sair(){
   secAtual = "";
