@@ -1,0 +1,21 @@
+VERSION="2.0.0"
+NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015"
+
+[DOCUMENTATION]
+ORG_NAME="McCoin Labs"
+ORG_URL="https://mccoinlabs.github.io/mccoinlabs"
+ORG_DBA="McCoin Labs"
+ORG_DESCRIPTION="MCCOIN - Moeda Comunitaria - Supply fixo 1B na Stellar"
+ORG_GITHUB="mccoinlabs"
+
+[[CURRENCIES]]
+code="MCCOIN"
+issuer="GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI"
+displayName="MCCOIN"
+desc="MCCOIN 1B - Emissao travada - Lastro comunitario"
+is_asset_anchored=false
+fixed_number=1000000000
+max_number=1000000000
+status="live"
+image="https://mccoinlabs.github.io/mccoinlabs/logo.png"
+conditions="Supply fixo 1B, nao inflacionavel"

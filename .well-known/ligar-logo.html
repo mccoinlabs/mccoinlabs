@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ligar Logo MCCOIN</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.0.0/stellar-sdk.min.js"></script>
+<style>body{background:#0a0f0d;color:#fff;font-family:Arial;padding:20px;max-width:420px;margin:auto}input{width:100%;padding:12px;margin:8px 0;border-radius:10px;background:#222;color:#fff;border:1px solid #333}button{width:100%;padding:14px;background:#FFD700;border:0;border-radius:10px;font-weight:bold;cursor:pointer}.ok{color:#00ff88}.err{color:#ff5555}</style></head>
+<body>
+<h2 style="color:#FFD700">🖼️ Ligar Logo MCCOIN</h2>
+<p style="font-size:13px;color:#aaa">Feito 1 vez só! Usa o SEC do EMISSOR GDZC...<br><b>NUNCA manda esse SEC pra ninguém!</b></p>
+<button onclick="testar()" style="background:#333;color:#fff;margin-bottom:10px">🔍 1º TESTAR SE O STELLAR.TOML TÁ NO AR</button>
+<p id="teste" style="font-size:13px"></p>
+<label>SEC do EMISSOR (começa com S...)</label>
+<input id="sec" type="password" placeholder="Cole o SEC do GDZC...">
+<button onclick="ligar()">✅ 2º LIGAR LOGO AGORA</button>
+<p id="msg" style="font-size:13px;color:#FFD700"></p>
+<script>
+const server=new StellarSdk.Horizon.Server("https://horizon.stellar.org");
+async function testar(){
+  document.getElementById("teste").innerText="Testando...";
+  try{
+    let r=await fetch("https://mccoinlabs.github.io/.well-known/stellar.toml");
+    if(r.ok){ document.getElementById("teste").innerHTML="<span class='ok'>✅ ACHADO NA RAIZ! Pode ligar!</span>"; }
+    else{ document.getElementById("teste").innerHTML="<span class='err'>❌ AINDA DÁ 404 NA RAIZ! Cria o repositório mccoinlabs.github.io com o stellar.toml na raiz antes de ligar!</span>"; }
+  }catch(e){ document.getElementById("teste").innerText="Erro ao testar: "+e.message; }
+}
+async function ligar(){
+  let sec=document.getElementById("sec").value.trim();
+  if(!sec.startsWith("S")) return alert("SEC inválido!");
+  document.getElementById("msg").innerText="Ligando... aguarde...";
+  try{
+    let kp=StellarSdk.Keypair.fromSecret(sec);
+    let pub=kp.publicKey();
+    if(pub!=="GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI") return alert("Esse SEC não é do emissor! É da carteira "+pub);
+    let acc=await server.loadAccount(pub);
+    let tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.setOptions({homeDomain:"mccoinlabs.github.io"})).setTimeout(30).build();
+    tx.sign(kp);
+    let r=await server.submitTransaction(tx);
+    document.getElementById("msg").innerText="✅ PRONTO! Logo ligada! Hash: "+r.hash;
+    alert("✅ PRONTO! Agora a Lobstr vai buscar sua logo!");
+  }catch(e){ document.getElementById("msg").innerText="Erro: "+e.message; alert("Erro: "+e.message); }
+}
+</script></body></html>
