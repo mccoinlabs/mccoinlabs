@@ -18,10 +18,12 @@ h2{padding:0 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padd
 .login{max-width:420px;margin:30px auto;padding:20px;background:#141414;border:1px solid #FFD700;border-radius:16px}
 input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
 button{cursor:pointer}.hidden{display:none!important}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;padding:16px;z-index:999}.modal>div{background:#1a1a1a;border:1px solid #FFD700;border-radius:16px;padding:20px;width:100%;max-width:400px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:16px;z-index:999}.modal>div{background:#1a1a1a;border:1px solid #FFD700;border-radius:16px;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #222}.nav div{cursor:pointer;text-align:center}.nav b{color:#FFD700}
 .box{background:#222;padding:12px;border-radius:10px;word-break:break-all;margin:10px 0;text-align:left}
 .aba{padding:0 14px}
+.check{display:flex;gap:10px;align-items:flex-start;background:#222;padding:12px;border-radius:10px;margin:10px 0;font-size:13px}.check input{width:20px;height:20px;margin:0}
+.btn-off{opacity:.4!important;pointer-events:none}
 </style>
 </head>
 <body>
@@ -30,15 +32,11 @@ button{cursor:pointer}.hidden{display:none!important}
 <div id="tela-login" class="login">
 <img src="logo.png" width="70" style="border-radius:50%;border:2px solid gold"><br>
 <h2 style="text-align:center;padding:0">MC WALLET</h2>
-
-<!-- TELA INICIAL: SÓ 2 BOTÕES -->
 <div id="tela-inicial">
 <button onclick="mostrarCriar()" style="width:100%;background:#22c55e;padding:16px;border-radius:12px;font-weight:bold;border:0;font-size:16px">+ Criar Carteira</button>
 <button onclick="mostrarEntrarPub()" style="width:100%;background:#111;color:#FFD700;border:1px solid #FFD700;padding:16px;border-radius:12px;margin-top:10px;font-weight:bold;font-size:16px">🔑 Chave Pública</button>
 <p style="font-size:12px;color:#aaa;text-align:center">Criar = carteira nova.<br>Chave Pública = entrar com seu PUB que já tem.</p>
 </div>
-
-<!-- CRIAR -->
 <div id="bloco-criar" class="hidden">
 <label style="color:#FFD700;font-size:13px">1. Crie sua senha</label>
 <input id="senha" type="password" placeholder="••••">
@@ -47,14 +45,11 @@ button{cursor:pointer}.hidden{display:none!important}
 <button onclick="criarCarteira()" style="width:100%;background:#22c55e;padding:14px;border-radius:12px;font-weight:bold;border:0">+ Criar Carteira</button>
 <button onclick="voltarInicial()" style="width:100%;background:#222;color:#fff;border:1px solid #333;padding:12px;border-radius:12px;margin-top:8px">← Voltar</button>
 </div>
-
-<!-- ENTRAR COM PUB -->
 <div id="bloco-entrar-pub" class="hidden">
 <label style="color:#FFD700;font-size:13px">Cole sua Chave Pública (PUB)</label>
 <input id="pub-entrar" placeholder="Cole seu PUB (começa com G...)">
 <button onclick="entrarComPub()" style="width:100%;background:#22c55e;padding:14px;border-radius:12px;font-weight:bold;border:0">Entrar com PUB</button>
 <button onclick="voltarInicial()" style="width:100%;background:#222;color:#fff;border:1px solid #333;padding:12px;border-radius:12px;margin-top:8px">← Voltar</button>
-<p style="font-size:12px;color:#aaa">Você entra só com o PUB. Depois que entrar, a chave S aparece escondida, só mostra se você clicar em Mostrar.</p>
 </div>
 </div>
 
@@ -68,13 +63,8 @@ button{cursor:pointer}.hidden{display:none!important}
 <div class="saldo"><span id="saldo-mcc">0,00</span> <span>MCC</span></div>
 <div style="color:#aaa;font-size:13px">Clique no 👁️ para ocultar / mostrar o saldo</div>
 <div class="btns"><button class="btn-verde" onclick="pedirNovaCarteira()">+ Criar Carteira</button><button class="btn-ouro" onclick="mostrarImportar2()">↓ Importar</button></div>
-<div class="box"><b>PUB:</b> <span id="pub-txt">-</span><br><button onclick="copiar('pub-txt')" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold">📋 Copiar PUB</button></div>
-<!-- CHAVE S - SEMPRE ESCONDIDA, SÓ MOSTRA DEPOIS DE ENTRAR + CLICAR -->
-<div class="box" id="box-sec"><b>Chave S (SEC):</b> <span id="sec-txt">••••••••••••</span><br>
-<button onclick="mostrarSec()" style="background:#222;color:#fff;border:1px solid #FFD700;padding:8px;border-radius:8px">👁️ Mostrar / Ocultar</button>
-<button onclick="copiarSec()" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold">📋 Copiar SEC</button>
-<p style="font-size:11px;color:#aaa;margin:4px 0 0">Só aparece se você clicar em Mostrar. Se for carteira só com PUB, vai pedir para colar o SEC 1 vez para salvar com senha.</p>
-</div>
+<div class="box"><b>PUB:</b> <span id="pub-txt">-</span><br><button onclick="copiar('pub-txt')" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold">📋 Copiar PUB</button> <button onclick="compartilharCarteira()" style="background:#25D366;padding:8px;border-radius:8px;border:0;font-weight:bold">📤 Compartilhar com Amigo</button></div>
+<!-- SEM CAIXA SEC AQUI - SEC FICA SÓ NO PERFIL -->
 </div>
 <div class="acoes">
 <button onclick="abrirModal('enviar')">⬆️<br>Enviar</button>
@@ -88,24 +78,15 @@ button{cursor:pointer}.hidden{display:none!important}
 <div id="historico" style="padding:0 14px;font-size:13px;color:#aaa"></div>
 </div>
 
-<div id="aba-mercado" class="hidden aba">
-<h2>Mercado</h2>
-<p style="color:#aaa;font-size:13px">Clique na moeda para abrir o ecossistema oficial.</p>
-<div class="grid" id="mercado-lista"></div>
-<button onclick="atualizarPrecos()" style="width:100%;background:#FFD700;padding:12px;border-radius:10px;font-weight:bold;border:0;margin-top:12px">🔄 Atualizar Preços</button>
-</div>
-
-<div id="aba-trocar" class="hidden aba">
-<h2>Trocar / Swap</h2>
-<input id="swap-valor" placeholder="Valor ex: 10">
-<button onclick="fazerSwap()" style="width:100%;background:#22c55e;padding:14px;border-radius:12px;font-weight:bold;border:0">Trocar Agora</button>
-<p id="swap-msg" style="font-size:12px;color:#aaa"></p>
-</div>
+<div id="aba-mercado" class="hidden aba"><h2>Mercado</h2><div class="grid" id="mercado-lista"></div><button onclick="atualizarPrecos()" style="width:100%;background:#FFD700;padding:12px;border-radius:10px;font-weight:bold;border:0;margin-top:12px">🔄 Atualizar Preços</button></div>
+<div id="aba-trocar" class="hidden aba"><h2>Trocar / Swap</h2><input id="swap-valor" placeholder="Valor ex: 10"><button onclick="fazerSwap()" style="width:100%;background:#22c55e;padding:14px;border-radius:12px;font-weight:bold;border:0">Trocar Agora</button><p id="swap-msg" style="font-size:12px;color:#aaa"></p></div>
 
 <div id="aba-perfil" class="hidden aba">
 <h2>Perfil</h2>
 <div class="box"><b>Seu PUB:</b><br><span id="pub-perfil">-</span></div>
 <button onclick="copiar('pub-perfil')" style="width:100%;background:#FFD700;padding:12px;border-radius:10px;font-weight:bold;border:0">📋 Copiar PUB</button>
+<button onclick="compartilharCarteira()" style="width:100%;background:#25D366;padding:12px;border-radius:10px;font-weight:bold;border:0;margin-top:8px">📤 Compartilhar Carteira com Amigo</button>
+<button onclick="abrirModalSec()" style="width:100%;background:#111;color:#FFD700;border:1px solid #FFD700;padding:12px;border-radius:10px;margin-top:8px;font-weight:bold">🔐 Ver Chave S (SEC) - Área Segura</button>
 <button onclick="pedirNovaCarteira()" style="width:100%;background:#222;color:#fff;border:1px solid #FFD700;padding:12px;border-radius:10px;margin-top:8px">+ Criar Nova Carteira</button>
 <button onclick="sair()" style="width:100%;background:#b91c1c;color:#fff;padding:12px;border-radius:10px;margin-top:8px;border:0">Sair da Carteira</button>
 </div>
@@ -113,6 +94,7 @@ button{cursor:pointer}.hidden{display:none!important}
 
 <div id="nav" class="nav hidden"><div onclick="mostrarAba('carteira')"><b>💼<br>Carteira</b></div><div onclick="mostrarAba('mercado')">📊<br>Mercado</div><div onclick="mostrarAba('trocar')">🔄<br>Trocar</div><div onclick="mostrarAba('perfil')">👤<br>Perfil</div></div>
 
+<!-- MODAL ENVIAR / RECEBER -->
 <div id="modal" class="modal hidden"><div>
 <h3 id="modal-titulo">Enviar</h3>
 <input id="modal-destino" placeholder="Destino PUB (G...)">
@@ -124,10 +106,42 @@ button{cursor:pointer}.hidden{display:none!important}
 <p id="modal-msg" style="font-size:12px;color:#aaa"></p>
 </div></div>
 
+<!-- MODAL SALVAR SEC NA CRIAÇÃO - COM COPIAR + CONFIRMAR -->
+<div id="modal-salvar-sec" class="modal hidden"><div>
+<h3 style="color:#FFD700">⚠️ SALVE SUA CHAVE S AGORA!</h3>
+<p style="font-size:13px;color:#aaa">Sem essa chave você PERDE a carteira para sempre! Ela é longa, por isso use Copiar, não precisa anotar na mão.</p>
+<div class="box"><b>Seu PUB:</b><br><span id="novo-pub">-</span><br><button onclick="copiar('novo-pub')" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold;margin-top:6px">📋 Copiar PUB</button></div>
+<div class="box" style="border:1px solid #FFD700"><b>🔐 Sua Chave S (SEC):</b><br><span id="novo-sec" style="color:#FFD700;font-weight:bold">-</span><br><button onclick="copiar('novo-sec')" style="background:#FFD700;padding:10px;border-radius:8px;border:0;font-weight:bold;margin-top:6px">📋 Copiar Chave S</button> <button onclick="baixarBackupNovo()" style="background:#222;color:#fff;border:1px solid #FFD700;padding:10px;border-radius:8px">💾 Baixar Backup</button></div>
+<label class="check"><input type="checkbox" id="check-salvei" onchange="liberarEntrar()"> <span>☑️ Eu copiei / salvei minha Chave S e meu PUB. Eu entendo que sem ela perco a carteira.</span></label>
+<button id="btn-entrar-apos-salvar" onclick="entrarAposSalvar()" class="btn-off" style="width:100%;background:#22c55e;padding:14px;border-radius:12px;font-weight:bold;border:0">✅ Já Salvei - Entrar na Carteira</button>
+<p style="font-size:11px;color:#aaa">O botão só libera depois que você marcar que salvou.</p>
+</div></div>
+
+<!-- MODAL VER CHAVE S - ÁREA SEGURA SEPARADA -->
+<div id="modal-sec" class="modal hidden"><div>
+<h3>🔐 Área Segura - Chave S</h3>
+<p style="font-size:13px;color:#aaa">Nunca mostre essa chave para ninguém. Ela está escondida por padrão.</p>
+<div id="passo-senha-sec">
+<label>Digite sua senha para mostrar a Chave S</label>
+<input id="senha-mostrar-sec" type="password" placeholder="Sua senha">
+<button onclick="revelarSec()" style="width:100%;background:#FFD700;padding:12px;border-radius:10px;font-weight:bold;border:0">Mostrar Chave S</button>
+<p style="font-size:12px;color:#aaa">Se você entrou só com PUB e nunca salvou SEC aqui, use "Colar SEC 1 vez" abaixo.</p>
+<label>Ou cole seu SEC 1 vez para salvar com senha</label>
+<input id="sec-colar" type="password" placeholder="Cole SEC (S...)">
+<input id="senha-nova-sec" type="password" placeholder="Crie senha para proteger">
+<button onclick="salvarSecColado()" style="width:100%;background:#222;color:#fff;border:1px solid #FFD700;padding:12px;border-radius:10px;margin-top:6px">Salvar SEC com senha</button>
+</div>
+<div id="passo-mostrar-sec" class="hidden">
+<div class="box" style="border:1px solid #FFD700"><b>Chave S:</b><br><span id="sec-revelado" style="color:#FFD700">-</span><br><button onclick="copiar('sec-revelado')" style="background:#FFD700;padding:10px;border-radius:8px;border:0;font-weight:bold;margin-top:6px">📋 Copiar Chave S</button></div>
+<p style="font-size:11px;color:#aaa">Vai ocultar sozinha em 30 segundos ou quando fechar.</p>
+</div>
+<button onclick="fecharModalSec()" style="width:100%;background:#222;color:#fff;padding:12px;border-radius:10px;margin-top:10px;border:1px solid #333">Fechar e Ocultar</button>
+</div></div>
+
 <script>
 const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
 const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI";
-let acaoAtual="enviar", saldoOculto=false, saldoReal={MCCOIN:0,XLM:0}, secAtual="", secVisivel=false;
+let acaoAtual="enviar", saldoOculto=false, saldoReal={MCCOIN:0,XLM:0}, secAtual="", pubAtual="", senhaCriacao="";
 let precos={};
 const MOEDAS=[
 {id:"ripple",name:"XRP",desc:"XRP • Ripple",url:"https://xrp.org"},
@@ -142,58 +156,20 @@ const MOEDAS=[
 {id:"mccoin",name:"MCCOIN",desc:"MCC • McCoin",url:"https://mccoinlabs.github.io/mccoinlabs/"},
 ];
 function abrirEcossistema(nome){ let m=MOEDAS.find(x=>x.name===nome); if(m) window.open(m.url,"_blank"); }
-function alternarSaldo(){
-  saldoOculto=!saldoOculto;
-  document.getElementById("olho-saldo").innerText = saldoOculto ? "🙈" : "👁️";
-  document.getElementById("saldo-mcc").innerText = saldoOculto ? "••••••" : saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2});
-  renderPortfolio();
-}
-async function atualizarPrecos(){
-  try{ let ids=MOEDAS.filter(m=>m.id!=="mccoin").map(m=>m.id).join(","); let r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids="+ids+"&vs_currencies=brl"); let d=await r.json(); MOEDAS.forEach(m=>{if(d[m.id]) precos[m.name]=d[m.id].brl;}); }catch(e){}
-  renderPortfolio(); renderMercado();
-}
-function renderPortfolio(){
-  let h=""; MOEDAS.forEach(m=>{
-    let q=0; if(m.name==="MCCOIN") q=saldoReal.MCCOIN; if(m.name==="XLM") q=saldoReal.XLM;
-    let saldoTxt = saldoOculto ? "••••••" : q.toLocaleString('pt-BR',{minimumFractionDigits:2})+" "+m.name;
-    h+=`<div class="coin"><div onclick="abrirEcossistema('${m.name}')"><b>${m.name}</b><br><small>${m.desc}</small><div class="val"><b>${saldoTxt}</b><br><small>${q===0?"Sem saldo":"Saldo real"}</small></div></div><button class="eco" onclick="abrirEcossistema('${m.name}')">🌐 Abrir Ecossistema ${m.name} ↗</button>${(m.name==="MCCOIN"||m.name==="XLM")?`<button class="eco" style="border-color:#22c55e;color:#22c55e" onclick="event.stopPropagation();abrirModal('enviar');document.getElementById('modal-moeda').value='${m.name}'">💼 Usar na Carteira</button>`:""}</div>`;
-  }); document.getElementById("portfolio").innerHTML=h;
-}
-function renderMercado(){
-  let h=""; MOEDAS.forEach(m=>{ let pr=precos[m.name]?"R$ "+precos[m.name].toLocaleString('pt-BR',{minimumFractionDigits:2}):"Carregando..."; h+=`<div class="coin"><div onclick="abrirEcossistema('${m.name}')"><b>${m.name}</b><br><small>${m.desc}</small><div class="val"><b>${pr}</b></div></div><button class="eco" onclick="abrirEcossistema('${m.name}')">🌐 Abrir Ecossistema ↗</button></div>`; }); document.getElementById("mercado-lista").innerHTML=h;
-}
+function alternarSaldo(){ saldoOculto=!saldoOculto; document.getElementById("olho-saldo").innerText=saldoOculto?"🙈":"👁️"; document.getElementById("saldo-mcc").innerText=saldoOculto?"••••••":saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2}); renderPortfolio(); }
+async function atualizarPrecos(){ try{ let ids=MOEDAS.filter(m=>m.id!=="mccoin").map(m=>m.id).join(","); let r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids="+ids+"&vs_currencies=brl"); let d=await r.json(); MOEDAS.forEach(m=>{if(d[m.id]) precos[m.name]=d[m.id].brl;}); }catch(e){} renderPortfolio(); renderMercado(); }
+function renderPortfolio(){ let h=""; MOEDAS.forEach(m=>{ let q=0; if(m.name==="MCCOIN") q=saldoReal.MCCOIN; if(m.name==="XLM") q=saldoReal.XLM; let saldoTxt=saldoOculto?"••••••":q.toLocaleString('pt-BR',{minimumFractionDigits:2})+" "+m.name; h+=`<div class="coin"><div onclick="abrirEcossistema('${m.name}')"><b>${m.name}</b><br><small>${m.desc}</small><div class="val"><b>${saldoTxt}</b><br><small>${q===0?"Sem saldo":"Saldo real"}</small></div></div><button class="eco" onclick="abrirEcossistema('${m.name}')">🌐 Abrir Ecossistema ${m.name} ↗</button>${(m.name==="MCCOIN"||m.name==="XLM")?`<button class="eco" style="border-color:#22c55e;color:#22c55e" onclick="event.stopPropagation();abrirModal('enviar');document.getElementById('modal-moeda').value='${m.name}'">💼 Usar na Carteira</button>`:""}</div>`; }); document.getElementById("portfolio").innerHTML=h; }
+function renderMercado(){ let h=""; MOEDAS.forEach(m=>{ let pr=precos[m.name]?"R$ "+precos[m.name].toLocaleString('pt-BR',{minimumFractionDigits:2}):"Carregando..."; h+=`<div class="coin"><div onclick="abrirEcossistema('${m.name}')"><b>${m.name}</b><br><small>${m.desc}</small><div class="val"><b>${pr}</b></div></div><button class="eco" onclick="abrirEcossistema('${m.name}')">🌐 Abrir Ecossistema ↗</button></div>`; }); document.getElementById("mercado-lista").innerHTML=h; }
 function mostrarAba(aba){ ["carteira","mercado","trocar","perfil"].forEach(a=>document.getElementById("aba-"+a).classList.add("hidden")); document.getElementById("aba-"+aba).classList.remove("hidden"); if(aba==="mercado") atualizarPrecos(); if(aba==="perfil") document.getElementById("pub-perfil").innerText=document.getElementById("pub-txt").innerText; }
 function abrirNotificacoes(){ alert("🔔 Nenhuma notificação nova."); }
 function abrirPerfil(){ mostrarAba('perfil'); }
 function abrirMembros(){ alert("⭐ Área de Membros - Bem-vindo!"); }
-function copiar(id){navigator.clipboard.writeText(document.getElementById(id).innerText);alert("Copiado!");}
-function copiarSec(){ if(!secAtual || !secVisivel) return alert("Clique em Mostrar primeiro!"); navigator.clipboard.writeText(secAtual); alert("SEC copiado!"); }
-function mostrarSec(){
-  // CORREÇÃO: SEC NUNCA aparece sozinho. Só depois de entrar + clicar.
-  if(!secAtual){
-    let s = prompt("Para mostrar a chave S, cole seu SEC 1 vez para salvar com sua senha (ele vai ficar escondido):");
-    if(!s || !s.startsWith("S")) return alert("SEC inválido!");
-    let senha = prompt("Crie uma senha para proteger seu SEC:");
-    if(!senha || senha.length<4) return alert("Senha com 4+ dígitos!");
-    secAtual=s;
-    let c=CryptoJS.AES.encrypt(secAtual,senha).toString();
-    localStorage.setItem("mccoin_sec",c);
-    localStorage.setItem("mccoin_pub",document.getElementById("pub-txt").innerText);
-    alert("SEC salvo com senha! Agora ele fica escondido até você clicar em Mostrar de novo.");
-    return;
-  }
-  if(!secVisivel){
-    // pede senha para revelar
-    let sal = localStorage.getItem("mccoin_sec");
-    if(sal){
-      let senha = prompt("Digite sua senha para mostrar a chave S:");
-      if(!senha) return;
-      try{ let dec=CryptoJS.AES.decrypt(sal,senha).toString(CryptoJS.enc.Utf8); if(!dec) return alert("Senha errada!"); secAtual=dec; }catch(e){ return alert("Senha errada!"); }
-    }
-    secVisivel=true; document.getElementById("sec-txt").innerText=secAtual;
-  } else {
-    secVisivel=false; document.getElementById("sec-txt").innerText="••••••••••••";
-  }
+function copiar(id){ let t=document.getElementById(id).innerText; navigator.clipboard.writeText(t).then(()=>alert("Copiado! ✅\n"+t.slice(0,20)+"...")); }
+function compartilharCarteira(){
+  let pub=document.getElementById("pub-txt").innerText;
+  let texto="Olha minha carteira MC WALLET! 💰\nMe manda MCCOIN aqui:\nPUB: "+pub+"\nBaixe a carteira: https://mccoinlabs.github.io/mccoinlabs/wallet.html?v=5";
+  if(navigator.share){ navigator.share({title:"Minha Carteira MC WALLET",text:texto}); }
+  else { navigator.clipboard.writeText(texto); window.open("https://wa.me/?text="+encodeURIComponent(texto),"_blank"); }
 }
 function voltarInicial(){ document.getElementById("bloco-criar").classList.add("hidden"); document.getElementById("bloco-entrar-pub").classList.add("hidden"); document.getElementById("tela-inicial").classList.remove("hidden"); }
 function mostrarCriar(){ document.getElementById("tela-inicial").classList.add("hidden"); document.getElementById("bloco-entrar-pub").classList.add("hidden"); document.getElementById("bloco-criar").classList.remove("hidden"); }
@@ -201,42 +177,37 @@ function mostrarEntrarPub(){ document.getElementById("tela-inicial").classList.a
 function criarCarteira(){
   let s=document.getElementById("senha").value,s2=document.getElementById("senha2").value;
   if(s.length<4)return alert("Crie senha com 4+ dígitos!"); if(s!==s2)return alert("Senhas diferentes!");
-  let p=StellarSdk.Keypair.random(); secAtual=p.secret(); secVisivel=false;
+  let p=StellarSdk.Keypair.random(); secAtual=p.secret(); pubAtual=p.publicKey(); senhaCriacao=s;
   let c=CryptoJS.AES.encrypt(secAtual,s).toString(); localStorage.setItem("mccoin_sec",c); localStorage.setItem("mccoin_pub",p.publicKey());
-  alert("Carteira criada! ANOTE SEU SEC: "+p.secret()+"\n\nDepois que entrar, ele fica escondido. Só mostra se clicar em Mostrar.");
-  abrirCarteira(p.publicKey());
+  // ABRE TELA DE SALVAR - COM COPIAR - NÃO DEIXA ENTRAR SEM CONFIRMAR
+  document.getElementById("novo-pub").innerText=p.publicKey();
+  document.getElementById("novo-sec").innerText=p.secret();
+  document.getElementById("check-salvei").checked=false;
+  document.getElementById("btn-entrar-apos-salvar").classList.add("btn-off");
+  document.getElementById("modal-salvar-sec").classList.remove("hidden");
 }
-function entrarComPub(){
-  let pub=document.getElementById("pub-entrar").value.trim();
-  if(!pub.startsWith("G")) return alert("PUB inválido! Tem que começar com G...");
-  localStorage.setItem("mccoin_pub",pub);
-  secAtual=""; secVisivel=false;
-  // tenta carregar SEC salvo se for a mesma PUB
-  abrirCarteira(pub);
-}
+function liberarEntrar(){ let ok=document.getElementById("check-salvei").checked; document.getElementById("btn-entrar-apos-salvar").classList.toggle("btn-off",!ok); }
+function entrarAposSalvar(){ if(!document.getElementById("check-salvei").checked) return alert("Marque que você salvou sua Chave S primeiro!"); document.getElementById("modal-salvar-sec").classList.add("hidden"); abrirCarteira(pubAtual); }
+function baixarBackupNovo(){ let blob=new Blob(["MC WALLET BACKUP - GUARDE COM SEGURANÇA!\n\nPUB: "+pubAtual+"\nSEC: "+secAtual+"\n\nSem o SEC você perde a carteira!"],{type:"text/plain"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="mcwallet-backup.txt"; a.click(); alert("Backup baixado! ✅"); }
+function entrarComPub(){ let pub=document.getElementById("pub-entrar").value.trim(); if(!pub.startsWith("G")) return alert("PUB inválido!"); localStorage.setItem("mccoin_pub",pub); pubAtual=pub; secAtual=""; abrirCarteira(pub); }
 function mostrarImportar2(){ document.getElementById("tela-carteira").classList.add("hidden"); document.getElementById("nav").classList.add("hidden"); document.getElementById("tela-login").classList.remove("hidden"); voltarInicial(); mostrarEntrarPub(); }
-async function abrirCarteira(pub){
-  document.getElementById("tela-login").classList.add("hidden"); document.getElementById("tela-carteira").classList.remove("hidden"); document.getElementById("nav").classList.remove("hidden"); document.getElementById("modal").classList.add("hidden"); mostrarAba('carteira');
-  document.getElementById("pub-txt").innerText=pub; document.getElementById("pub-perfil").innerText=pub;
-  document.getElementById("sec-txt").innerText="••••••••••••"; secVisivel=false;
-  saldoReal={MCCOIN:0,XLM:0}; 
-  if(saldoOculto) document.getElementById("saldo-mcc").innerText="••••••"; else document.getElementById("saldo-mcc").innerText="0,00";
-  renderPortfolio();
-  try{ let acc=await server.loadAccount(pub); let bal=acc.balances.find(b=>b.asset_code==="MCCOIN"); let xlm=acc.balances.find(b=>b.asset_type==="native"); saldoReal.MCCOIN=bal?parseFloat(bal.balance):0; saldoReal.XLM=xlm?parseFloat(xlm.balance):0; if(!saldoOculto) document.getElementById("saldo-mcc").innerText=saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2}); renderPortfolio(); }catch(e){ if(!saldoOculto) document.getElementById("saldo-mcc").innerText="0,00"; }
-}
+async function abrirCarteira(pub){ document.getElementById("tela-login").classList.add("hidden"); document.getElementById("tela-carteira").classList.remove("hidden"); document.getElementById("nav").classList.remove("hidden"); document.getElementById("modal").classList.add("hidden"); mostrarAba('carteira'); document.getElementById("pub-txt").innerText=pub; document.getElementById("pub-perfil").innerText=pub; pubAtual=pub; saldoReal={MCCOIN:0,XLM:0}; if(saldoOculto) document.getElementById("saldo-mcc").innerText="••••••"; else document.getElementById("saldo-mcc").innerText="0,00"; renderPortfolio(); try{ let acc=await server.loadAccount(pub); let bal=acc.balances.find(b=>b.asset_code==="MCCOIN"); let xlm=acc.balances.find(b=>b.asset_type==="native"); saldoReal.MCCOIN=bal?parseFloat(bal.balance):0; saldoReal.XLM=xlm?parseFloat(xlm.balance):0; if(!saldoOculto) document.getElementById("saldo-mcc").innerText=saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2}); renderPortfolio(); }catch(e){ if(!saldoOculto) document.getElementById("saldo-mcc").innerText="0,00"; } }
 function pedirNovaCarteira(){ if(confirm("Criar nova carteira? Anote seu PUB atual antes!")){ document.getElementById("tela-carteira").classList.add("hidden"); document.getElementById("nav").classList.add("hidden"); document.getElementById("tela-login").classList.remove("hidden"); voltarInicial(); mostrarCriar(); } }
 function abrirModal(a){acaoAtual=a;document.getElementById("modal").classList.remove("hidden");document.getElementById("modal-titulo").innerText=a==="enviar"?"Enviar":a==="receber"?"Receber":"Swap";document.getElementById("modal-msg").innerText=a==="receber"?"Seu PUB: "+document.getElementById("pub-txt").innerText:"";document.getElementById("campo-sec-envio").style.display=a==="enviar"?"block":"none";if(a==="receber") document.getElementById("modal-destino").value=document.getElementById("pub-txt").innerText;}
 function fecharModal(){document.getElementById("modal").classList.add("hidden");document.getElementById("modal-sec").value="";}
-async function executarAcao(){
-  if(acaoAtual==="receber"){copiar("modal-destino");return;}
-  let dest=document.getElementById("modal-destino").value.trim();let val=document.getElementById("modal-valor").value;let moeda=document.getElementById("modal-moeda").value;let sec=document.getElementById("modal-sec").value.trim() || secAtual;
-  if(!dest.startsWith("G"))return alert("Destino inválido!"); if(!val)return alert("Digite valor!"); if(!sec.startsWith("S"))return alert("Cole seu SEC para enviar.");
-  document.getElementById("modal-msg").innerText="Enviando...";
-  try{let pub=document.getElementById("pub-txt").innerText;let acc=await server.loadAccount(pub);let tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(moeda==="XLM"?StellarSdk.Operation.payment({destination:dest,asset:StellarSdk.Asset.native(),amount:val}):StellarSdk.Operation.payment({destination:dest,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:val})).setTimeout(30).build();tx.sign(StellarSdk.Keypair.fromSecret(sec));let r=await server.submitTransaction(tx);document.getElementById("modal-msg").innerText="✅ Enviado! Hash: "+r.hash;document.getElementById("modal-sec").value="";abrirCarteira(pub);}catch(e){document.getElementById("modal-msg").innerText="Erro: "+e.message;document.getElementById("modal-sec").value="";}
-}
+async function executarAcao(){ if(acaoAtual==="receber"){copiar("modal-destino");return;} let dest=document.getElementById("modal-destino").value.trim();let val=document.getElementById("modal-valor").value;let moeda=document.getElementById("modal-moeda").value;let sec=document.getElementById("modal-sec").value.trim()||secAtual; if(!dest.startsWith("G"))return alert("Destino inválido!"); if(!val)return alert("Digite valor!"); if(!sec.startsWith("S"))return alert("Cole seu SEC para enviar."); document.getElementById("modal-msg").innerText="Enviando..."; try{let pub=document.getElementById("pub-txt").innerText;let acc=await server.loadAccount(pub);let tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(moeda==="XLM"?StellarSdk.Operation.payment({destination:dest,asset:StellarSdk.Asset.native(),amount:val}):StellarSdk.Operation.payment({destination:dest,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:val})).setTimeout(30).build();tx.sign(StellarSdk.Keypair.fromSecret(sec));let r=await server.submitTransaction(tx);document.getElementById("modal-msg").innerText="✅ Enviado! Hash: "+r.hash;document.getElementById("modal-sec").value="";abrirCarteira(pub);}catch(e){document.getElementById("modal-msg").innerText="Erro: "+e.message;document.getElementById("modal-sec").value="";} }
 async function carregarHistorico(){let pub=document.getElementById("pub-txt").innerText;document.getElementById("historico").innerHTML="Carregando...";try{let ops=await server.operations().forAccount(pub).order("desc").limit(10).call();if(ops.records.length===0){document.getElementById("historico").innerHTML="Sem transações ainda.";return;}let h="<h3>Histórico Real</h3>";ops.records.forEach(o=>{h+=`<div style="background:#151515;padding:10px;border-radius:10px;margin:6px 0">${o.type} - ${o.amount||""} ${o.asset_code||""} - ${new Date(o.created_at).toLocaleString('pt-BR')}</div>`});document.getElementById("historico").innerHTML=h;}catch(e){document.getElementById("historico").innerHTML="Sem histórico. Conta precisa ser ativada com 1 XLM.";}}
 function fazerSwap(){ alert("Swap MCCOIN ↔ XLM - use Enviar por enquanto."); }
-function sair(){ secAtual=""; secVisivel=false; document.getElementById("modal").classList.add("hidden"); document.getElementById("tela-carteira").classList.add("hidden"); document.getElementById("nav").classList.add("hidden"); document.getElementById("tela-login").classList.remove("hidden"); voltarInicial(); }
+// --- CHAVE S EM LUGAR SEPARADO (PERFIL) - SEM PROMPT DO NAVEGADOR ---
+function abrirModalSec(){ document.getElementById("modal-sec").classList.remove("hidden"); document.getElementById("passo-senha-sec").classList.remove("hidden"); document.getElementById("passo-mostrar-sec").classList.add("hidden"); document.getElementById("sec-revelado").innerText="-"; }
+function fecharModalSec(){ document.getElementById("modal-sec").classList.add("hidden"); document.getElementById("sec-revelado").innerText="-"; document.getElementById("senha-mostrar-sec").value=""; document.getElementById("sec-colar").value=""; document.getElementById("senha-nova-sec").value=""; }
+function revelarSec(){
+  let sal=localStorage.getItem("mccoin_sec"); if(!sal) return alert("Nenhum SEC salvo aqui. Cole seu SEC abaixo 1 vez.");
+  let senha=document.getElementById("senha-mostrar-sec").value; if(!senha) return alert("Digite sua senha!");
+  try{ let dec=CryptoJS.AES.decrypt(sal,senha).toString(CryptoJS.enc.Utf8); if(!dec) return alert("Senha errada!"); secAtual=dec; document.getElementById("sec-revelado").innerText=dec; document.getElementById("passo-senha-sec").classList.add("hidden"); document.getElementById("passo-mostrar-sec").classList.remove("hidden"); setTimeout(()=>{ fecharModalSec(); },30000); }catch(e){ alert("Senha errada!"); }
+}
+function salvarSecColado(){ let sec=document.getElementById("sec-colar").value.trim(); let senha=document.getElementById("senha-nova-sec").value; if(!sec.startsWith("S")) return alert("SEC inválido!"); if(senha.length<4) return alert("Crie senha com 4+ dígitos!"); let c=CryptoJS.AES.encrypt(sec,senha).toString(); localStorage.setItem("mccoin_sec",c); secAtual=sec; alert("SEC salvo com senha! Agora use a senha para mostrar quando precisar."); fecharModalSec(); }
+function sair(){ secAtual=""; document.getElementById("modal").classList.add("hidden"); document.getElementById("tela-carteira").classList.add("hidden"); document.getElementById("nav").classList.add("hidden"); document.getElementById("tela-login").classList.remove("hidden"); voltarInicial(); }
 document.getElementById("modal").classList.add("hidden");
 renderPortfolio(); renderMercado();
 </script>
