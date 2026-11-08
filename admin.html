@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Área Corporativa - MC WALLET</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.0.0/stellar-sdk.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+*{box-sizing:border-box}body{background:#0a0f0d;color:#fff;font-family:Arial;margin:0;padding-bottom:90px}
+.top{background:#111;padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #FFD700}
+.top h1{color:#FFD700;font-size:20px;margin:0}
+.card{background:#141414;border:1px solid #222;border-radius:14px;padding:16px;margin:12px}
+.card-ouro{border-color:#FFD700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.num{font-size:28px;font-weight:bold;color:#FFD700}
+input,select{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
+button{cursor:pointer;padding:12px;border-radius:10px;font-weight:bold;border:0}
+.tabs{display:flex;gap:8px;padding:12px;overflow-x:auto}
+.tabs button{background:#222;color:#fff;white-space:nowrap}
+.tabs button.ativo{background:#FFD700;color:#000}
+.hidden{display:none!important}
+.linha{background:#222;padding:12px;border-radius:10px;margin:8px 0;font-size:13px;word-break:break-all}
+.badge{background:#1a3a22;color:#22c55e;padding:4px 8px;border-radius:20px;font-size:11px}
+</style>
+</head>
+<body>
+
+<div class="top"><h1>🏢 Área Corporativa</h1><span onclick="location.href='wallet.html'" style="cursor:pointer">← Voltar Carteira</span></div>
+<p style="padding:0 16px;font-size:12px;color:#aaa">Essa área NÃO altera dados de nenhum usuário. Só mostra números públicos da Stellar e permite enviar MCC da conta corporativa.</p>
+
+<div id="login-corp" class="card card-ouro">
+<h2>🔐 Entrar no Corporativo</h2>
+<p style="font-size:13px;color:#aaa">Só o PUB corporativo entra aqui. ADM atual: GBU43...</p>
+<label>Seu PUB Corporativo</label>
+<input id="pub-corp" placeholder="Cole seu PUB corporativo (G...)">
+<label>Senha do Corporativo (a mesma da criação, nesse aparelho)</label>
+<input id="senha-corp" type="password" placeholder="Senha">
+<button onclick="entrarCorp()" style="background:#FFD700;width:100%">Entrar no Corporativo</button>
+<p id="msg-login" style="font-size:12px;color:#FFD700"></p>
+<p style="font-size:11px;color:#aaa">A senha é só local, desse aparelho. Se você colou o SEC dessa ADM nesse aparelho com outra senha, use essa senha aqui.</p>
+</div>
+
+<div id="painel-corp" class="hidden">
+<div class="tabs">
+<button id="tab-btn-visao" class="ativo" onclick="mostrarTab('visao')">📊 Visão Geral</button>
+<button id="tab-btn-membros" onclick="mostrarTab('membros')">👥 Membros</button>
+<button id="tab-btn-tesouraria" onclick="mostrarTab('tesouraria')">💰 Tesouraria</button>
+<button id="tab-btn-enviar" onclick="mostrarTab('enviar')">📤 Enviar MCC</button>
+<button id="tab-btn-relatorio" onclick="mostrarTab('relatorio')">📄 Relatórios</button>
+</div>
+
+<div id="tab-visao">
+<div class="card card-ouro"><span>Saldo MCC Corporativo (Emissora)</span><div class="num" id="saldo-mcc-corp">Carregando...</div><span style="color:#aaa;font-size:12px" id="pub-corp-txt"></span></div>
+<div class="grid">
+<div class="card"><span>Saldo XLM</span><div class="num" id="saldo-xlm-corp" style="font-size:22px">-</div><span style="color:#aaa;font-size:12px">Para pagar taxa da rede</span></div>
+<div class="card"><span>Transações</span><div class="num" id="total-tx" style="font-size:22px">-</div><span style="color:#aaa;font-size:12px">Últimas 20</span></div>
+</div>
+<div class="card"><b>⚠️ Avisos</b><br><span style="font-size:13px;color:#aaa">• Nunca mostre seu SEC corporativo para ninguém.<br>• O Corporativo não vê senha, não vê SEC e não altera carteira de usuário.<br>• Tudo aqui é dado público da Stellar.</span></div>
+<button onclick="atualizarTudo()" style="background:#FFD700;width:calc(100% - 24px);margin:0 12px">🔄 Atualizar Tudo</button>
+</div>
+
+<div id="tab-membros" class="hidden">
+<div class="card"><h3>👥 Últimos Membros que movimentaram MCC</h3><p style="font-size:12px;color:#aaa">Lista pública da Stellar. Não mostra nome, e-mail ou senha - só PUB e valor.</p><div id="lista-membros">Carregando...</div><button onclick="carregarMembros()" style="background:#FFD700;margin-top:8px">Atualizar Membros</button></div>
+</div>
+
+<div id="tab-tesouraria" class="hidden">
+<div class="card card-ouro"><h3>💰 Tesouraria</h3><div>Saldo MCC: <b id="tes-mcc" style="color:#FFD700">-</b></div><div>Saldo XLM: <b id="tes-xlm">-</b></div><p style="font-size:12px;color:#aaa">Conta emissora: <span id="tes-issuer"></span></p><p style="font-size:12px;color:#aaa">Se o XLM estiver abaixo de 2, recarregue para não travar os envios.</p></div>
+</div>
+
+<div id="tab-enviar" class="hidden">
+<div class="card card-ouro"><h3>📤 Enviar MCC - Airdrop / Pagamento</h3>
+<label>PUB do membro (G...)</label><input id="destino-corp" placeholder="PUB do usuário">
+<label>Valor MCC</label><input id="valor-corp" placeholder="Ex: 100">
+<label>Motivo (só para seu controle)</label><select id="motivo-corp"><option>Airdrop</option><option>Pagamento</option><option>Prêmio / Sorteio</option><option>Reembolso</option><option>Outro</option></select>
+<label>SEC da Emissora - só para assinar esse envio</label><input id="sec-corp" type="password" placeholder="Cole SEC da emissora GDZCQY... SÓ agora">
+<button onclick="enviarMCC()" style="background:#22c55e;width:100%">Enviar MCC Agora</button>
+<p id="msg-envio" style="font-size:12px;color:#aaa"></p>
+<p style="font-size:11px;color:#aaa">O SEC não fica salvo. Ele some depois que enviar. Quem envia é a emissora, a ADM GBU43... é só a chave de acesso.</p>
+</div>
+</div>
+
+<div id="tab-relatorio" class="hidden">
+<div class="card"><h3>📄 Relatório - Últimas Transações</h3><div id="relatorio-lista">Carregando...</div><button onclick="baixarRelatorio()" style="background:#FFD700;margin-top:8px">💾 Baixar Relatório (.txt)</button></div>
+</div>
+
+<button onclick="sairCorp()" style="background:#b91c1c;color:#fff;width:calc(100% - 24px);margin:12px">Sair do Corporativo</button>
+</div>
+
+<script>
+const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
+const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI";
+const ADM_PUB = "GBU43MCALRHGX2WNR7FI5PFXJDMSVTBQSFP7SXYJVOLQWKPY7NAINXOQ";
+let pubCorp = "", historicoCorp = [];
+function mostrarTab(t){
+  ["visao","membros","tesouraria","enviar","relatorio"].forEach(x=>{
+    document.getElementById("tab-"+x).classList.add("hidden");
+    document.getElementById("tab-btn-"+x).classList.remove("ativo");
+  });
+  document.getElementById("tab-"+t).classList.remove("hidden");
+  document.getElementById("tab-btn-"+t).classList.add("ativo");
+  if(t==="membros") carregarMembros();
+  if(t==="relatorio") carregarRelatorio();
+  if(t==="tesouraria") atualizarTudo();
+}
+function entrarCorp(){
+  let p=document.getElementById("pub-corp").value.trim();
+  let s=document.getElementById("senha-corp").value;
+  if(p!==ADM_PUB){ document.getElementById("msg-login").innerText="❌ Esse PUB não é o Corporativo! Use a GBU43..."; return; }
+  if(!s || s.length<4){ document.getElementById("msg-login").innerText="Digite a senha do Corporativo!"; return; }
+  let sal = localStorage.getItem("mccoin_sec_"+p);
+  if(sal){
+    try{ let dec=CryptoJS.AES.decrypt(sal,s).toString(CryptoJS.enc.Utf8); if(!dec){ document.getElementById("msg-login").innerText="❌ Senha errada! Use a senha que você usou NESSE aparelho para salvar o SEC da GBU43..."; return; } }catch(e){ document.getElementById("msg-login").innerText="❌ Senha errada!"; return; }
+  } else {
+    document.getElementById("msg-login").innerText="⚠️ SEC da ADM não salvo nesse aparelho. Vai no wallet.html, entra com a GBU43..., vai em Perfil > Ver Chave S, cola o SEC dela 1 vez com essa senha, e volta aqui.";
+    return;
+  }
+  pubCorp=p;
+  document.getElementById("login-corp").classList.add("hidden");
+  document.getElementById("painel-corp").classList.remove("hidden");
+  document.getElementById("pub-corp-txt").innerText="ADM: "+p;
+  atualizarTudo(); carregarMembros(); carregarRelatorio();
+}
+async function atualizarTudo(){
+  try{
+    let acc=await server.loadAccount(ISSUER);
+    let mcc=acc.balances.find(b=>b.asset_code==="MCCOIN");
+    let xlm=acc.balances.find(b=>b.asset_type==="native");
+    document.getElementById("saldo-mcc-corp").innerText=(mcc?parseFloat(mcc.balance).toLocaleString('pt-BR'):"0")+" MCC";
+    document.getElementById("saldo-xlm-corp").innerText=xlm?parseFloat(xlm.balance).toLocaleString('pt-BR'):"0";
+    document.getElementById("tes-mcc").innerText=(mcc?parseFloat(mcc.balance).toLocaleString('pt-BR'):"0")+" MCC";
+    document.getElementById("tes-xlm").innerText=(xlm?parseFloat(xlm.balance).toLocaleString('pt-BR'):"0")+" XLM";
+    document.getElementById("tes-issuer").innerText=ISSUER;
+  }catch(e){ document.getElementById("saldo-mcc-corp").innerText="Conta não ativada"; }
+}
+async function carregarMembros(){
+  try{
+    let ops=await server.operations().forAccount(ISSUER).order("desc").limit(20).call();
+    historicoCorp=ops.records;
+    document.getElementById("total-tx").innerText=ops.records.length;
+    let h=""; let vistos=new Set();
+    ops.records.forEach(o=>{
+      let destino = o.to || o.destination || "-";
+      if(destino==="-" || vistos.has(destino)) return;
+      vistos.add(destino);
+      h+=`<div class="linha"><b>${destino.slice(0,12)}...${destino.slice(-6)}</b> <span class="badge">${o.amount||""} ${o.asset_code||"MCC"}</span><br><span style="color:#aaa">${new Date(o.created_at).toLocaleString('pt-BR')}</span><br><button onclick="copiarPub('${destino}')" style="background:#FFD700;padding:6px;margin-top:6px">📋 Copiar PUB</button> <button onclick="usarDestino('${destino}')" style="background:#222;color:#fff;border:1px solid #FFD700;padding:6px">📤 Enviar para ele</button></div>`;
+    });
+    document.getElementById("lista-membros").innerHTML=h||"Sem movimentação ainda.";
+  }catch(e){ document.getElementById("lista-membros").innerHTML="Erro ao carregar."; }
+}
+function copiarPub(p){ navigator.clipboard.writeText(p).then(()=>alert("PUB copiado!")); }
+function usarDestino(p){ document.getElementById("destino-corp").value=p; mostrarTab('enviar'); }
+async function carregarRelatorio(){
+  try{
+    let ops=await server.operations().forAccount(ISSUER).order("desc").limit(20).call();
+    let h=""; ops.records.forEach(o=>{ h+=`<div class="linha">${o.type} - ${o.amount||""} ${o.asset_code||""} - Para: ${(o.to||o.destination||"-").slice(0,12)}... - ${new Date(o.created_at).toLocaleString('pt-BR')}</div>`; });
+    document.getElementById("relatorio-lista").innerHTML=h||"Sem transações.";
+  }catch(e){ document.getElementById("relatorio-lista").innerHTML="Erro."; }
+}
+function baixarRelatorio(){
+  let txt="RELATÓRIO CORPORATIVO MC WALLET\nData: "+new Date().toLocaleString('pt-BR')+"\n\n";
+  historicoCorp.forEach(o=>{ txt+=o.type+" - "+(o.amount||"")+" "+(o.asset_code||"")+" - Para: "+(o.to||o.destination||"-")+" - "+o.created_at+"\n"; });
+  let blob=new Blob([txt],{type:"text/plain"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="relatorio-corporativo.txt"; a.click();
+}
+async function enviarMCC(){
+  let d=document.getElementById("destino-corp").value.trim();
+  let v=document.getElementById("valor-corp").value;
+  let s=document.getElementById("sec-corp").value.trim();
+  let motivo=document.getElementById("motivo-corp").value;
+  if(!d.startsWith("G")) return alert("PUB do membro inválido!");
+  if(!v) return alert("Digite o valor!");
+  if(!s.startsWith("S")) return alert("Cole o SEC da emissora para assinar!");
+  if(!confirm("Confirmar envio de "+v+" MCC para "+d.slice(0,12)+"... ?\nMotivo: "+motivo)) return;
+  document.getElementById("msg-envio").innerText="Enviando...";
+  try{
+    let acc=await server.loadAccount(ISSUER);
+    let tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.payment({destination:d,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:v})).setTimeout(30).build();
+    tx.sign(StellarSdk.Keypair.fromSecret(s));
+    let r=await server.submitTransaction(tx);
+    document.getElementById("msg-envio").innerText="✅ Enviado! Hash: "+r.hash+" | Motivo: "+motivo;
+    document.getElementById("sec-corp").value="";
+    atualizarTudo(); carregarMembros(); carregarRelatorio();
+  }catch(e){ document.getElementById("msg-envio").innerText="Erro: "+e.message; document.getElementById("sec-corp").value=""; }
+}
+function sairCorp(){ pubCorp=""; document.getElementById("painel-corp").classList.add("hidden"); document.getElementById("login-corp").classList.remove("hidden"); }
+</script>
+</body>
+</html>
