@@ -34,6 +34,7 @@ button{cursor:pointer}.hidden{display:none!important}
 <div id="tela-inicial">
 <button onclick="mostrarCriar()" style="width:100%;background:#22c55e;padding:16px;border-radius:12px;font-weight:bold;border:0;font-size:16px">+ Criar Carteira</button>
 <button onclick="mostrarEntrarPub()" style="width:100%;background:#111;color:#FFD700;border:1px solid #FFD700;padding:16px;border-radius:12px;margin-top:10px;font-weight:bold;font-size:16px">🔑 Chave Pública</button>
+<button onclick="mostrarEntrarSec()" style="width:100%;background:#FFD700;color:#000;padding:16px;border-radius:12px;margin-top:10px;font-weight:bold;font-size:16px">🔐 Entrar com SEC - Aceitar MCCOIN</button>
 </div>
 <div id="bloco-criar" class="hidden">
 <label style="color:#FFD700;font-size:13px">1. Crie sua senha</label>
@@ -49,6 +50,14 @@ button{cursor:pointer}.hidden{display:none!important}
 <button onclick="entrarComPub()" style="width:100%;background:#22c55e;padding:14px;border-radius:12px;font-weight:bold;border:0">Entrar com PUB</button>
 <button onclick="voltarInicial()" style="width:100%;background:#222;color:#fff;border:1px solid #333;padding:12px;border-radius:12px;margin-top:8px">← Voltar</button>
 </div>
+<div id="bloco-entrar-sec" class="hidden">
+<label style="color:#FFD700;font-size:13px">Cole sua Chave S (SEC) para Aceitar MCCOIN</label>
+<input id="sec-entrar" type="password" placeholder="Cole seu SEC (começa com S...)">
+<input id="senha-sec-entrar" type="password" placeholder="Crie uma senha pra salvar neste aparelho (4+ dígitos)">
+<button onclick="entrarComSec()" style="width:100%;background:#FFD700;color:#000;padding:14px;border-radius:12px;font-weight:bold;border:0">✅ Entrar e Aceitar MCCOIN</button>
+<button onclick="voltarInicial()" style="width:100%;background:#222;color:#fff;border:1px solid #333;padding:12px;border-radius:12px;margin-top:8px">← Voltar</button>
+<p style="font-size:12px;color:#aaa">Ao entrar com SEC, a carteira já cria o Trust do MCCOIN sozinha!</p>
+</div>
 </div>
 
 <div id="tela-carteira" class="hidden">
@@ -59,6 +68,8 @@ button{cursor:pointer}.hidden{display:none!important}
 <div class="saldo"><span id="saldo-mcc">0,00</span> <span>MCC</span></div>
 <div style="color:#aaa;font-size:13px">Clique no 👁️ para ocultar / mostrar o saldo</div>
 <div class="btns"><button class="btn-verde" onclick="pedirNovaCarteira()">+ Criar Carteira</button><button class="btn-ouro" onclick="mostrarImportar2()">↓ Importar</button></div>
+<button onclick="criarTrustManual()" style="width:100%;background:#FFD700;color:#000;padding:14px;border-radius:12px;font-weight:bold;border:0;margin-top:12px;font-size:15px">✅ Aceitar MCCOIN - Adicionar Trust</button>
+<p id="msg-trust" style="font-size:12px;color:#FFD700;text-align:center"></p>
 <div class="box"><b>PUB:</b> <span id="pub-txt">-</span><br><button onclick="copiar('pub-txt')" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold">📋 Copiar PUB</button> <button onclick="compartilharCarteira()" style="background:#25D366;padding:8px;border-radius:8px;border:0;font-weight:bold">📤 Compartilhar com Amigo</button></div>
 </div>
 <div class="acoes"><button onclick="abrirModal('enviar')">⬆️<br>Enviar</button><button onclick="abrirModal('receber')">⬇️<br>Receber</button><button onclick="abrirModal('swap')">🔄<br>Swap</button><button onclick="carregarHistorico()">🕒<br>Histórico</button></div>
@@ -116,7 +127,7 @@ button{cursor:pointer}.hidden{display:none!important}
 
 <script>
 const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
-const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZ0EYCWG4CSZYNKCI";
+const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
 const ADM_PUB = "GBU43MCALRHGX2WNR7FI5PFXJDMSVTBQSFP7SXYJVOLQWKPY7NAINXOQ";
 let acaoAtual="enviar", saldoOculto=false, saldoReal={MCCOIN:0,XLM:0}, secAtual="", pubAtual="";
 let precos={};
@@ -136,16 +147,43 @@ function abrirMembros(){ document.getElementById("modal-membros").classList.remo
 function fecharMembros(){ document.getElementById("modal-membros").classList.add("hidden"); }
 function copiar(id){let t=document.getElementById(id).innerText;navigator.clipboard.writeText(t).then(()=>alert("Copiado! ✅"));}
 function compartilharCarteira(){let pub=document.getElementById("pub-txt").innerText;let texto="Olha minha carteira MC WALLET! 💰\nMe manda MCCOIN aqui:\nPUB: "+pub+"\nBaixe: https://mccoinlabs.github.io/mccoinlabs/wallet.html";if(navigator.share){navigator.share({title:"Minha Carteira MC WALLET",text:texto});}else{navigator.clipboard.writeText(texto);window.open("https://wa.me/?text="+encodeURIComponent(texto),"_blank");}}
-function voltarInicial(){document.getElementById("bloco-criar").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.add("hidden");document.getElementById("tela-inicial").classList.remove("hidden");}
-function mostrarCriar(){document.getElementById("tela-inicial").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.add("hidden");document.getElementById("bloco-criar").classList.remove("hidden");}
-function mostrarEntrarPub(){document.getElementById("tela-inicial").classList.add("hidden");document.getElementById("bloco-criar").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.remove("hidden");let pub=localStorage.getItem("mccoin_pub");if(pub)document.getElementById("pub-entrar").value=pub;}
+function voltarInicial(){document.getElementById("bloco-criar").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.add("hidden");document.getElementById("bloco-entrar-sec").classList.add("hidden");document.getElementById("tela-inicial").classList.remove("hidden");}
+function mostrarCriar(){document.getElementById("tela-inicial").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.add("hidden");document.getElementById("bloco-entrar-sec").classList.add("hidden");document.getElementById("bloco-criar").classList.remove("hidden");}
+function mostrarEntrarPub(){document.getElementById("tela-inicial").classList.add("hidden");document.getElementById("bloco-criar").classList.add("hidden");document.getElementById("bloco-entrar-sec").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.remove("hidden");let pub=localStorage.getItem("mccoin_pub");if(pub)document.getElementById("pub-entrar").value=pub;}
+function mostrarEntrarSec(){document.getElementById("tela-inicial").classList.add("hidden");document.getElementById("bloco-criar").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.add("hidden");document.getElementById("bloco-entrar-sec").classList.remove("hidden");}
 function criarCarteira(){let s=document.getElementById("senha").value,s2=document.getElementById("senha2").value;if(s.length<4)return alert("Crie senha com 4+ dígitos!");if(s!==s2)return alert("Senhas diferentes!");let p=StellarSdk.Keypair.random();secAtual=p.secret();pubAtual=p.publicKey();salvarSecParaPub(p.publicKey(), p.secret(), s);localStorage.setItem("mccoin_pub",p.publicKey());document.getElementById("novo-pub").innerText=p.publicKey();document.getElementById("novo-sec").innerText=p.secret();document.getElementById("check-salvei").checked=false;document.getElementById("btn-entrar-apos-salvar").classList.add("btn-off");document.getElementById("modal-salvar-sec").classList.remove("hidden");}
 function liberarEntrar(){document.getElementById("btn-entrar-apos-salvar").classList.toggle("btn-off",!document.getElementById("check-salvei").checked);}
 function entrarAposSalvar(){if(!document.getElementById("check-salvei").checked)return alert("Marque que você salvou!");document.getElementById("modal-salvar-sec").classList.add("hidden");abrirCarteira(pubAtual);}
 function baixarBackupNovo(){let blob=new Blob(["MC WALLET BACKUP\n\nPUB: "+pubAtual+"\nSEC: "+secAtual],{type:"text/plain"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mcwallet-backup.txt";a.click();}
 function entrarComPub(){let pub=document.getElementById("pub-entrar").value.trim();if(!pub.startsWith("G"))return alert("PUB inválido!");localStorage.setItem("mccoin_pub",pub);pubAtual=pub;secAtual="";abrirCarteira(pub);}
+async function entrarComSec(){let sec=document.getElementById("sec-entrar").value.trim();let senha=document.getElementById("senha-sec-entrar").value;if(!sec.startsWith("S"))return alert("SEC inválido! Tem que começar com S...");if(senha.length<4)return alert("Crie senha com 4+ dígitos pra salvar!");try{let kp=StellarSdk.Keypair.fromSecret(sec);pubAtual=kp.publicKey();secAtual=sec;salvarSecParaPub(pubAtual, sec, senha);localStorage.setItem("mccoin_pub",pubAtual);abrirCarteira(pubAtual);setTimeout(()=>{criarTrustManual(true);},800);}catch(e){return alert("SEC inválido!");}}
 function mostrarImportar2(){document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");voltarInicial();mostrarEntrarPub();}
 async function abrirCarteira(pub){document.getElementById("tela-login").classList.add("hidden");document.getElementById("tela-carteira").classList.remove("hidden");document.getElementById("nav").classList.remove("hidden");document.getElementById("modal").classList.add("hidden");mostrarAba('carteira');document.getElementById("pub-txt").innerText=pub;document.getElementById("pub-perfil").innerText=pub;pubAtual=pub;saldoReal={MCCOIN:0,XLM:0};document.getElementById("saldo-mcc").innerText=saldoOculto?"••••••":"0,00";renderPortfolio();try{let acc=await server.loadAccount(pub);let bal=acc.balances.find(b=>b.asset_code==="MCCOIN");let xlm=acc.balances.find(b=>b.asset_type==="native");saldoReal.MCCOIN=bal?parseFloat(bal.balance):0;saldoReal.XLM=xlm?parseFloat(xlm.balance):0;if(!saldoOculto)document.getElementById("saldo-mcc").innerText=saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2});renderPortfolio();}catch(e){}}
+// === TRUST MCCOIN - CORRIGIDO COM ISSUER CERTO ===
+async function criarTrustManual(auto=false){
+  let msgEl=document.getElementById("msg-trust");
+  let sec=secAtual||document.getElementById("modal-sec-envio")?.value?.trim();
+  if(!sec || !sec.startsWith("S")){
+    let s=prompt("Cole seu SEC (S...) 1 vez para Aceitar MCCOIN:");
+    if(!s || !s.startsWith("S")) return alert("Precisa do SEC para Aceitar MCCOIN!");
+    sec=s.trim(); secAtual=sec;
+  }
+  try{
+    if(msgEl) msgEl.innerText="Criando Trust... aguarde...";
+    let acc=await server.loadAccount(pubAtual);
+    let jaTem=acc.balances.find(b=>b.asset_code==="MCCOIN" && b.asset_issuer===ISSUER);
+    if(jaTem){ if(msgEl) msgEl.innerText="✅ Você já aceita MCCOIN! Pode receber!"; return; }
+    let tx=new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.changeTrust({asset:new StellarSdk.Asset("MCCOIN",ISSUER)})).setTimeout(30).build();
+    tx.sign(StellarSdk.Keypair.fromSecret(sec));
+    let r=await server.submitTransaction(tx);
+    if(msgEl) msgEl.innerText="✅ Pronto! Trust criado! Agora você pode receber MCCOIN! Hash: "+r.hash.slice(0,12);
+    alert("✅ Pronto! Você já pode receber MCCOIN!");
+    abrirCarteira(pubAtual);
+  }catch(e){
+    if(msgEl) msgEl.innerText="Erro Trust: "+e.message;
+    if(!auto) alert("Erro Trust: "+e.message);
+  }
+}
 function pedirNovaCarteira(){if(confirm("Criar nova carteira? Anote seu PUB atual antes!")){document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");voltarInicial();mostrarCriar();}}
 function abrirModal(a){acaoAtual=a;document.getElementById("modal").classList.remove("hidden");document.getElementById("modal-titulo").innerText=a==="enviar"?"Enviar":a==="receber"?"Receber":"Swap";document.getElementById("modal-msg").innerText=a==="receber"?"Seu PUB: "+document.getElementById("pub-txt").innerText:"";document.getElementById("campo-sec-envio").style.display=a==="enviar"?"block":"none";if(a==="receber")document.getElementById("modal-destino").value=document.getElementById("pub-txt").innerText;}
 function fecharModal(){document.getElementById("modal").classList.add("hidden");document.getElementById("modal-sec-envio").value="";}
