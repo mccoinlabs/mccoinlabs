@@ -69,8 +69,11 @@ button{cursor:pointer}.hidden{display:none!important}
 <div style="color:#aaa;font-size:13px">Clique no 👁️ para ocultar / mostrar o saldo</div>
 <div class="btns"><button class="btn-verde" onclick="pedirNovaCarteira()">+ Criar Carteira</button><button class="btn-ouro" onclick="mostrarImportar2()">↓ Importar</button></div>
 <button onclick="criarTrustManual()" style="width:100%;background:#FFD700;color:#000;padding:14px;border-radius:12px;font-weight:bold;border:0;margin-top:12px;font-size:15px">✅ Aceitar MCCOIN - Adicionar Trust</button>
+<button onclick="verificarAtivacao()" style="width:100%;background:#22c55e;color:#000;padding:12px;border-radius:12px;font-weight:bold;border:0;margin-top:8px;font-size:14px">🔍 Verificar se já ativou com 2 XLM</button>
+<button onclick="gerarLinkConvite()" style="width:100%;background:#25D366;color:#000;padding:12px;border-radius:12px;font-weight:bold;border:0;margin-top:8px;font-size:14px">📤 Copiar Link Pronto p/ Convidar</button>
 <p id="msg-trust" style="font-size:12px;color:#FFD700;text-align:center"></p>
 <div class="box"><b>PUB:</b> <span id="pub-txt">-</span><br><button onclick="copiar('pub-txt')" style="background:#FFD700;padding:8px;border-radius:8px;border:0;font-weight:bold">📋 Copiar PUB</button> <button onclick="compartilharCarteira()" style="background:#25D366;padding:8px;border-radius:8px;border:0;font-weight:bold">📤 Compartilhar com Amigo</button></div>
+<div class="box" style="border:1px solid #22c55e"><b>🔑 Para Ativar sua Carteira:</b><br><span style="font-size:12px;color:#aaa">Manda 2 XLM de qualquer lugar (Binance, Lobstr, amigo) para esse PUB acima. Depois clica em Verificar Ativação e em Aceitar MCCOIN. Pronto!</span></div>
 </div>
 <div class="acoes"><button onclick="abrirModal('enviar')">⬆️<br>Enviar</button><button onclick="abrirModal('receber')">⬇️<br>Receber</button><button onclick="abrirModal('swap')">🔄<br>Swap</button><button onclick="carregarHistorico()">🕒<br>Histórico</button></div>
 <h2>Portfólio - Clique para abrir o ecossistema</h2><div class="grid" id="portfolio"></div>
@@ -146,7 +149,8 @@ function abrirNotificacoes(){alert("🔔 Nenhuma notificação nova.");} functio
 function abrirMembros(){ document.getElementById("modal-membros").classList.remove("hidden"); let ehAdm=(pubAtual===ADM_PUB); document.getElementById("box-corporativo").classList.toggle("hidden",!ehAdm); }
 function fecharMembros(){ document.getElementById("modal-membros").classList.add("hidden"); }
 function copiar(id){let t=document.getElementById(id).innerText;navigator.clipboard.writeText(t).then(()=>alert("Copiado! ✅"));}
-function compartilharCarteira(){let pub=document.getElementById("pub-txt").innerText;let texto="Olha minha carteira MC WALLET! 💰\nMe manda MCCOIN aqui:\nPUB: "+pub+"\nBaixe: https://mccoinlabs.github.io/mccoinlabs/wallet.html";if(navigator.share){navigator.share({title:"Minha Carteira MC WALLET",text:texto});}else{navigator.clipboard.writeText(texto);window.open("https://wa.me/?text="+encodeURIComponent(texto),"_blank");}}
+function compartilharCarteira(){let pub=document.getElementById("pub-txt").innerText;let link="https://mccoinlabs.github.io/mccoinlabs/wallet.html?pub="+pub;let texto="Olha minha carteira MC WALLET! 💰\nMe manda MCCOIN aqui:\nPUB: "+pub+"\nBaixe: "+link;if(navigator.share){navigator.share({title:"Minha Carteira MC WALLET",text:texto});}else{navigator.clipboard.writeText(texto);window.open("https://wa.me/?text="+encodeURIComponent(texto),"_blank");}}
+function gerarLinkConvite(){let pub=pubAtual||document.getElementById("pub-txt").innerText;if(!pub||!pub.startsWith("G"))return alert("Sem PUB!");let link="https://mccoinlabs.github.io/mccoinlabs/wallet.html?pub="+pub;navigator.clipboard.writeText(link).then(()=>alert("Link pronto copiado! ✅\nManda pra pessoa:\n"+link));return link;}
 function voltarInicial(){document.getElementById("bloco-criar").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.add("hidden");document.getElementById("bloco-entrar-sec").classList.add("hidden");document.getElementById("tela-inicial").classList.remove("hidden");}
 function mostrarCriar(){document.getElementById("tela-inicial").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.add("hidden");document.getElementById("bloco-entrar-sec").classList.add("hidden");document.getElementById("bloco-criar").classList.remove("hidden");}
 function mostrarEntrarPub(){document.getElementById("tela-inicial").classList.add("hidden");document.getElementById("bloco-criar").classList.add("hidden");document.getElementById("bloco-entrar-sec").classList.add("hidden");document.getElementById("bloco-entrar-pub").classList.remove("hidden");let pub=localStorage.getItem("mccoin_pub");if(pub)document.getElementById("pub-entrar").value=pub;}
@@ -159,10 +163,10 @@ function entrarComPub(){let pub=document.getElementById("pub-entrar").value.trim
 async function entrarComSec(){let sec=document.getElementById("sec-entrar").value.trim();let senha=document.getElementById("senha-sec-entrar").value;if(!sec.startsWith("S"))return alert("SEC inválido! Tem que começar com S...");if(senha.length<4)return alert("Crie senha com 4+ dígitos pra salvar!");try{let kp=StellarSdk.Keypair.fromSecret(sec);pubAtual=kp.publicKey();secAtual=sec;salvarSecParaPub(pubAtual, sec, senha);localStorage.setItem("mccoin_pub",pubAtual);abrirCarteira(pubAtual);setTimeout(()=>{criarTrustManual(true);},800);}catch(e){return alert("SEC inválido!");}}
 function mostrarImportar2(){document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");voltarInicial();mostrarEntrarPub();}
 async function abrirCarteira(pub){document.getElementById("tela-login").classList.add("hidden");document.getElementById("tela-carteira").classList.remove("hidden");document.getElementById("nav").classList.remove("hidden");document.getElementById("modal").classList.add("hidden");mostrarAba('carteira');document.getElementById("pub-txt").innerText=pub;document.getElementById("pub-perfil").innerText=pub;pubAtual=pub;saldoReal={MCCOIN:0,XLM:0};document.getElementById("saldo-mcc").innerText=saldoOculto?"••••••":"0,00";renderPortfolio();try{let acc=await server.loadAccount(pub);let bal=acc.balances.find(b=>b.asset_code==="MCCOIN");let xlm=acc.balances.find(b=>b.asset_type==="native");saldoReal.MCCOIN=bal?parseFloat(bal.balance):0;saldoReal.XLM=xlm?parseFloat(xlm.balance):0;if(!saldoOculto)document.getElementById("saldo-mcc").innerText=saldoReal.MCCOIN.toLocaleString('pt-BR',{minimumFractionDigits:2});renderPortfolio();}catch(e){}}
-// === TRUST MCCOIN - CORRIGIDO COM ISSUER CERTO ===
+async function verificarAtivacao(){let msgEl=document.getElementById("msg-trust");try{let acc=await server.loadAccount(pubAtual);let xlm=acc.balances.find(b=>b.asset_type==="native");if(xlm && parseFloat(xlm.balance)>=1){if(msgEl)msgEl.innerText="✅ Ativado com "+xlm.balance+" XLM! Agora clica em Aceitar MCCOIN!";if(secAtual) criarTrustManual(true);else alert("✅ Ativado com "+xlm.balance+" XLM! Agora clica em ✅ Aceitar MCCOIN!");}else{alert("Ainda não ativou! Manda 2 XLM pra esse PUB: "+pubAtual);}}catch(e){alert("Carteira ainda não ativada! Manda 2 XLM pra: "+pubAtual);}}
 async function criarTrustManual(auto=false){
   let msgEl=document.getElementById("msg-trust");
-  let sec=secAtual||document.getElementById("modal-sec-envio")?.value?.trim();
+  let sec=secAtual;
   if(!sec || !sec.startsWith("S")){
     let s=prompt("Cole seu SEC (S...) 1 vez para Aceitar MCCOIN:");
     if(!s || !s.startsWith("S")) return alert("Precisa do SEC para Aceitar MCCOIN!");
@@ -218,6 +222,22 @@ function salvarSecColado(){
 }
 function sair(){secAtual="";document.getElementById("modal").classList.add("hidden");document.getElementById("tela-carteira").classList.add("hidden");document.getElementById("nav").classList.add("hidden");document.getElementById("tela-login").classList.remove("hidden");voltarInicial();}
 renderPortfolio();renderMercado();
+// === LINK PRONTO - Ao abrir com ?pub=GD7DD... já entra direto ===
+window.addEventListener("load", ()=>{
+  try{
+    let params = new URLSearchParams(window.location.search);
+    let pubLink = params.get("pub");
+    if(pubLink && pubLink.startsWith("G")){
+      localStorage.setItem("mccoin_pub", pubLink);
+      pubAtual = pubLink;
+      abrirCarteira(pubLink);
+      setTimeout(()=>{
+        let msg = document.getElementById("msg-trust");
+        if(msg) msg.innerText = "👋 Bem-vindo! Para ativar, manda 2 XLM pra esse PUB. Depois clica em Verificar Ativação e em Aceitar MCCOIN!";
+      }, 1000);
+    }
+  }catch(e){}
+});
 </script>
 </body>
 </html>
