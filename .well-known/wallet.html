@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carteira MCCoin | McCoin Labs</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0a0f1e;color:#fff;margin:0;padding:0;text-align:center}
+header{padding:30px 20px}
+h1{color:#00d4ff;margin:0}
+.telegram-bar{background:#229ED9;padding:16px}
+.telegram-bar a{background:#fff;color:#000;font-weight:bold;font-size:18px;padding:12px 24px;border-radius:30px;text-decoration:none;display:inline-block}
+.card{background:#162144;border:1px solid #2a3a6b;border-radius:12px;padding:20px;max-width:600px;margin:20px auto}
+input{width:90%;padding:14px;border-radius:8px;border:none;margin:10px 0;font-size:15px}
+button{background:#00d4ff;color:#000;font-weight:bold;padding:14px 24px;border:none;border-radius:8px;cursor:pointer;font-size:16px}
+.result{margin-top:15px;background:#000;padding:15px;border-radius:8px;text-align:left;word-break:break-all}
+code{color:#00ff9d}
+.offline{background:#00d4ff;color:#000;font-weight:bold;padding:12px;border-radius:8px;max-width:600px;margin:15px auto}
+</style>
+</head>
+<body>
+<header>
+<h1>🪙 Carteira MCCoin</h1>
+<p>AQUI VOCÊ APRENDE OFFLINE.</p>
+</header>
+<div class="telegram-bar">
+<a href="https://telegram.me/walt/start?startapp=ref-4-eyDHMga5640" target="_blank">📲 ENTRAR NO TELEGRAM AGORA</a>
+</div>
+
+<div class="offline">Consulte seu saldo sem colocar sua SEED. Só a chave pública que começa com G.</div>
+
+<div class="card">
+<h2>Ver meu saldo</h2>
+<p>Cole sua chave pública Stellar (começa com G):</p>
+<input id="chave" placeholder="Ex: GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI">
+<br>
+<button onclick="verSaldo()">VER SALDO</button>
+<div id="resultado" class="result" style="display:none"></div>
+<p style="font-size:13px;color:#aaa">⚠️ Nunca coloque sua chave secreta que começa com S. Essa carteira não guarda nada.</p>
+</div>
+
+<div class="card">
+<h2>Trustline MCCoin</h2>
+<p>Código: <code>MCCOIN</code><br>Emissor: <code>GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</code></p>
+<a href="https://lobstr.co/" target="_blank" style="color:#00d4ff;font-weight:bold">Abrir Lobstr para adicionar</a>
+</div>
+
+<script>
+async function verSaldo(){
+  const chave = document.getElementById('chave').value.trim();
+  const div = document.getElementById('resultado');
+  if(!chave.startsWith('G')){ alert('Tem que começar com G!'); return; }
+  div.style.display='block'; div.innerHTML='Carregando...';
+  try{
+    const r = await fetch('https://horizon.stellar.org/accounts/'+chave);
+    const j = await r.json();
+    if(j.status===404){ div.innerHTML='Conta não encontrada ou não ativada ainda. Precisa de 1 XLM para ativar.'; return; }
+    let html = '<b>Conta:</b> '+chave+'<br><br><b>Saldos:</b><br>';
+    j.balances.forEach(b=>{
+      if(b.asset_type==='native') html += 'XLM: '+b.balance+'<br>';
+      else html += b.asset_code+' : '+b.balance+'<br>';
+    });
+    div.innerHTML = html;
+  }catch(e){ div.innerHTML='Erro ao consultar. Tente de novo com internet.'; }
+}
+</script>
+</body>
+</html>
