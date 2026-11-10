@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MC WALLET - MCCOIN</title>
+<link rel="icon" href="logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.0.0/stellar-sdk.min.js"></script>
 <style>
 *{box-sizing:border-box}body{background:#0a0f0d;color:#fff;font-family:Arial;margin:0;padding:0;padding-bottom:90px}
-.top{background:#000;padding:15px}.top h1{color:#FFD700;margin:0;font-size:22px}.top p{color:#aaa;margin:2px 0;font-size:12px}
-.banner{background:linear-gradient(90deg,#FFD700,#22c55e);color:#000;padding:15px;border-radius:0 0 16px 16px;margin:0 10px}.banner b{font-size:15px}
+.top{background:#000;padding:15px;display:flex;align-items:center;gap:12px}.top h1{color:#FFD700;margin:0;font-size:22px}.top p{color:#aaa;margin:2px 0;font-size:12px}.logo{width:52px;height:52px;border-radius:50%;border:2px solid #FFD700;object-fit:cover;background:#111}
+.banner{background:linear-gradient(90deg,#FFD700,#22c55e);color:#000;padding:15px;border-radius:0 0 16px 16px;margin:0 10px;display:flex;align-items:center;gap:12px}.banner b{font-size:15px}
 .card{background:#12211a;border:1px solid #222;border-radius:16px;padding:16px;margin:15px 10px}
 .saldo{font-size:36px;color:#FFD700;font-weight:bold;margin:5px 0}.sub{color:#aaa;font-size:13px}
 input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
@@ -16,13 +17,13 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 .btn-verde{background:#22c55e;color:#000}.btn-ouro{background:#FFD700;color:#000}.btn-preto{background:#111;color:#FFD700;border:1px solid #FFD700}.btn-cinza{background:#222;color:#fff;border:1px solid #333}
 .box{background:#1a1a1a;padding:12px;border-radius:10px;word-break:break-all;margin:10px 0;font-size:13px}.hidden{display:none!important}
 .painel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.painel div{background:#111;border:1px solid #FFD700;border-radius:12px;padding:12px;text-align:center}.painel small{color:#aaa;font-size:12px}.painel b{font-size:22px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.coin{background:#151515;border:1px solid #222;border-radius:14px;padding:12px}.coin b{font-size:17px}.coin small{color:#aaa}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.coin{background:#151515;border:1px solid #222;border-radius:14px;padding:12px}.coin b{font-size:17px}.coin small{color:#aaa}.coin img{width:32px;height:32px;border-radius:50%;object-fit:cover;background:#222}
 .bottom{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222;z-index:99}.bottom div{text-align:center;font-size:12px;color:#888;cursor:pointer}.bottom .ativo{color:#FFD700}
 </style>
 </head>
 <body>
-<div class="top"><h1>MC WALLET</h1><p>Pre-lancamento 10 MC</p></div>
-<div class="banner"><b>🎁 PRE-LANCAMENTO: 10 MC</b><br><span style="font-size:13px">Faca Trust + Ative com 2 XLM e resgate seus 10 MCCOIN</span><br><br><span style="font-size:12px">Pre-lancamento aberto • 300 vagas • 10 MC cada</span></div>
+<div class="top"><img src="logo.png" class="logo" onerror="this.src='https://mccoinlabs.github.io/mccoinlabs/logo.png'"><div><h1>MC WALLET</h1><p>Pre-lancamento 10 MC</p></div></div>
+<div class="banner"><img src="logo.png" style="width:48px;height:48px;border-radius:50%;border:2px solid #000;object-fit:cover" onerror="this.style.display='none'"><div><b>🎁 PRE-LANCAMENTO: 10 MC</b><br><span style="font-size:13px">Faca Trust + Ative com 2 XLM e resgate seus 10 MCCOIN</span><br><br><span style="font-size:12px">Pre-lancamento aberto • 300 vagas • 10 MC cada</span></div></div>
 
 <div id="aba-carteira">
 <div class="card">
@@ -60,7 +61,7 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 </div>
 
 <div id="aba-perfil" class="hidden">
-<div class="card"><h3 style="margin:0">👤 Perfil</h3><div class="box"><b>Seu PUB:</b><br><span id="pub-perfil">-</span></div><button class="btn-ouro" onclick="copiarPub()">📋 Copiar PUB</button><button class="btn-cinza" onclick="sair()">Sair da Carteira</button></div>
+<div class="card"><div style="text-align:center"><img src="logo.png" style="width:80px;height:80px;border-radius:50%;border:2px solid #FFD700;object-fit:cover" onerror="this.style.display='none'"></div><h3 style="margin:10px 0 0;text-align:center">👤 Perfil</h3><div class="box"><b>Seu PUB:</b><br><span id="pub-perfil">-</span></div><button class="btn-ouro" onclick="copiarPub()">📋 Copiar PUB</button><button class="btn-cinza" onclick="sair()">Sair da Carteira</button></div>
 </div>
 
 <div class="bottom">
@@ -73,11 +74,11 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
 const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
 let kpAtual = null; let secAtual = ""; let pubSomenteLeitura = "";
-const MOEDAS=[{name:"XRP",desc:"XRP • Ripple",url:"https://xrp.org"},{name:"XLM",desc:"XLM • Stellar",url:"https://stellar.org"},{name:"XDC",desc:"XDC • XDC Network",url:"https://xdc.org"},{name:"HBAR",desc:"HBAR • Hedera",url:"https://hedera.com"},{name:"ADA",desc:"ADA • Cardano",url:"https://cardano.org"},{name:"ALGO",desc:"ALGO • Algorand",url:"https://algorand.com"},{name:"QNT",desc:"QNT • Quant",url:"https://quant.network"},{name:"ETH",desc:"ETH • Ethereum",url:"https://ethereum.org"},{name:"USDC",desc:"USDC • USD Coin",url:"https://www.circle.com"},{name:"MCCOIN",desc:"MCC • McCoin",url:"https://mccoinlabs.github.io/mccoinlabs/"}];
+const MOEDAS=[{name:"XRP",desc:"XRP • Ripple",url:"https://xrp.org",img:"https://cryptologos.cc/logos/xrp-xrp-logo.png"},{name:"XLM",desc:"XLM • Stellar",url:"https://stellar.org",img:"https://cryptologos.cc/logos/stellar-xlm-logo.png"},{name:"XDC",desc:"XDC • XDC Network",url:"https://xdc.org",img:"https://cryptologos.cc/logos/xdc-network-xdc-logo.png"},{name:"HBAR",desc:"HBAR • Hedera",url:"https://hedera.com",img:"https://cryptologos.cc/logos/hedera-hashgraph-hbar-logo.png"},{name:"ADA",desc:"ADA • Cardano",url:"https://cardano.org",img:"https://cryptologos.cc/logos/cardano-ada-logo.png"},{name:"ALGO",desc:"ALGO • Algorand",url:"https://algorand.com",img:"https://cryptologos.cc/logos/algorand-algo-logo.png"},{name:"QNT",desc:"QNT • Quant",url:"https://quant.network",img:"https://cryptologos.cc/logos/quant-qnt-logo.png"},{name:"ETH",desc:"ETH • Ethereum",url:"https://ethereum.org",img:"https://cryptologos.cc/logos/ethereum-eth-logo.png"},{name:"USDC",desc:"USDC • USD Coin",url:"https://www.circle.com",img:"https://cryptologos.cc/logos/usd-coin-usdc-logo.png"},{name:"MCCOIN",desc:"MCC • McCoin",url:"https://mccoinlabs.github.io/mccoinlabs/",img:"logo.png"}];
 function fmt(n){ return Number(n).toFixed(2); }
 function abrirEco(url){ window.open(url,"_blank"); }
 function renderEco(){
-let h=""; MOEDAS.forEach(m=>{ h+=`<div class="coin"><b>${m.name}</b><br><small>${m.desc}</small><br><button class="btn-ouro" style="padding:8px;font-size:12px" onclick="abrirEco('${m.url}')">🌐 Abrir Ecossistema ${m.name} ↗</button></div>`; });
+let h=""; MOEDAS.forEach(m=>{ h+=`<div class="coin"><img src="${m.img}" onerror="this.style.display='none'"> <b>${m.name}</b><br><small>${m.desc}</small><br><button class="btn-ouro" style="padding:8px;font-size:12px" onclick="abrirEco('${m.url}')">🌐 Abrir Ecossistema ${m.name} ↗</button></div>`; });
 document.getElementById("portfolio").innerHTML=h; document.getElementById("mercado-lista").innerHTML=h;
 }
 function mostrarAba(a){
