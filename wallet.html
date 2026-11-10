@@ -3,65 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carteira MCCoin | McCoin Labs</title>
+<title>Carteira MCCoin - Pré-lançamento 10 MC</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2.0/stellar-sdk.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-body{font-family:Arial,sans-serif;background:#0a0f1e;color:#fff;margin:0;padding:0;text-align:center}
-header{padding:30px 20px}
-h1{color:#00d4ff;margin:0}
-.telegram-bar{background:#229ED9;padding:16px}
-.telegram-bar a{background:#fff;color:#000;font-weight:bold;font-size:18px;padding:12px 24px;border-radius:30px;text-decoration:none;display:inline-block}
-.card{background:#162144;border:1px solid #2a3a6b;border-radius:12px;padding:20px;max-width:600px;margin:20px auto}
-input{width:90%;padding:14px;border-radius:8px;border:none;margin:10px 0;font-size:15px}
-button{background:#00d4ff;color:#000;font-weight:bold;padding:14px 24px;border:none;border-radius:8px;cursor:pointer;font-size:16px}
-.result{margin-top:15px;background:#000;padding:15px;border-radius:8px;text-align:left;word-break:break-all}
-code{color:#00ff9d}
-.offline{background:#00d4ff;color:#000;font-weight:bold;padding:12px;border-radius:8px;max-width:600px;margin:15px auto}
+body{font-family:sans-serif;background:#0a0f1e;color:white;text-align:center;padding:15px;margin:0}
+.card{background:#1a2340;padding:20px;border-radius:18px;max-width:480px;margin:15px auto;text-align:left}
+h1{color:#00d4ff;font-size:24px;margin:10px 0 5px}
+h2{margin:0 0 10px;font-size:18px}
+button{background:#00d4ff;color:#000;border:none;padding:14px;border-radius:12px;width:100%;font-weight:bold;margin-top:10px;cursor:pointer;font-size:15px}
+button.sec{background:#333;color:white}
+input{width:100%;padding:13px;margin-top:10px;border-radius:10px;border:1px solid #444;background:#0a0f1e;color:white;box-sizing:border-box}
+.box{word-break:break-all;background:#0a0f1e;padding:12px;border-radius:10px;font-size:12px;margin-top:10px;border:1px dashed #00d4ff}
+.badge{background:#00d4ff;color:#000;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block}
+#qrcode{background:white;padding:10px;border-radius:10px;width:150px;margin:10px auto}
+#qrcode img{width:100%}
+small{color:#aaa}
 </style>
 </head>
 <body>
-<header>
-<h1>🪙 Carteira MCCoin</h1>
-<p>AQUI VOCÊ APRENDE OFFLINE.</p>
-</header>
-<div class="telegram-bar">
-<a href="https://telegram.me/walt/start?startapp=ref-4-eyDHMga5640" target="_blank">📲 ENTRAR NO TELEGRAM AGORA</a>
-</div>
 
-<div class="offline">Consulte seu saldo sem colocar sua SEED. Só a chave pública que começa com G.</div>
+<h1>💼 Carteira MCCoin</h1>
+<p><span class="badge">PRÉ-LANÇAMENTO • 10 MC</span></p>
+<p style="font-size:13px">AQUI VOCÊ APRENDE OFFLINE.</p>
+
+<a href="https://t.me/walt/start?startapp=ref-4-eyDHMga5640" target="_blank" style="text-decoration:none"><button style="background:#229ED9;color:white">📱 COMPRAR XLM COM PIX NO TELEGRAM</button></a>
 
 <div class="card">
-<h2>Ver meu saldo</h2>
-<p>Cole sua chave pública Stellar (começa com G):</p>
-<input id="chave" placeholder="Ex: GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI">
-<br>
+<h2>1. Gerar Carteira Nova</h2>
+<p style="font-size:13px;color:#ccc">Cria na hora no seu celular. Ninguém vê sua chave secreta.</p>
+<button onclick="gerarCarteira()">GERAR MINHA CARTEIRA</button>
+<div id="novaCarteira"></div>
+</div>
+
+<div class="card">
+<h2>2. Trustline MCCOIN - Passo Obrigatório</h2>
+<p style="font-size:13px;color:#ccc">Conecta na Freighter e autoriza receber MCCOIN do issuer:<br><b style="color:#00d4ff">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</b></p>
+<button onclick="fazerTrustline()">✅ FAZER TRUSTLINE MCCOIN</button>
+<div id="trustResult"></div>
+</div>
+
+<div class="card">
+<h2>3. Ver Meu Saldo</h2>
+<p style="font-size:13px;color:#ccc">Cole sua chave pública que começa com G:</p>
+<input id="pubKey" placeholder="Ex: GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI">
 <button onclick="verSaldo()">VER SALDO</button>
-<div id="resultado" class="result" style="display:none"></div>
-<p style="font-size:13px;color:#aaa">⚠️ Nunca coloque sua chave secreta que começa com S. Essa carteira não guarda nada.</p>
+<div id="saldoResult"></div>
 </div>
 
 <div class="card">
-<h2>Trustline MCCoin</h2>
-<p>Código: <code>MCCOIN</code><br>Emissor: <code>GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</code></p>
-<a href="https://lobstr.co/" target="_blank" style="color:#00d4ff;font-weight:bold">Abrir Lobstr para adicionar</a>
+<h2>4. Receber</h2>
+<p style="font-size:13px;color:#ccc">Mostre esse QR pra quem vai te mandar MCCOIN.</p>
+<input id="meuG" placeholder="Cole seu G... aqui pra gerar o QR">
+<button onclick="gerarQR()" class="sec">GERAR MEU QR</button>
+<div id="qrcode"></div>
+<div id="qrText"></div>
 </div>
+
+<div class="card">
+<h2>5. Enviar MCCOIN</h2>
+<p style="font-size:13px;color:#ccc">Você precisa da sua chave secreta S... e da Freighter.</p>
+<input id="destino" placeholder="Destino G...">
+<input id="valor" placeholder="Valor Ex: 10" type="number">
+<button onclick="enviarMCCOIN()">ENVIAR MCCOIN</button>
+<div id="enviarResult"></div>
+</div>
+
+<div class="card" style="border:2px solid #00d4ff">
+<h2>🎁 Resgatar Airdrop +10 MC</h2>
+<p style="font-size:13px">1. Faça o Trustline acima<br>2. Clique abaixo<br>3. Peça os 10 MC na sua carteira de distribuição</p>
+<button onclick="resgatar()">RESGATAR +10 MC</button>
+<div id="resgatarResult"></div>
+</div>
+
+<p><small>Nunca coloque sua chave secreta que começa com S em site estranho. Essa carteira não guarda nada.</small></p>
 
 <script>
-async function verSaldo(){
-  const chave = document.getElementById('chave').value.trim();
-  const div = document.getElementById('resultado');
-  if(!chave.startsWith('G')){ alert('Tem que começar com G!'); return; }
-  div.style.display='block'; div.innerHTML='Carregando...';
+const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
+const CODE = "MCCOIN";
+const server = new StellarSdk.Horizon.Server('https://horizon.stellar.org');
+
+function gerarCarteira(){
+  const pair = StellarSdk.Keypair.random();
+  document.getElementById('novaCarteira').innerHTML = `
+    <div class="box"><b>✅ CARTEIRA CRIADA!</b><br><br><b>ENDEREÇO G...</b><br>${pair.publicKey()}<br><br><b>🔑 CHAVE SECRETA S... - GUARDE, NÃO MOSTRE PRA NINGUÉM:</b><br>${pair.secret()}<br><br><span style="color:#ffcc00">Perdeu = perdeu tudo. Anote no papel.</span></div>
+    <p style="font-size:12px">Agora faça o Trustline no passo 2 com essa carteira.</p>`;
+  document.getElementById('pubKey').value = pair.publicKey();
+  document.getElementById('meuG').value = pair.publicKey();
+}
+
+async function fazerTrustline(){
+  document.getElementById('trustResult').innerHTML = "Conectando na Freighter...";
   try{
-    const r = await fetch('https://horizon.stellar.org/accounts/'+chave);
-    const j = await r.json();
-    if(j.status===404){ div.innerHTML='Conta não encontrada ou não ativada ainda. Precisa de 1 XLM para ativar.'; return; }
-    let html = '<b>Conta:</b> '+chave+'<br><br><b>Saldos:</b><br>';
-    j.balances.forEach(b=>{
-      if(b.asset_type==='native') html += 'XLM: '+b.balance+'<br>';
-      else html += b.asset_code+' : '+b.balance+'<br>';
+    if(!window.freighterApi){ document.getElementById('trustResult').innerHTML = "⚠️ Instale a extensão Freighter no navegador e recarregue a página."; return; }
+    const pub = await window.freighterApi.getPublicKey();
+    const asset = new StellarSdk.Asset(CODE, ISSUER);
+    const account = await server.loadAccount(pub);
+    const tx = new StellarSdk.TransactionBuilder(account, {fee: StellarSdk.BASE_FEE, networkPassphrase: StellarSdk.Networks.PUBLIC})
+      .addOperation(StellarSdk.Operation.changeTrust({asset: asset, limit: "23000"}))
+      .setTimeout(60).build();
+    const signed = await window.freighterApi.signTransaction(tx.toXDR(), {networkPassphrase: StellarSdk.Networks.PUBLIC});
+    const res = await server.submitTransaction(StellarSdk.TransactionBuilder.fromXDR(signed.signedTxXdr, StellarSdk.Networks.PUBLIC));
+    document.getElementById('trustResult').innerHTML = `<div class="box" style="border-color:#00ff88">✅ TRUSTLINE FEITO! Agora você pode receber MCCOIN.<br>Hash: ${res.hash}</div>`;
+  }catch(e){ document.getElementById('trustResult').innerHTML = `<div class="box">❌ Erro: ${e.message || e}</div>`; }
+}
+
+async function verSaldo(){
+  const key = document.getElementById('pubKey').value.trim();
+  if(!key.startsWith('G')){ document.getElementById('saldoResult').innerHTML = "Tem que começar com G..."; return; }
+  document.getElementById('saldoResult').innerHTML = "Buscando na rede Stellar...";
+  try{
+    const acc = await server.loadAccount(key).catch(()=>null);
+    if(!acc){ document.getElementById('saldoResult').innerHTML = `<div class="box">⚠️ Conta ainda não ativada. Envie 1 XLM pra ativar e depois faça Trustline.</div>`; return; }
+    let html = `<div class="box"><b>SALDO:</b><br>`;
+    acc.balances.forEach(b=>{
+      let code = b.asset_type === 'native' ? 'XLM' : b.asset_code;
+      html += `${code}: <b>${b.balance}</b><br>`;
     });
-    div.innerHTML = html;
-  }catch(e){ div.innerHTML='Erro ao consultar. Tente de novo com internet.'; }
+    html += `</div>`;
+    document.getElementById('saldoResult').innerHTML = html;
+  }catch(e){ document.getElementById('saldoResult').innerHTML = "Erro: "+e.message; }
+}
+
+function gerarQR(){
+  const g = document.getElementById('meuG').value.trim();
+  if(!g.startsWith('G')){ alert("Cole seu G..."); return; }
+  document.getElementById('qrcode').innerHTML = "";
+  new QRCode(document.getElementById('qrcode'), {text: g, width: 140, height: 140});
+  document.getElementById('qrText').innerHTML = `<div class="box">${g}</div>`;
+}
+
+async function enviarMCCOIN(){
+  const dest = document.getElementById('destino').value.trim();
+  const val = document.getElementById('valor').value.trim();
+  if(!dest.startsWith('G') || !val){ alert("Preencha destino G... e valor"); return; }
+  document.getElementById('enviarResult').innerHTML = "Assine na Freighter...";
+  try{
+    const pub = await window.freighterApi.getPublicKey();
+    const asset = new StellarSdk.Asset(CODE, ISSUER);
+    const account = await server.loadAccount(pub);
+    const tx = new StellarSdk.TransactionBuilder(account, {fee: StellarSdk.BASE_FEE, networkPassphrase: StellarSdk.Networks.PUBLIC})
+      .addOperation(StellarSdk.Operation.payment({destination: dest, asset: asset, amount: val}))
+      .setTimeout(60).build();
+    const signed = await window.freighterApi.signTransaction(tx.toXDR(), {networkPassphrase: StellarSdk.Networks.PUBLIC});
+    const res = await server.submitTransaction(StellarSdk.TransactionBuilder.fromXDR(signed.signedTxXdr, StellarSdk.Networks.PUBLIC));
+    document.getElementById('enviarResult').innerHTML = `<div class="box" style="border-color:#00ff88">✅ ENVIADO ${val} MCCOIN!<br>Hash: ${res.hash}</div>`;
+  }catch(e){ document.getElementById('enviarResult').innerHTML = "❌ Erro: "+(e.message||e); }
+}
+
+function resgatar(){
+  document.getElementById('resgatarResult').innerHTML = `<div class="box"><b>🎁 PRA RECEBER SEUS 10 MC:</b><br><br>1. Você já fez o Trustline no passo 2? Se não, faça agora.<br>2. Sua carteira já está pronta pra receber.<br>3. Agora é só enviar 10 MCCOIN da sua carteira de distribuição pra essa carteira que você criou.<br><br>Depois clique em VER SALDO no passo 3 que vai aparecer <b>10.00 MCCOIN</b>.</div>`;
 }
 </script>
 </body>
