@@ -16,12 +16,15 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 .btn-verde{background:#22c55e;color:#000}.btn-ouro{background:#FFD700;color:#000}.btn-preto{background:#111;color:#FFD700;border:1px solid #FFD700}.btn-cinza{background:#222;color:#fff;border:1px solid #333}
 .box{background:#1a1a1a;padding:12px;border-radius:10px;word-break:break-all;margin:10px 0;font-size:13px}.hidden{display:none!important}
 .painel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.painel div{background:#111;border:1px solid #FFD700;border-radius:12px;padding:12px;text-align:center}.painel small{color:#aaa;font-size:12px}.painel b{font-size:22px}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222}.bottom div{text-align:center;font-size:12px;color:#888}.bottom .ativo{color:#FFD700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.coin{background:#151515;border:1px solid #222;border-radius:14px;padding:12px}.coin b{font-size:17px}.coin small{color:#aaa}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222;z-index:99}.bottom div{text-align:center;font-size:12px;color:#888;cursor:pointer}.bottom .ativo{color:#FFD700}
 </style>
 </head>
 <body>
 <div class="top"><h1>MC WALLET</h1><p>Pre-lancamento 10 MC</p></div>
 <div class="banner"><b>🎁 PRE-LANCAMENTO: 10 MC</b><br><span style="font-size:13px">Faca Trust + Ative com 2 XLM e resgate seus 10 MCCOIN</span><br><br><span style="font-size:12px">Pre-lancamento aberto • 300 vagas • 10 MC cada</span></div>
+
+<div id="aba-carteira">
 <div class="card">
 <p style="margin:0;color:#aaa;font-size:13px">Saldo Total • MCC COIN</p>
 <div class="saldo"><span id="saldo-mcc">0.00</span> MCC</div>
@@ -32,7 +35,7 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 <div><small>TRUST MCCOIN</small><br><b id="info-trust">❌ NAO</b></div>
 <div><small>ATIVADO 2 XLM</small><br><b id="info-ativado">❌ NAO</b></div>
 </div>
-<div class="box" id="box-conta"><b>Seu PUB:</b><br><span id="pub-txt">Nenhuma carteira ainda - entre com PUB ou crie uma</span><br><br><b>Seu SEC (NUNCA mostre):</b><br><span id="sec-txt">-</span></div>
+<div class="box"><b>Seu PUB:</b><br><span id="pub-txt">Nenhuma carteira ainda - entre com PUB ou crie uma</span><br><br><b>Seu SEC (NUNCA mostre):</b><br><span id="sec-txt">-</span></div>
 <input id="pub-entrar" placeholder="Cole sua chave PUB (G...) para entrar como antes">
 <button class="btn-verde" onclick="entrarComPub()">🔑 ENTRAR COM CHAVE PUBLICA</button>
 <button class="btn-verde" onclick="criarCarteira()">+ Criar Carteira</button>
@@ -44,13 +47,45 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 <p id="msg" style="font-size:13px;color:#FFD700;text-align:center"></p>
 </div>
 <div class="card"><h3 style="margin:0">💸 Enviar MCCOIN</h3><input id="destino-envio" placeholder="Destino PUB (G...)"><input id="valor-envio" placeholder="Valor - ex: 10.00" value="10.00"><button class="btn-ouro" onclick="enviarMCC()">Enviar MCCOIN</button><p id="msg-envio" style="font-size:13px;color:#FFD700"></p></div>
+<div class="card"><h3 style="margin:0">💼 Portfólio - Clique para abrir o ecossistema</h3><div class="grid" id="portfolio"></div></div>
 <div class="card"><h3 style="margin:0">🏢 Area de Membros</h3><p style="font-size:13px;color:#aaa">ADM entra no painel corporativo. Usuario normal nao entra.</p><button class="btn-cinza" onclick="window.location.href='admin.html'">Entrar como ADM</button></div>
-<div class="bottom"><div class="ativo">💼<br>Carteira</div><div>📈<br>Mercado</div><div>🔄<br>Trocar</div><div>👤<br>Perfil</div></div>
+</div>
+
+<div id="aba-mercado" class="hidden">
+<div class="card"><h3 style="margin:0">📈 Mercado - Ecossistemas</h3><p style="font-size:13px;color:#aaa">Clique em qualquer moeda para abrir o site oficial dela.</p><div class="grid" id="mercado-lista"></div></div>
+</div>
+
+<div id="aba-trocar" class="hidden">
+<div class="card"><h3 style="margin:0">🔄 Trocar / Swap</h3><input id="swap-valor" placeholder="Valor ex: 10"><button class="btn-verde" onclick="fazerSwap()">Trocar Agora</button><p style="font-size:12px;color:#aaa">Por enquanto use Enviar. O Swap automático vem depois da pool.</p></div>
+</div>
+
+<div id="aba-perfil" class="hidden">
+<div class="card"><h3 style="margin:0">👤 Perfil</h3><div class="box"><b>Seu PUB:</b><br><span id="pub-perfil">-</span></div><button class="btn-ouro" onclick="copiarPub()">📋 Copiar PUB</button><button class="btn-cinza" onclick="sair()">Sair da Carteira</button></div>
+</div>
+
+<div class="bottom">
+<div id="btn-carteira" class="ativo" onclick="mostrarAba('carteira')">💼<br>Carteira</div>
+<div id="btn-mercado" onclick="mostrarAba('mercado')">📈<br>Mercado</div>
+<div id="btn-trocar" onclick="mostrarAba('trocar')">🔄<br>Trocar</div>
+<div id="btn-perfil" onclick="mostrarAba('perfil')">👤<br>Perfil</div>
+</div>
 <script>
 const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
 const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
 let kpAtual = null; let secAtual = ""; let pubSomenteLeitura = "";
+const MOEDAS=[{name:"XRP",desc:"XRP • Ripple",url:"https://xrp.org"},{name:"XLM",desc:"XLM • Stellar",url:"https://stellar.org"},{name:"XDC",desc:"XDC • XDC Network",url:"https://xdc.org"},{name:"HBAR",desc:"HBAR • Hedera",url:"https://hedera.com"},{name:"ADA",desc:"ADA • Cardano",url:"https://cardano.org"},{name:"ALGO",desc:"ALGO • Algorand",url:"https://algorand.com"},{name:"QNT",desc:"QNT • Quant",url:"https://quant.network"},{name:"ETH",desc:"ETH • Ethereum",url:"https://ethereum.org"},{name:"USDC",desc:"USDC • USD Coin",url:"https://www.circle.com"},{name:"MCCOIN",desc:"MCC • McCoin",url:"https://mccoinlabs.github.io/mccoinlabs/"}];
 function fmt(n){ return Number(n).toFixed(2); }
+function abrirEco(url){ window.open(url,"_blank"); }
+function renderEco(){
+let h=""; MOEDAS.forEach(m=>{ h+=`<div class="coin"><b>${m.name}</b><br><small>${m.desc}</small><br><button class="btn-ouro" style="padding:8px;font-size:12px" onclick="abrirEco('${m.url}')">🌐 Abrir Ecossistema ${m.name} ↗</button></div>`; });
+document.getElementById("portfolio").innerHTML=h; document.getElementById("mercado-lista").innerHTML=h;
+}
+function mostrarAba(a){
+["carteira","mercado","trocar","perfil"].forEach(x=>{ document.getElementById("aba-"+x).classList.add("hidden"); document.getElementById("btn-"+x).classList.remove("ativo"); });
+document.getElementById("aba-"+a).classList.remove("hidden"); document.getElementById("btn-"+a).classList.add("ativo");
+if(a==="perfil"){ document.getElementById("pub-perfil").innerText = document.getElementById("pub-txt").innerText; }
+window.scrollTo(0,0);
+}
 function atualizarPainel(mcc, xlm, temTrust){
 document.getElementById("info-mcc").innerText = fmt(mcc)+" MCC";
 document.getElementById("info-xlm").innerText = fmt(xlm)+" XLM";
@@ -58,17 +93,13 @@ document.getElementById("info-trust").innerText = temTrust ? "✅ SIM" : "❌ NA
 document.getElementById("info-ativado").innerText = (xlm >= 1) ? "✅ SIM" : "❌ NAO";
 }
 async function atualizarSaldo(){
-let pub = kpAtual ? kpAtual.publicKey() : pubSomenteLeitura;
-if(!pub) return;
+let pub = kpAtual ? kpAtual.publicKey() : pubSomenteLeitura; if(!pub) return;
 try{
 let acc = await server.loadAccount(pub);
 let mcc = acc.balances.find(b=>b.asset_code==="MCCOIN");
 let xlm = acc.balances.find(b=>b.asset_type==="native");
-let saldoMCC = mcc ? parseFloat(mcc.balance) : 0;
-let saldoXLM = xlm ? parseFloat(xlm.balance) : 0;
-document.getElementById("saldo-mcc").innerText = fmt(saldoMCC);
-document.getElementById("saldo-xlm").innerText = fmt(saldoXLM);
-document.getElementById("valor-reais").innerText = fmt(0);
+let saldoMCC = mcc ? parseFloat(mcc.balance) : 0; let saldoXLM = xlm ? parseFloat(xlm.balance) : 0;
+document.getElementById("saldo-mcc").innerText = fmt(saldoMCC); document.getElementById("saldo-xlm").innerText = fmt(saldoXLM); document.getElementById("valor-reais").innerText = fmt(0);
 atualizarPainel(saldoMCC, saldoXLM, !!mcc);
 }catch(e){ document.getElementById("msg").innerText = "Conta ainda nao ativada. Precisa de 2 XLM. Erro: " + e.message; atualizarPainel(0,0,false); }
 }
@@ -78,76 +109,60 @@ if(!pub.startsWith("G")){ document.getElementById("msg").innerText="PUB invalido
 pubSomenteLeitura = pub; kpAtual = null; secAtual = "";
 document.getElementById("pub-txt").innerText = pub;
 document.getElementById("sec-txt").innerText = "Voce entrou so com PUB (so ver saldo). Para Trust e Enviar, importe com SEC.";
-document.getElementById("msg").innerText = "✅ Entrou com PUB! Agora voce ve seu saldo e status la em cima.";
-atualizarSaldo();
+document.getElementById("msg").innerText = "✅ Entrou com PUB!"; atualizarSaldo();
 }
 function criarCarteira(){
 kpAtual = StellarSdk.Keypair.random(); secAtual = kpAtual.secret(); pubSomenteLeitura = "";
-document.getElementById("pub-txt").innerText = kpAtual.publicKey();
-document.getElementById("sec-txt").innerText = secAtual;
-document.getElementById("msg").innerText = "✅ Carteira criada! Salve seu SEC. Depois mande 2 XLM para ativar. Seu PUB: " + kpAtual.publicKey();
+document.getElementById("pub-txt").innerText = kpAtual.publicKey(); document.getElementById("sec-txt").innerText = secAtual;
+document.getElementById("msg").innerText = "✅ Carteira criada! Salve seu SEC. Depois mande 2 XLM para ativar.";
 atualizarSaldo();
 }
 function mostrarImportar(){ document.getElementById("box-importar").classList.remove("hidden"); }
 function importarCarteira(){
 let sec = document.getElementById("sec-importar").value.trim();
-if(!sec.startsWith("S")){ document.getElementById("msg").innerText="SEC invalido! Comeca com S..."; return; }
-try{
-kpAtual = StellarSdk.Keypair.fromSecret(sec); secAtual = sec; pubSomenteLeitura = "";
-document.getElementById("pub-txt").innerText = kpAtual.publicKey();
-document.getElementById("sec-txt").innerText = secAtual;
-document.getElementById("msg").innerText = "✅ Carteira importada!";
-atualizarSaldo();
+if(!sec.startsWith("S")){ document.getElementById("msg").innerText="SEC invalido!"; return; }
+try{ kpAtual = StellarSdk.Keypair.fromSecret(sec); secAtual = sec; pubSomenteLeitura = "";
+document.getElementById("pub-txt").innerText = kpAtual.publicKey(); document.getElementById("sec-txt").innerText = secAtual;
+document.getElementById("msg").innerText = "✅ Carteira importada!"; atualizarSaldo();
 }catch(e){ document.getElementById("msg").innerText="❌ SEC invalido!"; }
 }
 async function fazerTrust(){
-if(!kpAtual){ document.getElementById("msg").innerText="Voce entrou so com PUB. Para fazer Trust, clique em Importar e cole seu SEC!"; return; }
+if(!kpAtual){ document.getElementById("msg").innerText="Voce entrou so com PUB. Para Trust, clique em Importar e cole seu SEC!"; return; }
 document.getElementById("msg").innerText="Adicionando Trust...";
-try{
-let acc = await server.loadAccount(kpAtual.publicKey());
+try{ let acc = await server.loadAccount(kpAtual.publicKey());
 let tx = new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.changeTrust({asset:new StellarSdk.Asset("MCCOIN",ISSUER)})).setTimeout(30).build();
 tx.sign(kpAtual); let r = await server.submitTransaction(tx);
-document.getElementById("msg").innerText="✅ Trust adicionado! Agora ative com 2 XLM. Hash: "+r.hash;
-atualizarSaldo();
+document.getElementById("msg").innerText="✅ Trust adicionado!"; atualizarSaldo();
 }catch(e){ document.getElementById("msg").innerText="❌ Erro Trust: "+e.message; }
 }
 async function verificarAtivacao(){
-let pub = kpAtual ? kpAtual.publicKey() : pubSomenteLeitura;
-if(!pub){ document.getElementById("msg").innerText="Entre com PUB ou crie/importe primeiro!"; return; }
-try{
-let acc = await server.loadAccount(pub);
-let xlm = acc.balances.find(b=>b.asset_type==="native");
-let v = xlm ? parseFloat(xlm.balance) : 0;
-if(v >= 1){ document.getElementById("msg").innerText="✅ Ativado! Voce tem "+fmt(v)+" XLM. Pode resgatar!"; }
-else{ document.getElementById("msg").innerText="❌ Ainda nao ativado. Voce tem "+fmt(v)+" XLM. Precisa de 2 XLM."; }
-atualizarSaldo();
-}catch(e){ document.getElementById("msg").innerText="❌ Conta nao ativada ainda. Mande 2 XLM para: "+pub; }
+let pub = kpAtual ? kpAtual.publicKey() : pubSomenteLeitura; if(!pub){ document.getElementById("msg").innerText="Entre com PUB primeiro!"; return; }
+try{ let acc = await server.loadAccount(pub); let xlm = acc.balances.find(b=>b.asset_type==="native"); let v = xlm ? parseFloat(xlm.balance) : 0;
+if(v >= 1){ document.getElementById("msg").innerText="✅ Ativado! Voce tem "+fmt(v)+" XLM."; } else { document.getElementById("msg").innerText="❌ Ainda nao ativado. Voce tem "+fmt(v)+" XLM. Precisa de 2 XLM."; } atualizarSaldo();
+}catch(e){ document.getElementById("msg").innerText="❌ Conta nao ativada. Mande 2 XLM para: "+pub; }
 }
 async function resgatar10(){
-let trust = document.getElementById("info-trust").innerText;
-let ativ = document.getElementById("info-ativado").innerText;
+let trust = document.getElementById("info-trust").innerText; let ativ = document.getElementById("info-ativado").innerText;
 if(!trust.includes("SIM")){ document.getElementById("msg").innerText="❌ Primeiro clica em Aceitar MCCOIN!"; return; }
-if(!ativ.includes("SIM")){ document.getElementById("msg").innerText="❌ Primeiro manda 2 XLM e clica em Verificar Ativacao!"; return; }
-document.getElementById("msg").innerText="✅ Tudo pronto! Trust SIM + Ativado SIM. Fala com o ADM no painel para ele enviar seus 10 MC para: " + (kpAtual ? kpAtual.publicKey() : pubSomenteLeitura);
+if(!ativ.includes("SIM")){ document.getElementById("msg").innerText="❌ Primeiro manda 2 XLM e clica em Verificar!"; return; }
+document.getElementById("msg").innerText="✅ Tudo pronto! Fala com o ADM para enviar seus 10 MC para: " + (kpAtual ? kpAtual.publicKey() : pubSomenteLeitura);
 }
 async function enviarMCC(){
-let dest = document.getElementById("destino-envio").value.trim();
-let val = document.getElementById("valor-envio").value.trim();
-if(!kpAtual){ document.getElementById("msg-envio").innerText="Para enviar, importe com SEC primeiro!"; return; }
+let dest = document.getElementById("destino-envio").value.trim(); let val = document.getElementById("valor-envio").value.trim();
+if(!kpAtual){ document.getElementById("msg-envio").innerText="Para enviar, importe com SEC!"; return; }
 if(!dest.startsWith("G")){ document.getElementById("msg-envio").innerText="Destino invalido!"; return; }
 document.getElementById("msg-envio").innerText="Enviando...";
-try{
-let acc = await server.loadAccount(kpAtual.publicKey());
+try{ let acc = await server.loadAccount(kpAtual.publicKey());
 let tx = new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.payment({destination:dest,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:val})).setTimeout(30).build();
 tx.sign(kpAtual); let r = await server.submitTransaction(tx);
-document.getElementById("msg-envio").innerText="✅ Enviado "+val+" MCCOIN! Hash: "+r.hash;
-atualizarSaldo();
+document.getElementById("msg-envio").innerText="✅ Enviado "+val+" MCCOIN! Hash: "+r.hash; atualizarSaldo();
 }catch(e){ document.getElementById("msg-envio").innerText="❌ Erro: "+e.message; }
 }
-window.addEventListener("load", ()=>{
-let p = new URLSearchParams(window.location.search).get("pub");
-if(p && p.startsWith("G")){ document.getElementById("pub-entrar").value = p; entrarComPub(); }
-});
+function fazerSwap(){ alert("Swap - use Enviar por enquanto."); }
+function copiarPub(){ navigator.clipboard.writeText(document.getElementById("pub-txt").innerText).then(()=>alert("Copiado! ✅")); }
+function sair(){ kpAtual=null; secAtual=""; pubSomenteLeitura=""; document.getElementById("pub-txt").innerText="Nenhuma carteira ainda"; mostrarAba('carteira'); }
+renderEco();
+window.addEventListener("load", ()=>{ let p = new URLSearchParams(window.location.search).get("pub"); if(p && p.startsWith("G")){ document.getElementById("pub-entrar").value = p; entrarComPub(); } });
 </script>
 </body>
 </html>
