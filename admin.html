@@ -6,73 +6,74 @@
 <title>ADMIN - MC WALLET Corporativo</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.0.0/stellar-sdk.min.js"></script>
 <style>
-*{box-sizing:border-box}body{background:#0a0f0d;color:#fff;font-family:Arial;margin:0;padding:15px;padding-bottom:40px}
-h1{color:#FFD700;margin:5px 0}.card{background:#141414;border:1px solid #FFD700;border-radius:16px;padding:16px;margin:12px 0;max-width:520px;margin-left:auto;margin-right:auto}
+*{box-sizing:border-box}body{background:#0a0f0d;color:#fff;font-family:Arial;margin:0;padding:15px}
+h1{color:#FFD700;margin:5px 0}.card{background:#141414;border:1px solid #FFD700;border-radius:16px;padding:16px;margin:12px auto;max-width:520px}
 input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
 button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;cursor:pointer;margin-top:8px}
 .btn-ouro{background:#FFD700;color:#000}.btn-verde{background:#22c55e;color:#000}.btn-cinza{background:#222;color:#fff;border:1px solid #333}
 .box{background:#222;padding:12px;border-radius:10px;word-break:break-all;margin:10px 0;font-size:13px}
 .hidden{display:none!important}
-.badge{background:#FFD700;color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold}
 </style>
 </head>
 <body>
 <div style="max-width:520px;margin:0 auto;text-align:center">
 <h1>🏢 ADMIN MCCOIN</h1>
-<p style="color:#aaa;font-size:13px">Área Corporativa - Só o ADM entra</p>
-<span class="badge">ISSUER: GDZCQYJ...NKCI</span>
+<p style="color:#aaa;font-size:13px">Área Corporativa - Acesso restrito</p>
 </div>
 
 <div id="tela-login" class="card">
 <h3 style="margin:0">Entrar como ADM</h3>
-<p style="font-size:13px;color:#aaa">Cole seu PUB de ADM. Só ele libera o painel.</p>
-<input id="pub-adm" placeholder="Cole seu PUB ADM (G...)">
-<button class="btn-ouro" onclick="entrarAdmin()">ENTRAR NO PAINEL</button>
-<p style="font-size:12px;color:#aaa">ADM atual: GBU43MCALRHGX2WNR7FI5PFXJDMSVTBQSFP7SXYJVOLQWKPY7NAINXOQ</p>
+<p style="font-size:13px;color:#aaa">Só quem tem a chave SEC do ADM entra. O PUB sozinho NÃO entra mais.</p>
+<input id="sec-adm-login" type="password" placeholder="Cole seu SEC ADM (começa com S...)">
+<button class="btn-ouro" onclick="entrarAdmin()">🔐 ENTRAR COM SEC</button>
 <p id="msg-login" style="font-size:13px;color:#FFD700"></p>
+<p style="font-size:11px;color:#666">Nunca mostre seu SEC pra ninguém. Essa página não guarda seu SEC.</p>
 </div>
 
 <div id="tela-admin" class="card hidden">
 <h3 style="margin:0">📊 Visão Geral</h3>
-<div class="box"><b>Seu PUB ADM:</b><br><span id="adm-pub-txt"></span></div>
-<div class="box"><b>🏦 Carteira ISSUER / Cofre:</b><br>GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI<br><br><b>Saldo Cofre:</b> <span id="saldo-cofre">Carregando...</span><br><b>XLM Cofre:</b> <span id="xlm-cofre">-</span></div>
-<div class="box"><b>🎁 Pré-lançamento:</b><br>10 MC por pessoa • 300 vagas • Meta: 3.000 MCCOIN distribuídos</div>
+<div class="box"><b>✅ Logado como ADM</b><br>Seu PUB: <span id="adm-pub-txt"></span></div>
+<div class="box"><b>🏦 Cofre:</b><br><b>Saldo:</b> <span id="saldo-cofre">Carregando...</span><br><b>XLM:</b> <span id="xlm-cofre">-</span></div>
 <button class="btn-verde" onclick="carregarCofre()">🔄 Atualizar Saldo do Cofre</button>
 
 <h3 style="margin-top:20px">💸 Enviar MCCOIN - Airdrop 10 MC</h3>
-<p style="font-size:13px;color:#aaa">Use para pagar os 10 MC de quem fez Trust + ativou com 2 XLM.</p>
 <input id="destino" placeholder="Destino PUB da pessoa (G...)">
 <input id="valor" placeholder="Valor - ex: 10" value="10">
-<input id="sec-adm" type="password" placeholder="Cole seu SEC ADM (S...) só pra enviar">
 <button class="btn-ouro" onclick="enviarAirdrop()">ENVIAR MCCOIN</button>
 <p id="msg-envio" style="font-size:13px;color:#FFD700"></p>
+<p style="font-size:12px;color:#aaa">O envio usa o SEC que você já digitou no login. Não pede de novo.</p>
 
-<h3 style="margin-top:20px">🔍 Consultar Carteira de Aluno</h3>
+<h3 style="margin-top:20px">🔍 Consultar Aluno</h3>
 <input id="consultar-pub" placeholder="PUB do aluno (G...)">
 <button class="btn-cinza" onclick="consultarAluno()">CONSULTAR</button>
 <div id="res-consulta"></div>
-
-<button class="btn-cinza" onclick="sair()">Sair</button>
+<button class="btn-cinza" onclick="sair()">Sair e Apagar SEC da Tela</button>
 </div>
 
 <script>
 const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
 const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
+// O ADM_PUB fica só dentro do código, NÃO aparece na tela
 const ADM_PUB = "GBU43MCALRHGX2WNR7FI5PFXJDMSVTBQSFP7SXYJVOLQWKPY7NAINXOQ";
-let admPub = "";
+let secAdm = "", admPub = "";
 
 function entrarAdmin(){
-  let pub = document.getElementById("pub-adm").value.trim();
-  if(!pub.startsWith("G")){ document.getElementById("msg-login").innerText="PUB inválido!"; return; }
-  if(pub !== ADM_PUB){
-    document.getElementById("msg-login").innerText="❌ Esse PUB não é ADM! Só o ADM corporativo entra aqui. Você entrou como usuário normal, volte para a wallet.html";
-    return;
-  }
-  admPub = pub;
-  document.getElementById("tela-login").classList.add("hidden");
-  document.getElementById("tela-admin").classList.remove("hidden");
-  document.getElementById("adm-pub-txt").innerText = pub;
-  carregarCofre();
+  let sec = document.getElementById("sec-adm-login").value.trim();
+  if(!sec.startsWith("S")){ document.getElementById("msg-login").innerText="Cole seu SEC, começa com S..."; return; }
+  try{
+    let kp = StellarSdk.Keypair.fromSecret(sec);
+    if(kp.publicKey() !== ADM_PUB){
+      document.getElementById("msg-login").innerText="❌ Esse SEC não é do ADM! Acesso negado.";
+      document.getElementById("sec-adm-login").value="";
+      return;
+    }
+    secAdm = sec; admPub = kp.publicKey();
+    document.getElementById("tela-login").classList.add("hidden");
+    document.getElementById("tela-admin").classList.remove("hidden");
+    document.getElementById("adm-pub-txt").innerText = admPub.slice(0,8)+"..."+admPub.slice(-4);
+    document.getElementById("sec-adm-login").value="";
+    carregarCofre();
+  }catch(e){ document.getElementById("msg-login").innerText="❌ SEC inválido!"; }
 }
 async function carregarCofre(){
   document.getElementById("saldo-cofre").innerText="Carregando...";
@@ -87,14 +88,11 @@ async function carregarCofre(){
 async function enviarAirdrop(){
   let dest = document.getElementById("destino").value.trim();
   let val = document.getElementById("valor").value.trim() || "10";
-  let sec = document.getElementById("sec-adm").value.trim();
   if(!dest.startsWith("G")){ document.getElementById("msg-envio").innerText="Destino inválido!"; return; }
-  if(!sec.startsWith("S")){ document.getElementById("msg-envio").innerText="Cole seu SEC ADM para enviar!"; return; }
+  if(!secAdm){ document.getElementById("msg-envio").innerText="Faça login de novo!"; return; }
   document.getElementById("msg-envio").innerText="Enviando...";
   try{
-    // O envio sai da carteira ADM, não do Issuer. O ADM precisa ter MCCOIN.
-    // Se quiser enviar direto do Cofre, cole o SEC do Cofre aqui.
-    let kp = StellarSdk.Keypair.fromSecret(sec);
+    let kp = StellarSdk.Keypair.fromSecret(secAdm);
     let acc = await server.loadAccount(kp.publicKey());
     let tx = new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC})
       .addOperation(StellarSdk.Operation.payment({destination:dest,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:val}))
@@ -102,8 +100,7 @@ async function enviarAirdrop(){
     tx.sign(kp);
     let r = await server.submitTransaction(tx);
     document.getElementById("msg-envio").innerText="✅ Enviado "+val+" MCCOIN! Hash: "+r.hash;
-    document.getElementById("sec-adm").value="";
-  }catch(e){ document.getElementById("msg-envio").innerText="❌ Erro: "+e.message; document.getElementById("sec-adm").value=""; }
+  }catch(e){ document.getElementById("msg-envio").innerText="❌ Erro: "+e.message; }
 }
 async function consultarAluno(){
   let pub = document.getElementById("consultar-pub").value.trim();
@@ -113,11 +110,10 @@ async function consultarAluno(){
     let acc = await server.loadAccount(pub);
     let mcc = acc.balances.find(b=>b.asset_code==="MCCOIN");
     let xlm = acc.balances.find(b=>b.asset_type==="native");
-    let temTrust = mcc ? "✅ Já fez Trust MCCOIN" : "❌ Ainda NÃO fez Trust";
-    document.getElementById("res-consulta").innerHTML=`<div class="box"><b>${pub.slice(0,12)}...</b><br>${temTrust}<br>MCCOIN: <b>${mcc?mcc.balance:"0"}</b><br>XLM: <b>${xlm?xlm.balance:"0"}</b><br>${xlm && parseFloat(xlm.balance)>=1 ? "✅ Ativado com XLM" : "❌ Não ativado com XLM"}</div>`;
-  }catch(e){ document.getElementById("res-consulta").innerHTML=`<div class="box">❌ Conta não ativada ainda. Precisa de 2 XLM.</div>`; }
+    document.getElementById("res-consulta").innerHTML=`<div class="box"><b>${pub.slice(0,12)}...</b><br>${mcc?"✅ Já fez Trust":"❌ Sem Trust"}<br>MCCOIN: <b>${mcc?mcc.balance:"0"}</b><br>XLM: <b>${xlm?xlm.balance:"0"}</b></div>`;
+  }catch(e){ document.getElementById("res-consulta").innerHTML=`<div class="box">❌ Conta não ativada. Precisa de 2 XLM.</div>`; }
 }
-function sair(){ location.reload(); }
+function sair(){ secAdm=""; admPub=""; location.reload(); }
 </script>
 </body>
 </html>
