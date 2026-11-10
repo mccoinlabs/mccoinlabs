@@ -7,120 +7,147 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.0.0/stellar-sdk.min.js"></script>
 <style>
 *{box-sizing:border-box}body{background:#0a0f0d;color:#fff;font-family:Arial;margin:0;padding:0;padding-bottom:90px}
-.top{background:#000;padding:15px}
-.top h1{color:#FFD700;margin:0;font-size:22px}
-.top p{color:#aaa;margin:2px 0;font-size:12px}
-.banner{background:linear-gradient(90deg,#FFD700,#22c55e);color:#000;padding:15px;border-radius:0 0 16px 16px;margin:0 10px}
-.banner b{font-size:15px}
+.top{background:#000;padding:15px}.top h1{color:#FFD700;margin:0;font-size:22px}.top p{color:#aaa;margin:2px 0;font-size:12px}
+.banner{background:linear-gradient(90deg,#FFD700,#22c55e);color:#000;padding:15px;border-radius:0 0 16px 16px;margin:0 10px}.banner b{font-size:15px}
 .card{background:#12211a;border:1px solid #222;border-radius:16px;padding:16px;margin:15px 10px}
-.saldo{font-size:36px;color:#FFD700;font-weight:bold;margin:5px 0}
-.sub{color:#aaa;font-size:13px}
+.saldo{font-size:36px;color:#FFD700;font-weight:bold;margin:5px 0}.sub{color:#aaa;font-size:13px}
 input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff}
 button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;cursor:pointer;margin-top:8px;font-size:14px}
-.btn-verde{background:#22c55e;color:#000}
-.btn-ouro{background:#FFD700;color:#000}
-.btn-preto{background:#111;color:#FFD700;border:1px solid #FFD700}
-.btn-cinza{background:#222;color:#fff;border:1px solid #333}
-.box{background:#1a1a1a;padding:12px;border-radius:10px;word-break:break-all;margin:10px 0;font-size:13px}
-.hidden{display:none!important}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222}
-.bottom div{text-align:center;font-size:12px;color:#888}
-.bottom .ativo{color:#FFD700}
+.btn-verde{background:#22c55e;color:#000}.btn-ouro{background:#FFD700;color:#000}.btn-preto{background:#111;color:#FFD700;border:1px solid #FFD700}.btn-cinza{background:#222;color:#fff;border:1px solid #333}
+.box{background:#1a1a1a;padding:12px;border-radius:10px;word-break:break-all;margin:10px 0;font-size:13px}.hidden{display:none!important}
+.painel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.painel div{background:#111;border:1px solid #FFD700;border-radius:12px;padding:12px;text-align:center}.painel small{color:#aaa;font-size:12px}.painel b{font-size:22px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222}.bottom div{text-align:center;font-size:12px;color:#888}.bottom .ativo{color:#FFD700}
 </style>
 </head>
 <body>
-<div class="top"><h1>MC WALLET</h1><p>Pre-lancamento 120 MC</p></div>
-<div class="banner"><b>🎁 PRE-LANCAMENTO: 120 MC</b><br><span style="font-size:13px">Faca Trust + Ative com 2 XLM e resgate seus 120 MCCOIN</span><br><br><span style="font-size:12px">Pre-lancamento aberto • 300 vagas • 120 MC cada • Total: 36000.00 MCC</span></div>
+<div class="top"><h1>MC WALLET</h1><p>Pre-lancamento 10 MC</p></div>
+<div class="banner"><b>🎁 PRE-LANCAMENTO: 10 MC</b><br><span style="font-size:13px">Faca Trust + Ative com 2 XLM e resgate seus 10 MCCOIN</span><br><br><span style="font-size:12px">Pre-lancamento aberto • 300 vagas • 10 MC cada</span></div>
 <div class="card">
 <p style="margin:0;color:#aaa;font-size:13px">Saldo Total • MCC COIN</p>
 <div class="saldo"><span id="saldo-mcc">0.00</span> MCC</div>
 <div class="sub">≈ R$ <span id="valor-reais">0.00</span> • <span id="saldo-xlm">0.00</span> XLM • Pre-lancamento - Sem preco de mercado</div>
-<div class="box hidden" id="box-conta"><b>Seu PUB:</b><br><span id="pub-txt"></span><br><br><b>Seu SEC (NUNCA mostre):</b><br><span id="sec-txt"></span></div>
+<div class="painel">
+<div><small>SALDO MCC</small><br><b id="info-mcc" style="color:#FFD700">0.00 MCC</b></div>
+<div><small>SALDO XLM</small><br><b id="info-xlm" style="color:#22c55e">0.00 XLM</b></div>
+<div><small>TRUST MCCOIN</small><br><b id="info-trust">❌ NAO</b></div>
+<div><small>ATIVADO 2 XLM</small><br><b id="info-ativado">❌ NAO</b></div>
+</div>
+<div class="box" id="box-conta"><b>Seu PUB:</b><br><span id="pub-txt">Nenhuma carteira ainda - entre com PUB ou crie uma</span><br><br><b>Seu SEC (NUNCA mostre):</b><br><span id="sec-txt">-</span></div>
+<input id="pub-entrar" placeholder="Cole sua chave PUB (G...) para entrar como antes">
+<button class="btn-verde" onclick="entrarComPub()">🔑 ENTRAR COM CHAVE PUBLICA</button>
 <button class="btn-verde" onclick="criarCarteira()">+ Criar Carteira</button>
 <button class="btn-preto" onclick="mostrarImportar()">↓ Importar</button>
 <div id="box-importar" class="hidden"><input id="sec-importar" type="password" placeholder="Cole seu SEC (S...)"><button class="btn-verde" onclick="importarCarteira()">Importar Carteira</button></div>
 <button class="btn-ouro" onclick="fazerTrust()">✅ Aceitar MCCOIN - Adicionar Trust</button>
 <button class="btn-verde" onclick="verificarAtivacao()">🔍 Verificar se ja ativou com 2 XLM</button>
-<button class="btn-ouro" onclick="resgatar120()">🎁 RESGATAR MEUS 120 MC</button>
+<button class="btn-ouro" onclick="resgatar10()">🎁 RESGATAR MEUS 10 MC</button>
 <p id="msg" style="font-size:13px;color:#FFD700;text-align:center"></p>
 </div>
-<div class="card"><h3 style="margin:0">💸 Enviar MCCOIN</h3><input id="destino-envio" placeholder="Destino PUB (G...)"><input id="valor-envio" placeholder="Valor - ex: 120.00" value="120.00"><button class="btn-ouro" onclick="enviarMCC()">Enviar MCCOIN</button><p id="msg-envio" style="font-size:13px;color:#FFD700"></p></div>
-<div class="card"><h3 style="margin:0">🏢 Area de Membros</h3><p style="font-size:13px;color:#aaa">ADM entra no painel corporativo.</p><button class="btn-cinza" onclick="window.location.href='admin.html'">Entrar como ADM</button></div>
+<div class="card"><h3 style="margin:0">💸 Enviar MCCOIN</h3><input id="destino-envio" placeholder="Destino PUB (G...)"><input id="valor-envio" placeholder="Valor - ex: 10.00" value="10.00"><button class="btn-ouro" onclick="enviarMCC()">Enviar MCCOIN</button><p id="msg-envio" style="font-size:13px;color:#FFD700"></p></div>
+<div class="card"><h3 style="margin:0">🏢 Area de Membros</h3><p style="font-size:13px;color:#aaa">ADM entra no painel corporativo. Usuario normal nao entra.</p><button class="btn-cinza" onclick="window.location.href='admin.html'">Entrar como ADM</button></div>
 <div class="bottom"><div class="ativo">💼<br>Carteira</div><div>📈<br>Mercado</div><div>🔄<br>Trocar</div><div>👤<br>Perfil</div></div>
 <script>
 const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
 const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
-const VALOR_PRE_LANCAMENTO = "120.00";
-let kpAtual = null; let secAtual = "";
+let kpAtual = null; let secAtual = ""; let pubSomenteLeitura = "";
 function fmt(n){ return Number(n).toFixed(2); }
+function atualizarPainel(mcc, xlm, temTrust){
+document.getElementById("info-mcc").innerText = fmt(mcc)+" MCC";
+document.getElementById("info-xlm").innerText = fmt(xlm)+" XLM";
+document.getElementById("info-trust").innerText = temTrust ? "✅ SIM" : "❌ NAO";
+document.getElementById("info-ativado").innerText = (xlm >= 1) ? "✅ SIM" : "❌ NAO";
+}
 async function atualizarSaldo(){
-  if(!kpAtual) return;
-  try{
-    let acc = await server.loadAccount(kpAtual.publicKey());
-    let mcc = acc.balances.find(b=>b.asset_code==="MCCOIN");
-    let xlm = acc.balances.find(b=>b.asset_type==="native");
-    let saldoMCC = mcc ? parseFloat(mcc.balance) : 0;
-    let saldoXLM = xlm ? parseFloat(xlm.balance) : 0;
-    document.getElementById("saldo-mcc").innerText = fmt(saldoMCC);
-    document.getElementById("saldo-xlm").innerText = fmt(saldoXLM);
-    document.getElementById("valor-reais").innerText = fmt(saldoMCC * 0.00);
-  }catch(e){ document.getElementById("msg").innerText = "Conta ainda nao ativada. Precisa de 2 XLM."; }
+let pub = kpAtual ? kpAtual.publicKey() : pubSomenteLeitura;
+if(!pub) return;
+try{
+let acc = await server.loadAccount(pub);
+let mcc = acc.balances.find(b=>b.asset_code==="MCCOIN");
+let xlm = acc.balances.find(b=>b.asset_type==="native");
+let saldoMCC = mcc ? parseFloat(mcc.balance) : 0;
+let saldoXLM = xlm ? parseFloat(xlm.balance) : 0;
+document.getElementById("saldo-mcc").innerText = fmt(saldoMCC);
+document.getElementById("saldo-xlm").innerText = fmt(saldoXLM);
+document.getElementById("valor-reais").innerText = fmt(0);
+atualizarPainel(saldoMCC, saldoXLM, !!mcc);
+}catch(e){ document.getElementById("msg").innerText = "Conta ainda nao ativada. Precisa de 2 XLM. Erro: " + e.message; atualizarPainel(0,0,false); }
+}
+function entrarComPub(){
+let pub = document.getElementById("pub-entrar").value.trim();
+if(!pub.startsWith("G")){ document.getElementById("msg").innerText="PUB invalido! Comeca com G..."; return; }
+pubSomenteLeitura = pub; kpAtual = null; secAtual = "";
+document.getElementById("pub-txt").innerText = pub;
+document.getElementById("sec-txt").innerText = "Voce entrou so com PUB (so ver saldo). Para Trust e Enviar, importe com SEC.";
+document.getElementById("msg").innerText = "✅ Entrou com PUB! Agora voce ve seu saldo e status la em cima.";
+atualizarSaldo();
 }
 function criarCarteira(){
-  kpAtual = StellarSdk.Keypair.random(); secAtual = kpAtual.secret();
-  document.getElementById("pub-txt").innerText = kpAtual.publicKey();
-  document.getElementById("sec-txt").innerText = secAtual;
-  document.getElementById("box-conta").classList.remove("hidden");
-  document.getElementById("msg").innerText = "✅ Carteira criada! Salve seu SEC. Depois mande 2 XLM para ativar.";
-  atualizarSaldo();
+kpAtual = StellarSdk.Keypair.random(); secAtual = kpAtual.secret(); pubSomenteLeitura = "";
+document.getElementById("pub-txt").innerText = kpAtual.publicKey();
+document.getElementById("sec-txt").innerText = secAtual;
+document.getElementById("msg").innerText = "✅ Carteira criada! Salve seu SEC. Depois mande 2 XLM para ativar. Seu PUB: " + kpAtual.publicKey();
+atualizarSaldo();
 }
 function mostrarImportar(){ document.getElementById("box-importar").classList.remove("hidden"); }
 function importarCarteira(){
-  let sec = document.getElementById("sec-importar").value.trim();
-  if(!sec.startsWith("S")){ document.getElementById("msg").innerText="SEC invalido!"; return; }
-  try{
-    kpAtual = StellarSdk.Keypair.fromSecret(sec); secAtual = sec;
-    document.getElementById("pub-txt").innerText = kpAtual.publicKey();
-    document.getElementById("sec-txt").innerText = secAtual;
-    document.getElementById("box-conta").classList.remove("hidden");
-    document.getElementById("msg").innerText = "✅ Carteira importada!"; atualizarSaldo();
-  }catch(e){ document.getElementById("msg").innerText="❌ SEC invalido!"; }
+let sec = document.getElementById("sec-importar").value.trim();
+if(!sec.startsWith("S")){ document.getElementById("msg").innerText="SEC invalido! Comeca com S..."; return; }
+try{
+kpAtual = StellarSdk.Keypair.fromSecret(sec); secAtual = sec; pubSomenteLeitura = "";
+document.getElementById("pub-txt").innerText = kpAtual.publicKey();
+document.getElementById("sec-txt").innerText = secAtual;
+document.getElementById("msg").innerText = "✅ Carteira importada!";
+atualizarSaldo();
+}catch(e){ document.getElementById("msg").innerText="❌ SEC invalido!"; }
 }
 async function fazerTrust(){
-  if(!kpAtual){ document.getElementById("msg").innerText="Crie ou importe primeiro!"; return; }
-  document.getElementById("msg").innerText="Adicionando Trust...";
-  try{
-    let acc = await server.loadAccount(kpAtual.publicKey());
-    let tx = new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.changeTrust({asset:new StellarSdk.Asset("MCCOIN",ISSUER)})).setTimeout(30).build();
-    tx.sign(kpAtual); let r = await server.submitTransaction(tx);
-    document.getElementById("msg").innerText="✅ Trust adicionado! Agora ative com 2 XLM."; atualizarSaldo();
-  }catch(e){ document.getElementById("msg").innerText="❌ Erro Trust: "+e.message; }
+if(!kpAtual){ document.getElementById("msg").innerText="Voce entrou so com PUB. Para fazer Trust, clique em Importar e cole seu SEC!"; return; }
+document.getElementById("msg").innerText="Adicionando Trust...";
+try{
+let acc = await server.loadAccount(kpAtual.publicKey());
+let tx = new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.changeTrust({asset:new StellarSdk.Asset("MCCOIN",ISSUER)})).setTimeout(30).build();
+tx.sign(kpAtual); let r = await server.submitTransaction(tx);
+document.getElementById("msg").innerText="✅ Trust adicionado! Agora ative com 2 XLM. Hash: "+r.hash;
+atualizarSaldo();
+}catch(e){ document.getElementById("msg").innerText="❌ Erro Trust: "+e.message; }
 }
 async function verificarAtivacao(){
-  if(!kpAtual){ document.getElementById("msg").innerText="Crie ou importe primeiro!"; return; }
-  try{
-    let acc = await server.loadAccount(kpAtual.publicKey());
-    let xlm = acc.balances.find(b=>b.asset_type==="native");
-    let v = xlm ? parseFloat(xlm.balance) : 0;
-    if(v >= 1){ document.getElementById("msg").innerText="✅ Ativado! Voce tem "+fmt(v)+" XLM. Pode resgatar!"; }
-    else{ document.getElementById("msg").innerText="❌ Ainda nao ativado. Voce tem "+fmt(v)+" XLM. Precisa de 2 XLM."; }
-    atualizarSaldo();
-  }catch(e){ document.getElementById("msg").innerText="❌ Conta nao ativada ainda."; }
+let pub = kpAtual ? kpAtual.publicKey() : pubSomenteLeitura;
+if(!pub){ document.getElementById("msg").innerText="Entre com PUB ou crie/importe primeiro!"; return; }
+try{
+let acc = await server.loadAccount(pub);
+let xlm = acc.balances.find(b=>b.asset_type==="native");
+let v = xlm ? parseFloat(xlm.balance) : 0;
+if(v >= 1){ document.getElementById("msg").innerText="✅ Ativado! Voce tem "+fmt(v)+" XLM. Pode resgatar!"; }
+else{ document.getElementById("msg").innerText="❌ Ainda nao ativado. Voce tem "+fmt(v)+" XLM. Precisa de 2 XLM."; }
+atualizarSaldo();
+}catch(e){ document.getElementById("msg").innerText="❌ Conta nao ativada ainda. Mande 2 XLM para: "+pub; }
 }
-async function resgatar120(){ document.getElementById("msg").innerText="Para resgatar seus "+VALOR_PRE_LANCAMENTO+" MC, voce ja fez Trust + ativou com 2 XLM? Se sim, fale com o ADM no painel para ele enviar seus 120 MC."; }
+async function resgatar10(){
+let trust = document.getElementById("info-trust").innerText;
+let ativ = document.getElementById("info-ativado").innerText;
+if(!trust.includes("SIM")){ document.getElementById("msg").innerText="❌ Primeiro clica em Aceitar MCCOIN!"; return; }
+if(!ativ.includes("SIM")){ document.getElementById("msg").innerText="❌ Primeiro manda 2 XLM e clica em Verificar Ativacao!"; return; }
+document.getElementById("msg").innerText="✅ Tudo pronto! Trust SIM + Ativado SIM. Fala com o ADM no painel para ele enviar seus 10 MC para: " + (kpAtual ? kpAtual.publicKey() : pubSomenteLeitura);
+}
 async function enviarMCC(){
-  let dest = document.getElementById("destino-envio").value.trim();
-  let val = document.getElementById("valor-envio").value.trim();
-  if(!kpAtual){ document.getElementById("msg-envio").innerText="Crie ou importe primeiro!"; return; }
-  if(!dest.startsWith("G")){ document.getElementById("msg-envio").innerText="Destino invalido!"; return; }
-  document.getElementById("msg-envio").innerText="Enviando...";
-  try{
-    let acc = await server.loadAccount(kpAtual.publicKey());
-    let tx = new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.payment({destination:dest,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:val})).setTimeout(30).build();
-    tx.sign(kpAtual); let r = await server.submitTransaction(tx);
-    document.getElementById("msg-envio").innerText="✅ Enviado "+val+" MCCOIN!"; atualizarSaldo();
-  }catch(e){ document.getElementById("msg-envio").innerText="❌ Erro: "+e.message; }
+let dest = document.getElementById("destino-envio").value.trim();
+let val = document.getElementById("valor-envio").value.trim();
+if(!kpAtual){ document.getElementById("msg-envio").innerText="Para enviar, importe com SEC primeiro!"; return; }
+if(!dest.startsWith("G")){ document.getElementById("msg-envio").innerText="Destino invalido!"; return; }
+document.getElementById("msg-envio").innerText="Enviando...";
+try{
+let acc = await server.loadAccount(kpAtual.publicKey());
+let tx = new StellarSdk.TransactionBuilder(acc,{fee:StellarSdk.BASE_FEE,networkPassphrase:StellarSdk.Networks.PUBLIC}).addOperation(StellarSdk.Operation.payment({destination:dest,asset:new StellarSdk.Asset("MCCOIN",ISSUER),amount:val})).setTimeout(30).build();
+tx.sign(kpAtual); let r = await server.submitTransaction(tx);
+document.getElementById("msg-envio").innerText="✅ Enviado "+val+" MCCOIN! Hash: "+r.hash;
+atualizarSaldo();
+}catch(e){ document.getElementById("msg-envio").innerText="❌ Erro: "+e.message; }
 }
+window.addEventListener("load", ()=>{
+let p = new URLSearchParams(window.location.search).get("pub");
+if(p && p.startsWith("G")){ document.getElementById("pub-entrar").value = p; entrarComPub(); }
+});
 </script>
 </body>
 </html>
