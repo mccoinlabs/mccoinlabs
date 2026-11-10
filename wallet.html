@@ -32,13 +32,13 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 
 <div class="top">
 <h1>MC WALLET</h1>
-<p>Pre-lancamento 10 MC</p>
+<p>Pre-lancamento 120 MC</p>
 </div>
 
 <div class="banner">
-<b>🎁 PRE-LANCAMENTO: 10 MC</b><br>
-<span style="font-size:13px">Faca Trust + Ative com 2 XLM e resgate seus 10 MCCOIN</span><br><br>
-<span style="font-size:12px">Pre-lancamento aberto • 300 vagas • 10 MC cada</span>
+<b>🎁 PRE-LANCAMENTO: 120 MC</b><br>
+<span style="font-size:13px">Faca Trust + Ative com 2 XLM e resgate seus 120 MCCOIN</span><br><br>
+<span style="font-size:12px">Pre-lancamento aberto • 300 vagas • 120 MC cada • Total: 36000.00 MCC</span>
 </div>
 
 <div class="card">
@@ -60,14 +60,14 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 
 <button class="btn-ouro" onclick="fazerTrust()">✅ Aceitar MCCOIN - Adicionar Trust</button>
 <button class="btn-verde" onclick="verificarAtivacao()">🔍 Verificar se ja ativou com 2 XLM</button>
-<button class="btn-ouro" onclick="resgatar10()">🎁 RESGATAR MEUS 10 MC</button>
+<button class="btn-ouro" onclick="resgatar120()">🎁 RESGATAR MEUS 120 MC</button>
 <p id="msg" style="font-size:13px;color:#FFD700;text-align:center"></p>
 </div>
 
 <div class="card">
 <h3 style="margin:0">💸 Enviar MCCOIN</h3>
 <input id="destino-envio" placeholder="Destino PUB (G...)">
-<input id="valor-envio" placeholder="Valor - ex: 10.00" value="10.00">
+<input id="valor-envio" placeholder="Valor - ex: 120.00" value="120.00">
 <button class="btn-ouro" onclick="enviarMCC()">Enviar MCCOIN</button>
 <p id="msg-envio" style="font-size:13px;color:#FFD700"></p>
 </div>
@@ -88,6 +88,7 @@ button{width:100%;padding:14px;border-radius:12px;font-weight:bold;border:0;curs
 <script>
 const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
 const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
+const VALOR_PRE_LANCAMENTO = "120.00";
 let kpAtual = null;
 let secAtual = "";
 
@@ -163,8 +164,8 @@ async function verificarAtivacao(){
     atualizarSaldo();
   }catch(e){ document.getElementById("msg").innerText="❌ Conta nao ativada ainda. Mande 2 XLM para: "+kpAtual.publicKey(); }
 }
-async function resgatar10(){
-  document.getElementById("msg").innerText="Para resgatar, voce ja fez Trust + ativou com 2 XLM? Se sim, fale com o ADM no painel para ele enviar seus 10 MC. O resgate automatico sera ligado depois da pool.";
+async function resgatar120(){
+  document.getElementById("msg").innerText="Para resgatar seus "+VALOR_PRE_LANCAMENTO+" MC, voce ja fez Trust + ativou com 2 XLM? Se sim, fale com o ADM no painel para ele enviar seus 120 MC. O resgate automatico sera ligado depois da pool.";
 }
 async function enviarMCC(){
   let dest = document.getElementById("destino-envio").value.trim();
