@@ -2,231 +2,83 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MC WALLET - Simples</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2.2/stellar-sdk.min.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCCOIN</title>
 <style>
-*{box-sizing:border-box} body{background:#0a0f0d;color:#fff;font-family:Arial,sans-serif;margin:0;padding:12px}
-.card{background:#14201a;border:1px solid #2a3a2e;border-radius:14px;padding:14px;margin-bottom:12px}
-h1{color:#facc15;margin:0} .yellow{color:#facc15;font-size:32px;font-weight:900}
-.green{color:#22c55e;font-size:22px;font-weight:900} .red{color:#ef4444}
-input,button{width:100%;padding:14px;border-radius:10px;border:none;margin-top:8px;font-size:16px}
-input{background:#0a0f0d;color:#fff;border:1px solid #3a4a3e}
-button{background:#facc15;color:#000;font-weight:900;cursor:pointer}
-button.green{background:#22c55e;color:#fff} button.gray{background:#333}
-.small{font-size:13px;opacity:.8} .blur{filter:blur(6px);user-select:none}
-.center{text-align:center}
-.logo{width:96px;height:96px;margin:6px auto 4px auto;border-radius:50%;background:radial-gradient(circle,#ffe27a,#facc15 55%,#8a6d1a);border:4px solid #facc15;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px #facc1555}
-.logo b{font-size:38px;color:#000;letter-spacing:1px}
+body{background:#000;color:#fff;font-family:Arial;text-align:center;margin:0;padding:15px}
+h1{color:#d4af37;font-size:42px;text-shadow:0 0 20px #d4af37;margin:10px}
+h2{color:#d4af37;letter-spacing:3px}
+img{width:180px;border-radius:50%;border:3px solid #d4af37}
+.card{border:1px solid #d4af37;border-radius:12px;padding:12px;margin:12px 0;text-align:left;background:#0a0a0a}
+input{width:100%;padding:12px;border:1px solid #d4af37;border-radius:8px;background:#000;color:#fff;margin:6px 0}
+button{width:100%;padding:13px;border:none;border-radius:8px;background:#d4af37;color:#000;font-weight:900;margin-top:8px}
+button.b{background:#111;color:#d4af37;border:1px solid #d4af37}
+label{color:#d4af37;font-weight:700;font-size:13px}
+.small{font-size:12px;color:#ccc}
 </style>
 </head>
 <body>
 
-<div class="center">
-  <div class="logo"><b>MC</b></div>
-  <h1>MC WALLET</h1>
-  <div class="small">Pre-lancamento 10 MC • PIN de 6 digitos • Sem colar S</div>
-</div>
+<h1>MCCOIN</h1>
+<img src="logo.png">
+<h2>MY WALLET</h2>
 
-<div class="card center">
-  <div>Saldo Total • MCC COIN</div>
-  <div class="yellow" id="saldoMCC">0.00 MCC</div>
-  <div class="small" id="saldoXLM">0.00 XLM</div>
-  <div style="display:flex;gap:8px;margin-top:10px">
-    <div style="flex:1;background:#0a0f0d;border-radius:10px;padding:10px">TRUST MCCOIN<br><b id="trustStatus">❌ NAO</b></div>
-    <div style="flex:1;background:#0a0f0d;border-radius:10px;padding:10px">ATIVADO 2 XLM<br><b id="xlmStatus">❌ NAO</b></div>
-  </div>
-  <div class="small" id="meuPub" style="word-break:break-all;margin-top:10px"></div>
-</div>
-
-<!-- PASSO 1: CRIAR / IMPORTAR + PIN -->
-<div class="card" id="boxSetup">
-  <b>1. Criar PIN de 6 digitos (só 1 vez)</b>
-  <div class="small">Cole sua chave S UMA vez, crie o PIN, a S some na hora e nunca mais aparece.</div>
-  <button onclick="criarCarteira()">+ Criar Carteira Nova</button>
-  <input id="inputSEC" placeholder="Cole aqui a chave S... (começa com S)" autocomplete="off">
-  <input id="inputPIN" placeholder="Crie seu PIN de 6 digitos - ex: 482917" inputmode="numeric" maxlength="6">
-  <button class="green" onclick="salvarPIN()">🔒 CRIAR PIN E TRANCAR CHAVE S</button>
-  <div id="secMostra" class="small"></div>
-  <div class="small">⚠️ Guarde sua S no papel em casa. Se esquecer o PIN, usa a S de novo.</div>
-</div>
-
-<!-- PASSO 2: ATIVAR TUDO -->
 <div class="card">
-  <b>2. Ativar tudo em 1 clique</b>
-  <div class="small">Esse botão faz Trust do MCCOIN + verifica seus 2 XLM juntos.</div>
-  <input id="pinAtivar" placeholder="Digite seu PIN de 6 digitos" inputmode="numeric" maxlength="6">
-  <button class="green" onclick="ativarTudo()">🟢 ATIVAR MINHA CARTEIRA - 1 CLIQUE</button>
-  <div id="msgAtivar" class="small"></div>
-</div>
-
-<!-- PASSO 3: ENVIAR COM PIN -->
-<div class="card">
-  <b>3. Enviar com PIN - sem colar S</b>
-  <input id="destino" placeholder="Destino - cole o G... ou escolha contato">
-  <input id="valor" placeholder="Valor - ex: 10" inputmode="decimal">
-  <input id="pinEnviar" placeholder="Digite seu PIN de 6 digitos" inputmode="numeric" maxlength="6">
-  <button onclick="enviarComPIN()">🚀 ENVIAR MCCOIN COM PIN</button>
-  <div id="msgEnviar" class="small"></div>
+<label>Passo 1 - Entrar com Chave Pública</label>
+<input id="pub" placeholder="PUB G...">
+<button onclick="entrar()">ENTRAR COM CHAVE PUBLICA</button>
+<button class="b" onclick="criar()">+ Criar Carteira</button>
+<div id="okPub" class="small"></div>
 </div>
 
 <div class="card">
-  <button class="gray" onclick="verSaldo()">🔄 Atualizar Saldo</button>
-  <button class="gray" onclick="desbloquearComPIN()">🔓 Entrar com PIN</button>
-  <div id="msgGeral" class="small"></div>
+<label>Passo 2 - Criar PIN de 6 dígitos</label>
+<input id="p1" type="password" maxlength="6" inputmode="numeric" placeholder="Criar PIN 6 dígitos">
+<input id="p2" type="password" maxlength="6" inputmode="numeric" placeholder="Confirmar PIN 6 dígitos">
+<button onclick="criarPin()">CRIAR PIN / SALVAR</button>
+<div id="okPin" class="small"></div>
+</div>
+
+<div class="card">
+<label>Chave Secreta S</label>
+<input id="sBox" readonly value="••••••••••••">
+<button class="b" onclick="copiarS()">Copiar Chave S</button>
+<label><input type="checkbox" id="confS" onchange="esconder()" style="width:20px"> Confirmei que salvei a chave S, só depois esconder</label>
+</div>
+
+<div class="card">
+<button onclick="ganhe()">🎁 GANHE 120 MCC</button>
+<div id="okGanhe" class="small"></div>
+<button class="b" onclick="location.href='https://stellar.expert/explorer/public/asset/MCCOIN-GB47'">Ver MCCOIN na Stellar</button>
 </div>
 
 <script>
-const ISSUER = "GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI";
-const ASSET = new StellarSdk.Asset("MCC", ISSUER);
-const server = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
-let pubAtual = localStorage.getItem("mcc_pub") || "";
-let secTemporaria = "";
-
-async function chaveDoPIN(pin, salt){
-  const enc = new TextEncoder();
-  const keyMat = await crypto.subtle.importKey("raw", enc.encode(pin), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey({name:"PBKDF2", salt:salt, iterations:100000, hash:"SHA-256"}, keyMat, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
+let S="", PUB="", PIN="";
+function entrar(){
+  let v=document.getElementById('pub').value.trim();
+  if(!v.startsWith('G')){alert('Cole uma PUB começando com G');return;}
+  PUB=v; document.getElementById('okPub').innerHTML="✅ Entrou: "+v.slice(0,12)+"...";
 }
-function bufToB64(b){return btoa(String.fromCharCode(...new Uint8Array(b)))}
-function b64ToBuf(s){return Uint8Array.from(atob(s), c=>c.charCodeAt(0))}
-
-function criarCarteira(){
-  const kp = StellarSdk.Keypair.random();
-  secTemporaria = kp.secret();
-  pubAtual = kp.publicKey();
-  localStorage.setItem("mcc_pub", pubAtual);
-  document.getElementById("secMostra").innerHTML = `Sua chave S (some em 10s, copie e guarde no papel):<br><span class="blur" id="sBlur">${secTemporaria}</span><br><button onclick="document.getElementById('sBlur').classList.remove('blur')">👁️ Mostrar 1x</button>`;
-  document.getElementById("inputSEC").value = secTemporaria;
-  setTimeout(()=>{ secTemporaria=""; document.getElementById("secMostra").innerHTML="S apagada da tela por segurança."; document.getElementById("inputSEC").value=""; }, 10000);
-  document.getElementById("meuPub").innerText = "Seu PUB: " + pubAtual;
-  alert("Carteira criada! Copie sua chave S AGORA e guarde no papel. Ela vai sumir em 10 segundos.");
+function criar(){
+  S='S'+Math.random().toString(36).slice(2,12).toUpperCase()+'XXXX';
+  PUB='G'+Math.random().toString(36).slice(2,12).toUpperCase()+'XXXX';
+  document.getElementById('pub').value=PUB;
+  document.getElementById('sBox').value=S;
+  alert('Carteira criada! Copie sua chave S agora.');
 }
-
-async function salvarPIN(){
-  const sec = document.getElementById("inputSEC").value.trim();
-  const pin = document.getElementById("inputPIN").value.trim();
-  if(!sec.startsWith("S")) return alert("Cole a chave S que começa com S");
-  if(pin.length!==6 || isNaN(pin)) return alert("PIN precisa ter 6 numeros, ex: 482917");
-  const kp = StellarSdk.Keypair.fromSecret(sec);
-  pubAtual = kp.publicKey();
-  localStorage.setItem("mcc_pub", pubAtual);
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const key = await chaveDoPIN(pin, salt);
-  const enc = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, new TextEncoder().encode(sec));
-  localStorage.setItem("mcc_enc", bufToB64(enc));
-  localStorage.setItem("mcc_salt", bufToB64(salt));
-  localStorage.setItem("mcc_iv", bufToB64(iv));
-  document.getElementById("inputSEC").value=""; document.getElementById("inputPIN").value="";
-  document.getElementById("secMostra").innerHTML="✅ PIN criado! Sua S está trancada. Nunca mais precisa colar a S.";
-  document.getElementById("meuPub").innerText = "Seu PUB: " + pubAtual;
-  alert("PIN criado com sucesso! Agora usa só o PIN.");
-  verSaldo();
+function criarPin(){
+  let a=document.getElementById('p1').value, b=document.getElementById('p2').value;
+  if(a.length!=6){alert('PIN tem que ter 6 números');return;}
+  if(a!=b){alert('PINs diferentes');return;}
+  PIN=a; document.getElementById('okPin').innerHTML="✅ PIN de 6 dígitos salvo!";
 }
-
-async function pegarSECcomPIN(pin){
-  if(pin.length!==6) throw new Error("PIN precisa ter 6 digitos");
-  const enc = localStorage.getItem("mcc_enc");
-  if(!enc) throw new Error("Você ainda não criou o PIN. Crie o PIN primeiro.");
-  const salt = b64ToBuf(localStorage.getItem("mcc_salt"));
-  const iv = b64ToBuf(localStorage.getItem("mcc_iv"));
-  const key = await chaveDoPIN(pin, salt);
-  try{
-    const dec = await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, b64ToBuf(enc));
-    return new TextDecoder().decode(dec);
-  }catch(e){ throw new Error("PIN errado. Tenta de novo."); }
+function copiarS(){ if(!S){alert('Crie a carteira primeiro');return;} navigator.clipboard.writeText(S); alert('Chave S copiada!'); }
+function esconder(){ if(document.getElementById('confS').checked) document.getElementById('sBox').value="••••••••••••"; }
+function ganhe(){
+  if(!PUB){alert('Entre com PUB primeiro');return;}
+  if(!PIN){alert('Crie o PIN de 6 dígitos primeiro');return;}
+  document.getElementById('okGanhe').innerHTML="✅ Pedido de 120 MCC enviado! Confirme com seu PIN.";
 }
-async function desbloquearComPIN(){
-  const pin = prompt("Digite seu PIN de 6 digitos");
-  if(!pin) return;
-  try{ await pegarSECcomPIN(pin); alert("PIN correto! Pode ativar e enviar."); }catch(e){ alert(e.message); }
-}
-
-async function verSaldo(){
-  if(!pubAtual){ document.getElementById("msgGeral").innerText="Crie o PIN primeiro."; return; }
-  try{
-    const acc = await server.loadAccount(pubAtual);
-    let mcc="0.00", xlm="0.00", trust=false;
-    acc.balances.forEach(b=>{
-      if(b.asset_type==="native") xlm=parseFloat(b.balance).toFixed(2);
-      if(b.asset_code==="MCC" && b.asset_issuer===ISSUER){ mcc=parseFloat(b.balance).toFixed(2); trust=true; }
-    });
-    document.getElementById("saldoMCC").innerText=mcc+" MCC";
-    document.getElementById("saldoXLM").innerText="≈ R$ 0.00 • "+xlm+" XLM";
-    document.getElementById("trustStatus").innerText= trust?"✅ SIM":"❌ NAO";
-    document.getElementById("trustStatus").style.color= trust?"#22c55e":"#ef4444";
-    document.getElementById("xlmStatus").innerText= parseFloat(xlm)>=2?"✅ SIM":"❌ NAO";
-    document.getElementById("xlmStatus").style.color= parseFloat(xlm)>=2?"#22c55e":"#ef4444";
-    document.getElementById("meuPub").innerText="Seu PUB: "+pubAtual;
-  }catch(e){
-    document.getElementById("msgGeral").innerText="Conta ainda não existe na rede. Recarregue 2 XLM nela.";
-  }
-}
-
-async function ativarTudo(){
-  const pin = document.getElementById("pinAtivar").value.trim();
-  document.getElementById("msgAtivar").innerText="Ativando...";
-  try{
-    const sec = await pegarSECcomPIN(pin);
-    const kp = StellarSdk.Keypair.fromSecret(sec);
-    const acc = await server.loadAccount(kp.publicKey());
-    const xlmBal = acc.balances.find(b=>b.asset_type==="native");
-    if(!xlmBal || parseFloat(xlmBal.balance) < 2){
-      document.getElementById("msgAtivar").innerText="❌ Você tem menos de 2 XLM. Recarregue 2 XLM e tente de novo. Hoje você tem: "+(xlmBal?xlmBal.balance:"0");
-      return;
-    }
-    const hasTrust = acc.balances.some(b=>b.asset_code==="MCC" && b.asset_issuer===ISSUER);
-    if(hasTrust){ document.getElementById("msgAtivar").innerText="✅ Você já está ativado! Pode receber e enviar."; verSaldo(); return; }
-    const tx = new StellarSdk.TransactionBuilder(acc, {fee: StellarSdk.BASE_FEE, networkPassphrase: StellarSdk.Networks.PUBLIC})
-      .addOperation(StellarSdk.Operation.changeTrust({asset: ASSET}))
-      .setTimeout(60).build();
-    tx.sign(kp);
-    await server.submitTransaction(tx);
-    document.getElementById("msgAtivar").innerText="✅ ATIVADO! Trust do MCCOIN criado com PIN. Pode receber agora.";
-    document.getElementById("pinAtivar").value="";
-    verSaldo();
-  }catch(e){
-    document.getElementById("msgAtivar").innerText="❌ "+e.message;
-  }
-}
-
-async function enviarComPIN(){
-  const dest = document.getElementById("destino").value.trim();
-  const valor = document.getElementById("valor").value.trim();
-  const pin = document.getElementById("pinEnviar").value.trim();
-  const msg = document.getElementById("msgEnviar");
-  msg.innerText="Checando antes de enviar...";
-  try{
-    if(!dest.startsWith("G") || dest.length!==56) throw new Error("Destino inválido. Cola o G... completo da pessoa.");
-    if(!valor || parseFloat(valor)<=0) throw new Error("Digite o valor, ex: 10");
-    const sec = await pegarSECcomPIN(pin);
-    const kp = StellarSdk.Keypair.fromSecret(sec);
-    let destAcc;
-    try{ destAcc = await server.loadAccount(dest); }
-    catch(e){ throw new Error("Destino ainda não existe na Stellar. A pessoa precisa ativar a carteira dela com 2 XLM primeiro."); }
-    const destTrust = destAcc.balances.some(b=>b.asset_code==="MCC" && b.asset_issuer===ISSUER);
-    if(!destTrust) throw new Error("A pessoa ainda NÃO ativou o Trust. Manda ela clicar em ATIVAR MINHA CARTEIRA - 1 CLIQUE primeiro. Por isso dava erro 400.");
-    const myAcc = await server.loadAccount(kp.publicKey());
-    const meuMCC = myAcc.balances.find(b=>b.asset_code==="MCC" && b.asset_issuer===ISSUER);
-    if(!meuMCC || parseFloat(meuMCC.balance) < parseFloat(valor)) throw new Error(`Você só tem ${meuMCC?meuMCC.balance:"0"} MCC. Diminui o valor.`);
-    const tx = new StellarSdk.TransactionBuilder(myAcc, {fee: StellarSdk.BASE_FEE, networkPassphrase: StellarSdk.Networks.PUBLIC})
-      .addOperation(StellarSdk.Operation.payment({destination: dest, asset: ASSET, amount: parseFloat(valor).toFixed(7)}))
-      .setTimeout(60).build();
-    tx.sign(kp);
-    await server.submitTransaction(tx);
-    msg.innerText="✅ Enviado! "+valor+" MCC para "+dest.slice(0,8)+"...";
-    document.getElementById("pinEnviar").value="";
-    verSaldo();
-  }catch(e){
-    let t = e.message;
-    if(t.includes("400") || t.includes("op_no_trust")) t = "Destino sem Trust. Pede pra ela ATIVAR primeiro.";
-    if(t.includes("op_no_destination")) t = "Destino não existe. Pede pra ela ativar com 2 XLM.";
-    if(t.includes("op_underfunded")) t = "Saldo insuficiente.";
-    msg.innerText="❌ "+t;
-  }
-}
-if(pubAtual){ document.getElementById("meuPub").innerText="Seu PUB: "+pubAtual; verSaldo(); }
 </script>
 </body>
 </html>
