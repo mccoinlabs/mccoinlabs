@@ -64,8 +64,21 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <div class="gold">🔑 Passo 1<br>Entrar com Chave Publica - Automático</div>
 <input id="pubInput" placeholder="Cole sua PUB G... - entra sozinho" oninput="autoEntrar()">
 <div id="entrarLoading" class="small hidden">⏳ <span class="spin">🔄</span> Carregando e entrando...</div>
-<div class="flex"><button class="btn btn2" onclick="criarCarteira()">+ Criar Carteira</button><button class="btn btn2" onclick="importar()">📁 Importar S</button></div>
+<div class="flex"><button class="btn btn2" onclick="criarCarteira()">+ Criar Carteira</button><button class="btn btn2" onclick="mostrarImportar()">📁 Importar S</button></div>
 <div id="pubAtiva" class="small"></div>
+</div>
+
+<!-- IMPORTAR SÓ CHAVE S - DENTRO DA PÁGINA, SEM PROMPT -->
+<div id="importBox" class="card hidden" style="border-color:#FFD700">
+<div class="gold">📁 Importar SÓ a Chave S</div>
+<div class="small">Sua PUB já está acima, não precisa digitar de novo.<br>Só cole a chave S:</div>
+<label>Cole sua Chave S (começa com S...)</label>
+<input id="importS" type="password" placeholder="S... cole sua chave secreta" oninput="autoImportar()">
+<label>Seu PIN 6 dígitos (para vincular neste dispositivo)</label>
+<input id="importPin" type="password" maxlength="6" inputmode="numeric" placeholder="PIN 6 dígitos" oninput="autoImportar()">
+<div id="importLoading" class="small hidden">⏳ <span class="spin">🔄</span> Carregando e vinculando...</div>
+<div id="importMsg" class="small"></div>
+<button class="btn btn2" onclick="fecharImportar()">Fechar</button>
 </div>
 
 <div class="card">
@@ -77,9 +90,9 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <div id="pinMsg" class="small"></div>
 </div>
 
-<!-- CHAVE S COM PIN AUTOMATICO -->
+<!-- CHAVE S -->
 <div class="card">
-<div class="gold">🔑 Chave Secreta S - Abre com PIN em qualquer dispositivo</div>
+<div class="gold">🔑 Chave Secreta S - Abre com PIN</div>
 <div class="flex"><input id="sBox" readonly value="••••••••••••••••"><button class="btn" id="btnMostrarS" style="width:140px;margin-top:0" onclick="pedirPinS()">👁️ Mostrar</button></div>
 <div id="pinSBox" class="pinBox hidden">
 <label>Digite PIN - libera sozinho ao completar 6 dígitos:</label>
@@ -89,7 +102,7 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 </div>
 <div class="flex"><button class="btn btn2" onclick="copiarS()">📋 Copiar Chave S</button><button class="btn btn2" onclick="pedirPinS()">👁️ Mostrar / Esconder</button></div>
 <label><input type="checkbox" id="confS" style="width:20px"> Já salvei minha chave S em papel</label>
-<div id="sMsg" class="small">🔒 Digite PIN que abre sozinho. 1ª vez neste celular: clique em Importar S e cole 1 vez para vincular. Depois só PIN abre em qualquer dispositivo.</div>
+<div id="sMsg" class="small">🔒 Digite PIN que abre sozinho. 1ª vez neste celular: clique em Importar S e cole SÓ a S. Sua PUB já está em cima.</div>
 </div>
 
 <div class="card">
@@ -142,7 +155,7 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <div class="card"><label>Você envia</label><input id="de" value="MCCOIN"><label>Você recebe</label><input id="para" value="XLM"><label>Quantidade</label><input id="qtd" type="number" placeholder="Quantidade"><button class="btn" onclick="trocar()">🔄 TROCAR AGORA</button><div id="trocaMsg" class="small"></div></div>
 </div>
 
-<!-- MEMBROS AUTOMATICO -->
+<!-- MEMBROS -->
 <div id="t-membros" class="hidden">
 <h1>MCCOIN</h1><h2>ÁREA DE MEMBROS</h2>
 <div class="card">
@@ -173,7 +186,7 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <!-- PERFIL -->
 <div id="t-perfil" class="hidden">
 <h1>MCCOIN</h1><h2>PERFIL</h2>
-<div class="card"><label>Seu PUB:</label><input id="perfilPub" readonly><div class="flex"><button class="btn btn2" onclick="copiarPub()">Copiar PUB</button><button class="btn btn2" onclick="sair()">Sair</button></div><div class="small">Emissor MCCOIN (só perfil):<br><span class="issuer">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</span></div><div class="small">Vincular este dispositivo: cole PUB + PIN + S 1 vez em Importar S. Depois só PIN abre a S aqui.</div></div>
+<div class="card"><label>Seu PUB:</label><input id="perfilPub" readonly><div class="flex"><button class="btn btn2" onclick="copiarPub()">Copiar PUB</button><button class="btn btn2" onclick="sair()">Sair</button></div><div class="small">Emissor MCCOIN (só perfil):<br><span class="issuer">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</span></div></div>
 </div>
 
 </div>
@@ -187,7 +200,7 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 
 <script>
 let S=localStorage.getItem('mc_s')||'',PUB=localStorage.getItem('mc_pub')||'',PIN=localStorage.getItem('mc_pin')||'';
-let saldoVisivel=false, saldoMCC='0', saldoUSD='0.00', sVisivel=false, entrando=false;
+let saldoVisivel=false, saldoMCC='0', saldoUSD='0.00', sVisivel=false, entrando=false, importando=false;
 const ISSUER='GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI';
 const ADMIN_KEY='MCCOIN-ADMIN-2026';
 function save(){localStorage.setItem('mc_s',S);localStorage.setItem('mc_pub',PUB);localStorage.setItem('mc_pin',PIN);tela();}
@@ -203,11 +216,21 @@ document.getElementById('entrarLoading').classList.remove('hidden');
 setTimeout(()=>{PUB=v;save();document.getElementById('entrarLoading').classList.add('hidden');entrando=false;document.getElementById('pubAtiva').innerHTML='<span class="ok">✅ Entrou! Carregando saldo...</span>';saldo();},700);
 }
 function criarCarteira(){try{let p=StellarSdk.Keypair.random();S=p.secret();PUB=p.publicKey();sVisivel=true;document.getElementById('sBox').value=S;document.getElementById('btnMostrarS').textContent='🙈 Esconder';save();alert('Carteira criada! SUA CHAVE S ESTÁ APARECENDO - COPIE AGORA!');}catch(e){alert('Erro: '+e.message)}}
-function importar(){
-let s=prompt('Cole sua chave S (1 vez para vincular este dispositivo):');if(!s)return;S=s.trim();sVisivel=true;
-let p=prompt('Cole sua PUB G:');if(p)PUB=p.trim();
-let pin=prompt('Crie / confirme seu PIN 6 dígitos para abrir a S neste dispositivo:');if(pin&&pin.length==6)PIN=pin;
-document.getElementById('sBox').value=S;document.getElementById('btnMostrarS').textContent='🙈 Esconder';save();alert('Dispositivo vinculado! Agora só PIN abre a S aqui.');
+// IMPORTAR SÓ S - SEM PROMPT, DENTRO DA PÁGINA
+function mostrarImportar(){document.getElementById('importBox').classList.remove('hidden');document.getElementById('importBox').scrollIntoView({behavior:'smooth'});}
+function fecharImportar(){document.getElementById('importBox').classList.add('hidden');}
+function autoImportar(){
+let s=document.getElementById('importS').value.trim();
+let pin=document.getElementById('importPin').value.trim();
+if(!s.startsWith('S')||s.length<50) return;
+if(pin.length!==6) {document.getElementById('importMsg').innerHTML='Digite seu PIN 6 dígitos para vincular...';return;}
+if(importando) return; importando=true;
+document.getElementById('importLoading').classList.remove('hidden');
+setTimeout(()=>{
+S=s;PIN=pin;importando=false;document.getElementById('importLoading').classList.add('hidden');
+sVisivel=true;document.getElementById('sBox').value=S;document.getElementById('btnMostrarS').textContent='🙈 Esconder';
+save();document.getElementById('importMsg').innerHTML='<span class="ok">✅ Chave S vinculada! Agora só PIN abre ela aqui.</span>';
+},700);
 }
 function dots(){let v=document.getElementById('pin1').value;for(let i=1;i<=6;i++)document.getElementById('d'+i).textContent=v.length>=i?'●':'○';}
 function autoPin(){
@@ -218,7 +241,7 @@ setTimeout(()=>{PIN=v;save();document.getElementById('pinLoading').classList.add
 }
 }
 function pedirPinS(){
-if(!S){alert('⚠️ Não tem Chave S neste celular! Clique em IMPORTAR S e cole 1 vez para vincular. Depois só PIN abre.');return;}
+if(!S){mostrarImportar();document.getElementById('sMsg').innerHTML='⚠️ Não tem S aqui. Cole SÓ a S no campo acima.';return;}
 if(sVisivel){sVisivel=false;document.getElementById('sBox').value='••••••••••••••••';document.getElementById('btnMostrarS').textContent='👁️ Mostrar';document.getElementById('pinSBox').classList.add('hidden');return;}
 if(!PIN){alert('Crie seu PIN primeiro no Passo 2!');return;}
 document.getElementById('pinSBox').classList.remove('hidden');document.getElementById('pinSMsg').innerHTML='Digite PIN - libera sozinho ao completar 6 dígitos.';document.getElementById('pinSInput').value='';document.getElementById('pinSInput').focus();
@@ -233,7 +256,7 @@ if(p!==PIN){document.getElementById('pinSMsg').innerHTML='❌ PIN errado!';docum
 sVisivel=true;document.getElementById('sBox').value=S;document.getElementById('btnMostrarS').textContent='🙈 Esconder';document.getElementById('pinSBox').classList.add('hidden');document.getElementById('sMsg').innerHTML='<span class="ok">✅ PIN correto! Chave S liberada - copie agora!</span>';
 },700);
 }
-function copiarS(){if(!S){alert('Não tem Chave S neste celular. Clique em Importar S.');return;}if(!sVisivel){pedirPinS();return;}navigator.clipboard.writeText(S);document.getElementById('sMsg').innerHTML='<span class="ok">✅ Copiada! Agora clique em Esconder.</span>';}
+function copiarS(){if(!S){mostrarImportar();return;}if(!sVisivel){pedirPinS();return;}navigator.clipboard.writeText(S);document.getElementById('sMsg').innerHTML='<span class="ok">✅ Copiada! Agora clique em Esconder.</span>';}
 function copiarPub(){if(!PUB){alert('Sem PUB');return;}navigator.clipboard.writeText(PUB);alert('PUB copiada');}
 function sair(){PUB='';document.getElementById('pubInput').value='';save();}
 function trust(){if(!PUB){alert('Entre com PUB');return;}window.open('https://stellar.expert/explorer/public/asset/MCCOIN-'+ISSUER,'_blank');}
