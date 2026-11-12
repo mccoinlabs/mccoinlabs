@@ -6,70 +6,80 @@
 <title>MCCOIN - MY WALLET</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/11.2/stellar-sdk.min.js"></script>
 <style>
-*{box-sizing:border-box}body{background:#02140d;color:#fff;font-family:Arial;margin:0}
-.app{max-width:520px;margin:0 auto;padding:15px 15px 100px}
-h1{text-align:center;color:#d4af37;font-size:44px;text-shadow:0 0 20px #d4af37;margin:10px 0;letter-spacing:2px}
-.logo{width:200px;height:200px;border-radius:50%;display:block;margin:0 auto;border:3px solid #d4af37;object-fit:cover;background:#111}
-h2{text-align:center;color:#d4af37;letter-spacing:3px;margin:8px 0 14px}
-.card{border:1px solid #d4af37;border-radius:14px;padding:13px;margin:12px 0;background:#0a0a0a}
-.card2{background:#111;border:1px solid #222;border-radius:14px;padding:13px;margin:10px 0}
-label{color:#d4af37;font-weight:700;font-size:13px;display:block;margin:8px 0 4px}
-input{width:100%;padding:12px;border:1px solid #d4af37;border-radius:10px;background:#000;color:#fff}
-.btn{width:100%;padding:13px;border:none;border-radius:10px;background:linear-gradient(180deg,#f5d67a,#d4af37);color:#000;font-weight:900;margin-top:8px;cursor:pointer}
+*{box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;margin:0}
+.app{max-width:520px;margin:0 auto;padding:15px 15px 110px;background:#000}
+h1{text-align:center;color:#d4af37;font-size:58px;margin:5px 0 0;letter-spacing:3px;text-shadow:0 0 25px #FFD700}
+.logo{width:190px;height:190px;border-radius:50%;display:block;margin:5px auto;border:3px solid #d4af37;object-fit:cover;background:#111;box-shadow:0 0 40px #d4af37}
+h2{text-align:center;color:#d4af37;letter-spacing:5px;margin:10px 0 14px;font-size:22px}
+.card{background:#111;border:1px solid #2a2a2a;border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.card2{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:13px;margin:10px 0}
+label{color:#d4af37;font-weight:700;font-size:14px;display:block;margin:10px 0 5px}
+input{width:100%;padding:13px;border:1px solid #8a6d1a;border-radius:10px;background:#000;color:#fff;font-size:14px}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;background:#e8c15a;color:#000;font-weight:900;margin-top:10px;cursor:pointer;font-size:15px}
 .btn2{background:#111;color:#d4af37;border:1px solid #d4af37}
 .btnEco{width:100%;padding:11px;border:none;border-radius:20px;background:#FFD700;color:#000;font-weight:800;margin-top:8px;cursor:pointer;font-size:13px}
 .flex{display:flex;gap:8px}.flex button{flex:1}
-.small{font-size:12px;color:#ccc;line-height:1.5;margin-top:6px}
-.gold{color:#d4af37;font-weight:700}.ok{color:#7CFC00;font-weight:700}
+.small{font-size:12px;color:#aaa;line-height:1.5;margin-top:6px}
+.gold{color:#d4af37;font-weight:700;font-size:16px}.ok{color:#7CFC00;font-weight:700}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .iso{display:flex;justify-content:space-between;padding:9px 2px;border-bottom:1px solid #222;font-size:13px}
 .tag{background:#d4af37;color:#000;padding:2px 6px;border-radius:6px;font-size:10px;font-weight:900}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #d4af37;display:flex;max-width:520px;margin:0 auto;z-index:99}
-.nav button{flex:1;background:none;border:none;color:#888;padding:10px 0;cursor:pointer;font-size:11px}
-.nav button.active{color:#d4af37;font-weight:900}.nav b{font-size:20px;display:block}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#000;border-top:1px solid #d4af37;display:flex;max-width:520px;margin:0 auto;z-index:99;padding:5px 0 10px}
+.nav button{flex:1;background:none;border:none;color:#d4af37;padding:8px 0;cursor:pointer;font-size:12px}
+.nav button.active{font-weight:900}.nav b{font-size:24px;display:block}
 .hidden{display:none!important}
 .dots{display:flex;gap:8px;justify-content:center;margin:8px 0}.dot{width:22px;height:22px;border:1px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#d4af37}
 table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px solid #222;padding:6px;text-align:left}
 .ecoBox{border:1px solid #d4af37;border-radius:12px;padding:12px;margin-top:10px;background:#02140d}
 .price{color:#7CFC00;font-weight:700;font-size:13px}
 .issuer{font-size:10px;color:#888;word-break:break-all}
+.saldoTop{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);border:1px solid #d4af37;border-radius:18px;padding:16px;text-align:center;margin:10px 0}
+.saldoValor{font-size:32px;font-weight:900;color:#FFD700;margin:5px 0}
+.eyeBtn{background:#222;color:#FFD700;border:1px solid #d4af37;border-radius:50%;width:38px;height:38px;font-size:18px;cursor:pointer;float:right}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- CARTEIRA -->
 <div id="t-carteira">
 <h1>MCCOIN</h1>
 <img class="logo" src="https://raw.githubusercontent.com/mccoin-oficial/mccoin/main/logo.png" onerror="this.src='logo.png'">
 <h2>MY WALLET</h2>
-<div class="small" style="text-align:center">Emissor: MCCOIN<br><span class="issuer">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</span></div>
+
+<!-- SALDO COM OLHO -->
+<div class="saldoTop">
+<button class="eyeBtn" onclick="toggleSaldo()" id="eyeBtn">👁️</button>
+<div class="gold" style="font-size:13px">💰 SEU SALDO TOTAL</div>
+<div class="saldoValor" id="saldoTopValor">•••••• MCC</div>
+<div class="small" id="saldoTopUsd">•••••• USD • Toque no olho para ver</div>
+<div class="small">Emissor: MCCOIN<br><span class="issuer">GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</span></div>
+<button class="btn btn2" onclick="saldo()">🔄 Consultar Saldo ao Vivo</button>
+<div id="saldoBox" class="small"></div>
+</div>
 
 <div class="card">
-<div class="gold">🔑 Passo 1 - Entrar com Chave Pública</div>
-<label>PUB G...</label>
-<input id="pubInput" placeholder="Cole sua PUB G...">
+<div class="gold">🔑 Passo 1<br>Entrar com Chave Publica</div>
+<input id="pubInput" placeholder="PUB G...">
 <button class="btn" onclick="entrarPub()">ENTRAR COM CHAVE PUBLICA</button>
 <div class="flex"><button class="btn btn2" onclick="criarCarteira()">+ Criar Carteira</button><button class="btn btn2" onclick="importar()">📁 Importar</button></div>
 <div id="pubAtiva" class="small"></div>
 </div>
 
 <div class="card">
-<div class="gold">🔒 Passo 2 - Criar PIN de 6 dígitos</div>
-<div class="dots"><div class="dot" id="d1">○</div><div class="dot" id="d2">○</div><div class="dot" id="d3">○</div><div class="dot" id="d4">○</div><div class="dot" id="d5">○</div><div class="dot" id="d6">○</div></div>
+<div class="gold">🔒 Passo 2<br>Criar PIN de 6 dígitos</div>
 <label>Criar PIN (6 dígitos)</label>
+<div class="dots"><div class="dot" id="d1">●</div><div class="dot" id="d2">●</div><div class="dot" id="d3">●</div><div class="dot" id="d4">●</div><div class="dot" id="d5">●</div><div class="dot" id="d6">●</div></div>
 <input id="pin1" type="password" maxlength="6" inputmode="numeric" placeholder="Ex: 123456" oninput="dots()">
 <label>Confirmar PIN (6 dígitos)</label>
 <input id="pin2" type="password" maxlength="6" inputmode="numeric" placeholder="Repita o PIN">
-<button class="btn" onclick="criarPin()">CRIAR PIN / SALVAR</button>
+<div class="flex"><button class="btn btn2" onclick="criarPin()">CRIAR PIN</button><button class="btn" onclick="criarPin()">SALVAR</button></div>
 <div id="pinMsg" class="small"></div>
 </div>
 
 <div class="card">
 <div class="gold">🔑 Chave Secreta S</div>
-<input id="sBox" readonly value="••••••••••••••••">
-<button class="btn btn2" onclick="copiarS()">📋 Copiar Chave S</button>
-<label><input type="checkbox" id="confS" onchange="esconderS()" style="width:20px"> Confirmei que salvei a chave S, só depois esconder</label>
+<div class="flex"><input id="sBox" readonly value="••••••••••••••••"><button class="btn" style="width:130px;margin-top:0" onclick="copiarS()">Copiar Chave S</button></div>
+<label><input type="checkbox" id="confS" onchange="esconderS()" style="width:20px"> Confirmei que salvei</label>
 <div id="sMsg" class="small">⚠️ Nunca mostre sua chave S.</div>
 <button class="btn btn2" onclick="mostrarS()">👁️ Mostrar Chave S novamente</button>
 </div>
@@ -81,18 +91,12 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <button class="btn" onclick="ganhe()">🎁 GANHE 120 MCC</button>
 <div id="ganheMsg" class="small"></div>
 </div>
-
-<div class="card">
-<label>Saldo Real - Stellar ao Vivo</label>
-<button class="btn btn2" onclick="saldo()">🔄 Consultar Saldo ao Vivo</button>
-<div id="saldoBox" class="small"></div>
-</div>
 </div>
 
 <!-- MERCADO -->
 <div id="t-mercado" class="hidden">
 <h1>MCCOIN</h1><h2>MERCADO</h2>
-<div class="small" style="text-align:center">Preços CoinMarketCap - 12/11/2026 • Atualize no CoinMarketCap</div>
+<div class="small" style="text-align:center">Preços CoinMarketCap - 12/11/2026</div>
 <div class="card"><div class="gold">💎 Portfólio - Clique para abrir o ecossistema</div>
 <div class="grid" style="margin-top:10px">
 <div class="card2"><b>XRP</b><div class="small">XRP • Ripple</div><div class="price">$1.05</div><button class="btnEco" onclick="eco('XRP','Ripple','ISO 20022 - Pagamento bancário internacional')">🌐 Abrir Ecossistema XRP ↗</button></div>
@@ -108,7 +112,6 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 </div>
 <div id="ecoBox" class="ecoBox hidden"></div>
 </div>
-
 <div class="card"><div class="gold">💎 ATIVOS ISO 20022 - Alinhados</div>
 <div class="iso"><span><b>XLM</b> - Stellar <span class="tag">BASE</span></span><span>ISO ✓ • $0.146</span></div>
 <div class="iso"><span><b>XRP</b> - Ripple</span><span>ISO ✓ • $1.05</span></div>
@@ -120,15 +123,13 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <div class="iso"><span><b>ETH</b> - Ethereum</span><span>ISO ✓ • $2,043</span></div>
 <div class="iso"><span><b>USDC</b> - USD Coin</span><span>ISO ✓ • $1.00</span></div>
 <div class="iso"><span><b>MCC</b> - MCCOIN <span class="tag">SEU LOTE</span></span><span>ISO ✓ • $0.023</span></div>
-<div class="small">Fonte preços: CoinMarketCap - 12/11/2026. MCCOIN é preço de pool Stellar, não listado no CoinMarketCap.</div>
 </div>
 </div>
 
 <!-- TROCAR -->
 <div id="t-trocar" class="hidden">
 <h1>MCCOIN</h1><h2>TROCAR</h2>
-<div class="card"><label>Você envia</label><input id="de" value="MCCOIN"><label>Você recebe</label><input id="para" value="XLM"><label>Quantidade</label><input id="qtd" type="number" placeholder="Quantidade"><button class="btn" onclick="trocar()">🔄 TROCAR AGORA</button><div id="trocaMsg" class="small"></div>
-<div class="small">Troca rápida: MCC <> XLM <> USDC <> XRP. Confirme com PIN 6 dígitos.</div></div>
+<div class="card"><label>Você envia</label><input id="de" value="MCCOIN"><label>Você recebe</label><input id="para" value="XLM"><label>Quantidade</label><input id="qtd" type="number" placeholder="Quantidade"><button class="btn" onclick="trocar()">🔄 TROCAR AGORA</button><div id="trocaMsg" class="small"></div></div>
 </div>
 
 <!-- MEMBROS -->
@@ -140,21 +141,19 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <label>Seu PIN de 6 dígitos</label><input id="mPin" type="password" maxlength="6" inputmode="numeric" placeholder="PIN 6 dígitos">
 <button class="btn" onclick="entrarMembro()">ENTRAR NA ÁREA DE MEMBROS</button>
 <div id="mMsg" class="small"></div>
-<div id="mArea" class="hidden"><div class="gold">✅ Bem-vindo, Membro MCCOIN!</div><div class="small" id="mPubShow"></div><div class="small">• 120 MCC de boas-vindas<br>• Portfólio ISO 20022<br>• Troca MCC <> XLM<br>• Ecossistema de cada moeda</div><button class="btn btn2" onclick="aba('carteira')">Ver Minha Carteira</button></div>
+<div id="mArea" class="hidden"><div class="gold">✅ Bem-vindo, Membro MCCOIN!</div><div class="small" id="mPubShow"></div><button class="btn btn2" onclick="aba('carteira')">Ver Minha Carteira</button></div>
 </div>
 <div class="card">
-<div class="gold">🔐 Admin - Entrar pela Área de Membros</div>
-<div class="small">Só admin entra aqui. Membro normal não vê o painel.</div>
+<div class="gold">🔐 Admin</div>
 <label>Chave Admin</label><input id="adminKey" type="password" placeholder="Chave do Admin">
 <button class="btn btn2" onclick="entrarAdmin()">ENTRAR COMO ADMIN</button>
 <div id="adminMsg" class="small"></div>
 <div id="adminArea" class="hidden">
 <div class="gold">🛡️ PAINEL ADMIN MCCOIN</div>
-<table><tr><th>Membro</th><th>PUB</th><th>Status</th></tr><tr><td>Você</td><td id="aPub">-</td><td>Ativo</td></tr><tr><td>Membro 1</td><td>G...EXEMPLO</td><td>Pendente 120 MCC</td></tr></table>
+<table><tr><th>Membro</th><th>PUB</th><th>Status</th></tr><tr><td>Você</td><td id="aPub">-</td><td>Ativo</td></tr></table>
 <label>Enviar 120 MCC para membro</label><input id="aDest" placeholder="PUB G do membro">
 <button class="btn" onclick="adminEnviar()">ENVIAR 120 MCC</button>
 <div id="aMsg" class="small"></div>
-<button class="btn btn2" onclick="document.getElementById('adminArea').classList.add('hidden')">Sair do Admin</button>
 </div>
 </div>
 </div>
@@ -162,7 +161,7 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <!-- PERFIL -->
 <div id="t-perfil" class="hidden">
 <h1>MCCOIN</h1><h2>PERFIL</h2>
-<div class="card"><label>Seu PUB:</label><input id="perfilPub" readonly><div class="flex"><button class="btn btn2" onclick="copiarPub()">Copiar PUB</button><button class="btn btn2" onclick="sair()">Sair</button></div><div class="small">Guarde sua chave S em papel, fora do celular.</div><div class="small">Emissor MCCOIN:<br>GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</div></div>
+<div class="card"><label>Seu PUB:</label><input id="perfilPub" readonly><div class="flex"><button class="btn btn2" onclick="copiarPub()">Copiar PUB</button><button class="btn btn2" onclick="sair()">Sair</button></div><div class="small">Emissor MCCOIN:<br>GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</div></div>
 </div>
 
 </div>
@@ -170,17 +169,18 @@ table{width:100%;font-size:12px;border-collapse:collapse}td,th{border-bottom:1px
 <button class="active" onclick="aba('carteira',this)"><b>👛</b>Carteira</button>
 <button onclick="aba('mercado',this)"><b>📊</b>Mercado</button>
 <button onclick="aba('trocar',this)"><b>🔄</b>Trocar</button>
-<button onclick="aba('membros',this)"><b>👥</b>Membros</button>
 <button onclick="aba('perfil',this)"><b>👤</b>Perfil</button>
 </nav>
 
 <script>
 let S=localStorage.getItem('mc_s')||'',PUB=localStorage.getItem('mc_pub')||'',PIN=localStorage.getItem('mc_pin')||'';
+let saldoVisivel=false, saldoMCC='0', saldoUSD='0.00';
 const ISSUER='GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI';
 const ADMIN_KEY='MCCOIN-ADMIN-2026';
 function save(){localStorage.setItem('mc_s',S);localStorage.setItem('mc_pub',PUB);localStorage.setItem('mc_pin',PIN);tela();}
 function tela(){document.getElementById('pubInput').value=PUB;document.getElementById('perfilPub').value=PUB;document.getElementById('mPub').value=PUB;document.getElementById('pubAtiva').innerHTML=PUB?'<span class="ok">✅ Ativa: '+PUB.slice(0,12)+'...</span>':'';document.getElementById('pinMsg').innerHTML=PIN?'<span class="ok">✅ PIN 6 dígitos salvo</span>':'';}
 function aba(n,b){['carteira','mercado','trocar','membros','perfil'].forEach(t=>document.getElementById('t-'+t).classList.toggle('hidden',t!==n));document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');window.scrollTo(0,0);}
+function toggleSaldo(){saldoVisivel=!saldoVisivel;document.getElementById('eyeBtn').textContent=saldoVisivel?'👁️':'🙈';document.getElementById('saldoTopValor').textContent=saldoVisivel?saldoMCC+' MCC':'•••••• MCC';document.getElementById('saldoTopUsd').textContent=saldoVisivel?'≈ $'+saldoUSD+' USD':'•••••• USD • Toque no olho para ver';}
 function entrarPub(){let v=document.getElementById('pubInput').value.trim();if(!v.startsWith('G')||v.length<20){alert('PUB inválida, começa com G');return;}PUB=v;save();alert('Entrou!');}
 function criarCarteira(){try{let p=StellarSdk.Keypair.random();S=p.secret();PUB=p.publicKey();document.getElementById('confS').checked=false;document.getElementById('sBox').value=S;save();alert('Carteira criada! COPIE A CHAVE S AGORA!');}catch(e){alert('Erro: '+e.message)}}
 function importar(){let s=prompt('Cole sua chave S:');if(!s)return;S=s.trim();let p=prompt('Cole sua PUB G:');if(p)PUB=p.trim();document.getElementById('sBox').value=S;save();alert('Importado!');}
@@ -194,12 +194,12 @@ function sair(){PUB='';document.getElementById('pubInput').value='';save();}
 function trust(){if(!PUB){alert('Entre com PUB');return;}window.open('https://stellar.expert/explorer/public/account/'+PUB,'_blank');alert('Aceite MCCOIN - Trustline na Stellar');}
 function verXLM(){if(!PUB){alert('Entre com PUB');return;}document.getElementById('xlmMsg').innerHTML='Precisa de 2 XLM para ativar. <a style="color:#d4af37" href="https://stellar.expert/explorer/public/account/'+PUB+'" target="_blank">Ver conta →</a>';}
 function ganhe(){if(!PUB){alert('Entre com PUB');return;}if(!PIN){alert('Crie PIN 6 dígitos');return;}document.getElementById('ganheMsg').innerHTML='<span class="ok">✅ Pedido 120 MCC enviado! Confirme com PIN 6 dígitos.</span>';}
-async function saldo(){if(!PUB){alert('Entre com PUB');return;}document.getElementById('saldoBox').innerHTML='Buscando...';try{let sv=new StellarSdk.Horizon.Server('https://horizon.stellar.org');let a=await sv.loadAccount(PUB);let h='';a.balances.forEach(b=>{h+=(b.asset_type=='native'?'XLM':b.asset_code)+' : <b>'+b.balance+'</b><br>'});document.getElementById('saldoBox').innerHTML=h||'Sem saldo';}catch(e){document.getElementById('saldoBox').innerHTML='Conta não ativada ainda. Envie 2 XLM para ativar. <a style="color:#d4af37" href="https://stellar.expert/explorer/public/account/'+PUB+'" target="_blank">Ver →</a>';}}
+async function saldo(){if(!PUB){alert('Entre com PUB');return;}document.getElementById('saldoBox').innerHTML='Buscando...';try{let sv=new StellarSdk.Horizon.Server('https://horizon.stellar.org');let a=await sv.loadAccount(PUB);let h='';let mcc='0';a.balances.forEach(b=>{let code=b.asset_type=='native'?'XLM':b.asset_code;h+=code+' : <b>'+b.balance+'</b><br>';if(code=='MCCOIN')mcc=b.balance;});saldoMCC=mcc;saldoUSD=(parseFloat(mcc)*0.023).toFixed(2);document.getElementById('saldoBox').innerHTML=h||'Sem saldo';if(!saldoVisivel){document.getElementById('saldoTopValor').textContent='•••••• MCC';}else{toggleSaldo();toggleSaldo();}}catch(e){document.getElementById('saldoBox').innerHTML='Conta não ativada ainda. Envie 2 XLM para ativar.';}}
 function trocar(){let q=document.getElementById('qtd').value;if(!q){alert('Digite quantidade');return;}if(!PIN){alert('Crie PIN 6');return;}document.getElementById('trocaMsg').innerHTML='Troca '+q+' '+document.getElementById('de').value+' → '+document.getElementById('para').value+' preparada. Confirme com PIN.';}
 function eco(sigla,nome,desc){
 let links={XRP:'https://xrpl.org',XLM:'https://stellar.org',XDC:'https://xinfin.org',HBAR:'https://hedera.com',ADA:'https://cardano.org',ALGO:'https://algorand.com',QNT:'https://quant.network',ETH:'https://ethereum.org',USDC:'https://circle.com/usdc',MCCOIN:'https://stellar.expert/explorer/public/asset/MCCOIN-GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI'};
 let box=document.getElementById('ecoBox');box.classList.remove('hidden');
-box.innerHTML='<b style="color:#d4af37;font-size:16px">'+sigla+' - '+nome+'</b><div class="small">'+desc+'</div><button class="btn" onclick="window.open(\''+links[sigla]+'\',\'_blank\')">🌐 Abrir Site Oficial '+sigla+' ↗</button><button class="btn btn2" onclick="window.open(\'https://stellar.expert/explorer/public/asset/'+sigla+'-'+(sigla==='MCCOIN'?'GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI':sigla)+'\',\'_blank\')">Ver na Stellar Expert</button>';
+box.innerHTML='<b style="color:#d4af37;font-size:16px">'+sigla+' - '+nome+'</b><div class="small">'+desc+'</div><button class="btn" onclick="window.open(\''+links[sigla]+'\',\'_blank\')">🌐 Abrir Site Oficial '+sigla+' ↗</button>';
 if(sigla==='MCCOIN'){box.innerHTML+='<div class="small" style="margin-top:8px">Emissor MCCOIN:<br>GDZCQYJULHLB3IVNACWWXDCCXRFPKCFH2W3CRUJLZOEYCWG4CSZYNKCI</div>';}
 box.scrollIntoView({behavior:'smooth'});
 }
